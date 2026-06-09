@@ -1105,7 +1105,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect6(create, deps) {
+        function useEffect7(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1888,7 +1888,7 @@ var require_react_development = __commonJS({
         exports.useContext = useContext;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect6;
+        exports.useEffect = useEffect7;
         exports.useId = useId;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
@@ -2392,9 +2392,9 @@ var require_react_dom_development = __commonJS({
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
           __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
         }
-        var React3 = require_react();
+        var React4 = require_react();
         var Scheduler = require_scheduler();
-        var ReactSharedInternals = React3.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         var suppressWarning = false;
         function setSuppressWarning(newSuppressWarning) {
           {
@@ -3999,7 +3999,7 @@ var require_react_dom_development = __commonJS({
           {
             if (props.value == null) {
               if (typeof props.children === "object" && props.children !== null) {
-                React3.Children.forEach(props.children, function(child) {
+                React4.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -23568,7 +23568,7 @@ var require_react_jsx_runtime_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React3 = require_react();
+        var React4 = require_react();
         var REACT_ELEMENT_TYPE = Symbol.for("react.element");
         var REACT_PORTAL_TYPE = Symbol.for("react.portal");
         var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -23594,7 +23594,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
           return null;
         }
-        var ReactSharedInternals = React3.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function error(format) {
           {
             {
@@ -24479,7 +24479,7 @@ var import_obsidian8 = require("obsidian");
 var import_client = __toESM(require_client());
 
 // src/components/FlowApp.tsx
-var React2 = __toESM(require_react());
+var React3 = __toESM(require_react());
 var import_react10 = __toESM(require_react());
 
 // src/utils/obsidianUtils.ts
@@ -24878,7 +24878,7 @@ type: daily-note
     return;
   const content = await app.vault.read(file);
   const todayIssues = issues.filter((i) => i.today && i.status !== "done");
-  const doneTodayIssues = issues.filter((i) => i.today && i.status === "done");
+  const doneTodayIssues = issues.filter((i) => i.today && i.status === "done" && (!i.completedDate || i.completedDate === todayStr));
   const activityRegex = /## Activity[\s\S]*?(?=\n## |$)/;
   const match = content.match(activityRegex);
   let todayPomodoros = 0;
@@ -25406,6 +25406,7 @@ var X = createLucideIcon("X", [
 ]);
 
 // src/components/DashboardView.tsx
+var React = __toESM(require_react());
 var import_react2 = __toESM(require_react());
 var import_obsidian2 = require("obsidian");
 var import_jsx_runtime = __toESM(require_jsx_runtime());
@@ -25423,6 +25424,27 @@ function DashboardView({
   const { issues, projects } = index;
   const [energyFilter, setEnergyFilter] = (0, import_react2.useState)("all");
   const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  React.useEffect(() => {
+    const staleCompletedIssues = issues.filter(
+      (i) => i.today && i.status === "done" && i.completedDate && i.completedDate !== todayStr
+    );
+    if (staleCompletedIssues.length > 0) {
+      Promise.all(staleCompletedIssues.map(async (issue) => {
+        const file = app.vault.getAbstractFileByPath(issue.filePath);
+        if (file && file instanceof import_obsidian2.TFile) {
+          try {
+            await updateIssueProperty(app, file, (fm) => {
+              fm.today = false;
+            });
+          } catch (e) {
+            console.error(`Failed to auto-clear today status for stale completed issue ${issue.id}:`, e);
+          }
+        }
+      })).then(() => {
+        onRefresh();
+      });
+    }
+  }, [issues, app, onRefresh, todayStr]);
   const activeIssues = issues.filter((i) => !i.isInbox);
   const totalIssues = activeIssues.length;
   const completedIssues = activeIssues.filter((i) => i.status === "done").length;
@@ -25441,6 +25463,8 @@ function DashboardView({
   });
   const dailyPlanDoneIssues = activeIssues.filter((i) => {
     if (!i.today || i.status !== "done")
+      return false;
+    if (i.completedDate && i.completedDate !== todayStr)
       return false;
     return energyFilter === "all" || i.energy === "low";
   });
@@ -25603,8 +25627,10 @@ function DashboardView({
                   {
                     type: "checkbox",
                     checked: false,
-                    onClick: (e) => handleToggleDone(e, issue),
-                    onChange: () => {
+                    onClick: (e) => e.stopPropagation(),
+                    onChange: async (e) => {
+                      e.stopPropagation();
+                      await handleToggleDone(e, issue);
                     }
                   }
                 ),
@@ -25628,8 +25654,10 @@ function DashboardView({
                   {
                     type: "checkbox",
                     checked: true,
-                    onClick: (e) => handleToggleDone(e, issue),
-                    onChange: () => {
+                    onClick: (e) => e.stopPropagation(),
+                    onChange: async (e) => {
+                      e.stopPropagation();
+                      await handleToggleDone(e, issue);
                     }
                   }
                 ),
@@ -26081,7 +26109,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
 }
 
 // src/components/TaskListView.tsx
-var React = __toESM(require_react());
+var React2 = __toESM(require_react());
 var import_react4 = __toESM(require_react());
 var import_jsx_runtime3 = __toESM(require_jsx_runtime());
 function TaskListView({ index, onEditIssue }) {
@@ -26096,7 +26124,7 @@ function TaskListView({ index, onEditIssue }) {
   const [sortOrder, setSortOrder] = (0, import_react4.useState)("desc");
   const [currentPage, setCurrentPage] = (0, import_react4.useState)(1);
   const PAGE_SIZE = 15;
-  React.useEffect(() => {
+  React2.useEffect(() => {
     setCurrentPage(1);
   }, [search, filterProject, filterEpic, filterStatus, filterPriority, filterTag, sortField, sortOrder]);
   const processedIssues = (0, import_react4.useMemo)(() => {
@@ -28028,9 +28056,18 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   const timerRef = (0, import_react8.useRef)(null);
   (0, import_react8.useEffect)(() => {
     setQueue((prev) => {
-      let next = [...prev];
-      const todayIssues = issues.filter((i) => i.today && i.status !== "done");
       let changed = false;
+      const next = prev.map((id) => {
+        if (!id)
+          return "";
+        const task = issues.find((i) => i.id === id);
+        if (!task || task.status === "done" || !task.today) {
+          changed = true;
+          return "";
+        }
+        return id;
+      });
+      const todayIssues = issues.filter((i) => i.today && i.status !== "done");
       todayIssues.forEach((issue) => {
         if (!next.includes(issue.id)) {
           const emptyIdx = next.findIndex((id) => !id);
@@ -28379,7 +28416,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               onChange: (e) => handleSlotChange(idx, e.target.value),
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("option", { value: "", children: "-- Kosong --" }),
-                issues.filter((i) => i.status !== "done" || i.id === issueId).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
+                issues.filter((i) => i.today && i.status !== "done" || i.id === issueId).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
                   i.id,
                   " - ",
                   i.title,
@@ -29194,7 +29231,7 @@ function FlowApp({ plugin, app }) {
   const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react10.useState)("");
   const [selectedProjectId, setSelectedProjectId] = (0, import_react10.useState)(null);
   const [selectedEpicId, setSelectedEpicId] = (0, import_react10.useState)(null);
-  const reloadIndex = React2.useCallback(() => {
+  const reloadIndex = React3.useCallback(() => {
     const freshIndex = scanVault(app, plugin.settings);
     setIndex(freshIndex);
   }, [app, plugin.settings]);
