@@ -24472,10 +24472,10 @@ __export(main_exports, {
   default: () => FlowPlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian7 = require("obsidian");
+var import_obsidian8 = require("obsidian");
 
 // src/FlowView.tsx
-var import_obsidian6 = require("obsidian");
+var import_obsidian7 = require("obsidian");
 var import_client = __toESM(require_client());
 
 // src/components/FlowApp.tsx
@@ -24542,12 +24542,25 @@ function scanVault(app, settings) {
   for (const file of files) {
     const cache = app.metadataCache.getFileCache(file);
     const frontmatter = cache?.frontmatter || {};
-    const isInbox = isPathInFolder(file.path, settings.inboxFolder) || frontmatter.type === "inbox";
-    const isIssue = isPathInFolder(file.path, settings.issuesFolder) || frontmatter.type === "issue";
-    const isProject = isPathInFolder(file.path, settings.projectsFolder) || frontmatter.type === "project";
-    const isEpic = isPathInFolder(file.path, settings.epicsFolder) || frontmatter.type === "epic";
-    const isDoc = isPathInFolder(file.path, settings.docsFolder);
-    const isDailyNote = isPathInFolder(file.path, settings.dailyNotesFolder);
+    const headings = cache?.headings || [];
+    const h1 = headings.find((h) => h.level === 1)?.heading;
+    const fileTitle = frontmatter.title || h1 || file.basename;
+    let isInbox = frontmatter.type === "inbox";
+    let isIssue = frontmatter.type === "issue";
+    let isProject = frontmatter.type === "project";
+    let isEpic = frontmatter.type === "epic";
+    if (!frontmatter.type) {
+      if (isPathInFolder(file.path, settings.inboxFolder))
+        isInbox = true;
+      else if (isPathInFolder(file.path, settings.issuesFolder))
+        isIssue = true;
+      else if (isPathInFolder(file.path, settings.epicsFolder))
+        isEpic = true;
+      else if (isPathInFolder(file.path, settings.projectsFolder))
+        isProject = true;
+    }
+    const isDoc = frontmatter.type === "doc" || !frontmatter.type && isPathInFolder(file.path, settings.docsFolder);
+    const isDailyNote = isPathInFolder(file.path, settings.dailyNotesFolder) || frontmatter.type === "daily-note";
     if (isInbox) {
       const issueId = frontmatter.id || `INBOX-${file.basename}`;
       const status = frontmatter.status || "todo";
@@ -24560,8 +24573,8 @@ function scanVault(app, settings) {
       issues.push({
         id: issueId,
         type: "issue",
-        title: frontmatter.title || file.basename,
-        status: ["todo", "in-progress", "blocked", "done"].includes(status) ? status : "todo",
+        title: fileTitle,
+        status: ["todo", "in-progress", "in-review", "blocked", "done"].includes(status) ? status : "todo",
         priority: ["high", "medium", "low", "normal"].includes(priority) ? priority : "normal",
         project: frontmatter.project || void 0,
         epic: frontmatter.epic || void 0,
@@ -24578,7 +24591,9 @@ function scanVault(app, settings) {
         blockedBy: parsedBlockedBy,
         today: !!frontmatter.today,
         completedDate: frontmatter.completedDate || void 0,
-        energy: ["low", "high"].includes(frontmatter.energy) ? frontmatter.energy : void 0
+        energy: ["low", "high"].includes(frontmatter.energy) ? frontmatter.energy : void 0,
+        urgent: !!frontmatter.urgent,
+        important: !!frontmatter.important
       });
     } else if (isIssue) {
       const issueId = frontmatter.id || file.basename;
@@ -24592,8 +24607,8 @@ function scanVault(app, settings) {
       issues.push({
         id: issueId,
         type: "issue",
-        title: frontmatter.title || file.basename,
-        status: ["todo", "in-progress", "blocked", "done"].includes(status) ? status : "todo",
+        title: fileTitle,
+        status: ["todo", "in-progress", "in-review", "blocked", "done"].includes(status) ? status : "todo",
         priority: ["high", "medium", "low", "normal"].includes(priority) ? priority : "normal",
         project: frontmatter.project || void 0,
         epic: frontmatter.epic || void 0,
@@ -24610,13 +24625,15 @@ function scanVault(app, settings) {
         blockedBy: parsedBlockedBy,
         today: !!frontmatter.today,
         completedDate: frontmatter.completedDate || void 0,
-        energy: ["low", "high"].includes(frontmatter.energy) ? frontmatter.energy : void 0
+        energy: ["low", "high"].includes(frontmatter.energy) ? frontmatter.energy : void 0,
+        urgent: !!frontmatter.urgent,
+        important: !!frontmatter.important
       });
     } else if (isProject) {
       projects.push({
         id: frontmatter.id || `PROJECT-${file.basename.toUpperCase().replace(/\s+/g, "-")}`,
         type: "project",
-        title: file.basename,
+        title: fileTitle,
         status: frontmatter.status || "active",
         filePath: file.path
       });
@@ -24624,13 +24641,13 @@ function scanVault(app, settings) {
       epics.push({
         id: frontmatter.id || `EPIC-${file.basename.toUpperCase().replace(/\s+/g, "-")}`,
         type: "epic",
-        title: file.basename,
+        title: fileTitle,
         project: frontmatter.project || void 0,
         filePath: file.path
       });
     } else if (isDoc) {
       docs.push({
-        title: file.basename,
+        title: fileTitle,
         filePath: file.path
       });
     } else if (isDailyNote) {
@@ -24716,9 +24733,11 @@ async function createIssueFile(app, settings, issues, data) {
     logged: data.logged || 0,
     difficulty: data.difficulty,
     blockedBy: data.blockedBy || [],
-    today: data.today || false,
-    completedDate: data.status === "done" ? data.completedDate || (/* @__PURE__ */ new Date()).toISOString().split("T")[0] : void 0,
-    energy: data.energy
+    today: data.today,
+    energy: data.energy,
+    urgent: data.urgent,
+    important: data.important,
+    completedDate: data.completedDate
   };
   const frontmatterStr = serializeFrontmatter(frontmatterData);
   const bodyText = data.body || "\n# Context\n\n# Notes\n";
@@ -24791,6 +24810,8 @@ async function promoteInboxIssue(app, settings, file, issueId, frontmatterData) 
     fm.today = frontmatterData.today || false;
     fm.completedDate = frontmatterData.status === "done" ? frontmatterData.completedDate || (/* @__PURE__ */ new Date()).toISOString().split("T")[0] : null;
     fm.energy = frontmatterData.energy || null;
+    fm.urgent = frontmatterData.urgent || false;
+    fm.important = frontmatterData.important || false;
   });
   const newPath = `${settings.issuesFolder}/${issueId}.md`;
   await app.fileManager.renameFile(file, newPath);
@@ -24917,6 +24938,81 @@ reviewedAt: ${todayStr}
     newContent = content.trim() + "\n\n" + reviewSection;
   }
   await app.vault.modify(file, newContent);
+}
+function calculateTaskScore(issue, allIssues) {
+  if (issue.status === "done" || issue.isInbox)
+    return { score: -9999, breakdown: ["Status: Done / Inbox"] };
+  let score = 0;
+  const breakdown = [];
+  if (issue.status === "blocked")
+    return { score: -1e3, breakdown: ["Blocked (-1000)"] };
+  if (issue.blockedBy && issue.blockedBy.length > 0) {
+    const isActuallyBlocked = issue.blockedBy.some((blockerId) => {
+      const blockerTask = allIssues.find((tsk) => tsk.id === blockerId);
+      return blockerTask && blockerTask.status !== "done";
+    });
+    if (isActuallyBlocked)
+      return { score: -1e3, breakdown: ["Blocked by dependency (-1000)"] };
+  }
+  if (issue.status === "in-progress") {
+    score += 100;
+    breakdown.push("In Progress (+100)");
+  }
+  if (issue.due) {
+    const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    const dueDate = new Date(issue.due);
+    const todayDate = new Date(todayStr);
+    dueDate.setHours(0, 0, 0, 0);
+    todayDate.setHours(0, 0, 0, 0);
+    const diffTime = dueDate.getTime() - todayDate.getTime();
+    const diffDays = Math.ceil(diffTime / (1e3 * 60 * 60 * 24));
+    if (diffDays < 0) {
+      score += 300;
+      breakdown.push("Overdue (+300)");
+    } else if (diffDays === 0) {
+      score += 200;
+      breakdown.push("Due Today (+200)");
+    } else if (diffDays === 1) {
+      score += 100;
+      breakdown.push("Due Tomorrow (+100)");
+    }
+  }
+  if (issue.urgent) {
+    score += 200;
+    breakdown.push("Urgent (+200)");
+  }
+  if (issue.important) {
+    score += 150;
+    breakdown.push("Important (+150)");
+  }
+  if (issue.priority === "high") {
+    score += 100;
+    breakdown.push("High Priority (+100)");
+  } else if (issue.priority === "medium") {
+    score += 50;
+    breakdown.push("Medium Priority (+50)");
+  } else if (issue.priority === "low") {
+    score -= 50;
+    breakdown.push("Low Priority (-50)");
+  }
+  if (issue.energy === "low") {
+    score += 20;
+    breakdown.push("Low Energy Task (+20)");
+  }
+  const est = issue.estimate || 0;
+  if (est > 0) {
+    if (est < 2) {
+      score += 30;
+      breakdown.push("Quick Win <2 pmd (+30)");
+    } else if (est <= 4) {
+      score += 15;
+      breakdown.push("Medium Task <=4 pmd (+15)");
+    }
+  }
+  if (breakdown.length === 0) {
+    breakdown.push("Normal Task (0)");
+  }
+  return { score, breakdown };
 }
 
 // node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/createLucideIcon.js
@@ -25181,8 +25277,16 @@ function DashboardView({
     return energyFilter === "all" || i.energy === "low";
   });
   const overallProgress = totalIssues > 0 ? Math.round(completedIssues / totalIssues * 100) : 0;
-  const dailyPlanIssues = activeIssues.filter((i) => i.today && i.status !== "done");
-  const dailyPlanDoneIssues = activeIssues.filter((i) => i.today && i.status === "done");
+  const dailyPlanIssues = activeIssues.filter((i) => {
+    if (!i.today || i.status === "done")
+      return false;
+    return energyFilter === "all" || i.energy === "low";
+  });
+  const dailyPlanDoneIssues = activeIssues.filter((i) => {
+    if (!i.today || i.status !== "done")
+      return false;
+    return energyFilter === "all" || i.energy === "low";
+  });
   const totalDailyPlanTasks = dailyPlanIssues.length + dailyPlanDoneIssues.length;
   const totalDailyPlanEstimate = [...dailyPlanIssues, ...dailyPlanDoneIssues].reduce((acc, curr) => acc + (curr.estimate || 0), 0);
   const totalDailyPlanHours = totalDailyPlanEstimate * 25 / 60;
@@ -25280,10 +25384,10 @@ function DashboardView({
           totalIssues
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stat-widget", onClick: () => onNavigate("weekly-review"), style: { cursor: "pointer" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "stat-label", style: { display: "flex", alignItems: "center", gap: "4px" }, children: "\u{1F4C5} Weekly Review" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "stat-value", style: { fontSize: "13px", color: isReviewedToday ? "#10b981" : "#ef4444", fontWeight: 700, marginTop: "8px" }, children: isReviewedToday ? "Reviewed Today \u2713" : "Review Pending" })
-      ] })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "stat-widget", onClick: () => onNavigate("weekly-review"), style: { cursor: "pointer" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card-title", style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Weekly Review" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge ${isReviewedToday ? "badge-status-done" : "badge-status-todo"}`, children: isReviewedToday ? "Completed" : "Pending" })
+      ] }) })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-12", style: { display: "flex", gap: "10px", alignItems: "center", background: "var(--background-secondary)", padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "12px", fontWeight: 600, color: "var(--text-muted)" }, children: "ADHD Energy planning:" }),
@@ -25302,26 +25406,24 @@ function DashboardView({
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-8", style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: "6px", fontWeight: 700 }, children: [
-          "\u{1F3AF} Today's Plan (",
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+          "Today's Plan (",
           totalDailyPlanTasks,
           " tasks | ",
           totalDailyPlanEstimate,
-          " \u{1F345} ~",
+          " pomodoros ~",
           totalDailyPlanHours.toFixed(1),
           "h / Max 6h)"
         ] }) }),
-        totalDailyPlanTasks > 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(245, 158, 11, 0.12)", border: "1px solid rgba(245, 158, 11, 0.2)", borderRadius: "6px", padding: "8px 12px", fontSize: "12px", color: "#f59e0b", marginBottom: "12px" }, children: [
-          "\u{1F4A1} ",
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "ADHD Tip:" }),
-          " Lebih dari 3 tugas utama hari ini berisiko membuat kewalahan. Batasi tugas Anda!"
+        totalDailyPlanTasks > 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px", marginBottom: "16px", borderLeft: "4px solid var(--interactive-accent)", fontSize: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Tip:" }),
+          " Lebih dari 3 tugas utama hari ini berisiko membuat kewalahan. Pertimbangkan untuk membatasi tugas Anda."
         ] }),
-        totalDailyPlanEstimate > 14 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.12)", border: "1px solid rgba(239, 68, 68, 0.2)", borderRadius: "6px", padding: "8px 12px", fontSize: "12px", color: "#ef4444", marginBottom: "12px" }, children: [
-          "\u26A0\uFE0F ",
+        totalDailyPlanEstimate > 14 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", padding: "12px", borderRadius: "8px", marginBottom: "16px", borderLeft: "4px solid #ef4444", fontSize: "12px", color: "#ef4444" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Overcommitment:" }),
-          " Estimasi waktu hari ini melebihi batas 6 jam kerja fokus. Kurangi tugas agar realistis!"
+          " Estimasi waktu hari ini melebihi batas 6 jam kerja fokus. Pertimbangkan untuk mengurangi tugas agar lebih realistis."
         ] }),
-        totalDailyPlanTasks === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "12px", padding: "16px 0", textAlign: "center" }, children: `Belum ada tugas untuk hari ini. Centang "Today's Plan" di editor issue untuk memasukkan tugas ke sini.` }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
+        totalDailyPlanTasks === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "empty-state-subtitle", children: `Belum ada tugas untuk hari ini. Centang "Today's Plan" di editor issue untuk memasukkan tugas ke sini.` }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
           dailyPlanIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
             "div",
             {
@@ -25341,7 +25443,7 @@ function DashboardView({
                 ),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-id", children: issue.id }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", children: issue.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: issue.estimate ? `${issue.logged || 0} / ${issue.estimate} \u{1F345}` : "--" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: issue.estimate ? `${issue.logged || 0} / ${issue.estimate} pmd` : "--" }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge badge-priority-${issue.priority}`, style: { justifySelf: "end" }, children: issue.priority })
               ]
             },
@@ -25366,7 +25468,7 @@ function DashboardView({
                 ),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-id", style: { textDecoration: "line-through" }, children: issue.id }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", style: { textDecoration: "line-through" }, children: issue.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: issue.estimate ? `${issue.logged || 0} / ${issue.estimate} \u{1F345}` : "--" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: issue.estimate ? `${issue.logged || 0} / ${issue.estimate} pmd` : "--" }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "badge badge-status-done", style: { justifySelf: "end" }, children: "Done" })
               ]
             },
@@ -25385,7 +25487,7 @@ function DashboardView({
             "button",
             {
               className: "flow-nav-tab",
-              onClick: () => onNavigate("kanban"),
+              onClick: () => onNavigate("board"),
               style: { padding: "2px 8px", fontSize: "11px" },
               children: "Go to Board"
             }
@@ -25405,49 +25507,6 @@ function DashboardView({
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckCircle2, { size: 20, style: { color: "var(--text-muted)", opacity: 0.6 } }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "No tasks due today!" })
         ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: dueTodayIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "div",
-          {
-            className: `issue-row ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
-            onClick: () => onEditIssue(issue),
-            style: { gridTemplateColumns: "90px 1fr 100px", padding: "8px 12px", borderRadius: "6px", background: "var(--background-primary)" },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-id", children: issue.id }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", children: issue.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge badge-priority-${issue.priority}`, style: { justifySelf: "end" }, children: issue.priority })
-            ]
-          },
-          issue.id
-        )) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-          "Created Today (",
-          createdTodayIssues.length,
-          ")"
-        ] }) }),
-        createdTodayIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "16px 0" }, children: "No issues created today." }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: createdTodayIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "div",
-          {
-            className: `issue-row ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
-            onClick: () => onEditIssue(issue),
-            style: { gridTemplateColumns: "90px 1fr 100px 100px", padding: "8px 12px", borderRadius: "6px", background: "var(--background-primary)" },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-id", children: issue.id }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", children: issue.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge badge-status-${issue.status}`, style: { justifySelf: "center" }, children: issue.status }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge badge-priority-${issue.priority}`, style: { justifySelf: "end" }, children: issue.priority })
-            ]
-          },
-          issue.id
-        )) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-          "Blocked Issues (",
-          blockedIssues.length,
-          ")"
-        ] }) }),
-        blockedIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "16px 0" }, children: "No blocked issues. Way to go!" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: blockedIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
           "div",
           {
             className: `issue-row ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
@@ -25533,18 +25592,26 @@ function DashboardView({
   ] });
 }
 
-// src/components/KanbanView.tsx
+// src/components/BoardView.tsx
 var import_react3 = __toESM(require_react());
 var import_obsidian3 = require("obsidian");
 var import_jsx_runtime2 = __toESM(require_jsx_runtime());
 var COLUMNS = [
   { id: "todo", title: "Todo" },
   { id: "in-progress", title: "In Progress" },
+  { id: "in-review", title: "In Review" },
   { id: "blocked", title: "Blocked" },
   { id: "done", title: "Done" }
 ];
-function KanbanView({ index, app, onEditIssue, activePomodoroTaskId, wipLimit }) {
+var EISENHOWER_QUADS = [
+  { id: "do-first", title: "Do First", subtitle: "Urgent & Important" },
+  { id: "schedule", title: "Schedule", subtitle: "Important, Not Urgent" },
+  { id: "delegate", title: "Minimize / Delegate", subtitle: "Urgent, Not Important" },
+  { id: "eliminate", title: "Eliminate", subtitle: "Not Urgent, Not Important" }
+];
+function BoardView({ index, app, onEditIssue, activePomodoroTaskId, wipLimit }) {
   const { issues, projects } = index;
+  const [boardMode, setBoardMode] = (0, import_react3.useState)("kanban");
   const [draggedOverColumn, setDraggedOverColumn] = (0, import_react3.useState)(null);
   const getUnresolvedBlockers = (issue) => {
     if (!issue.blockedBy)
@@ -25580,7 +25647,7 @@ function KanbanView({ index, app, onEditIssue, activePomodoroTaskId, wipLimit })
       const inProgressCount = issues.filter((i) => i.status === "in-progress" && !i.isInbox).length;
       if (inProgressCount >= wipLimit) {
         new Notification("Flow Tracker", {
-          body: `\u26A0\uFE0F WIP Limit reached! Anda memiliki ${inProgressCount} tugas dalam pengerjaan. Selesaikan tugas tersebut untuk menghindari distraksi.`
+          body: `WIP Limit reached! Anda memiliki ${inProgressCount} tugas dalam pengerjaan. Selesaikan tugas tersebut terlebih dahulu.`
         });
       }
     }
@@ -25600,8 +25667,61 @@ function KanbanView({ index, app, onEditIssue, activePomodoroTaskId, wipLimit })
       }
     }
   };
+  const handleEisenhowerDrop = async (e, targetQuad) => {
+    e.preventDefault();
+    setDraggedOverColumn(null);
+    const issueId = e.dataTransfer.getData("text/plain");
+    if (!issueId)
+      return;
+    const issue = issues.find((i) => i.id === issueId);
+    if (!issue)
+      return;
+    let urgent = false;
+    let important = false;
+    if (targetQuad === "do-first") {
+      urgent = true;
+      important = true;
+    } else if (targetQuad === "schedule") {
+      urgent = false;
+      important = true;
+    } else if (targetQuad === "delegate") {
+      urgent = true;
+      important = false;
+    } else if (targetQuad === "eliminate") {
+      urgent = false;
+      important = false;
+    }
+    const file = app.vault.getAbstractFileByPath(issue.filePath);
+    if (file && file instanceof import_obsidian3.TFile) {
+      try {
+        await updateIssueProperty(app, file, (frontmatter) => {
+          frontmatter.urgent = urgent;
+          frontmatter.important = important;
+        });
+      } catch (err) {
+        console.error(`Failed to update matrix for issue ${issueId}:`, err);
+      }
+    }
+  };
   const getIssuesForColumn = (columnId) => {
     return issues.filter((i) => i.status === columnId && !i.isInbox);
+  };
+  const getIssuesForQuadrant = (quadId) => {
+    return issues.filter((i) => {
+      if (i.isInbox || i.status === "done")
+        return false;
+      const isUrgent = !!i.urgent;
+      const isImportant = !!i.important;
+      if (quadId === "do-first")
+        return isUrgent && isImportant;
+      if (quadId === "schedule")
+        return !isUrgent && isImportant;
+      if (quadId === "delegate")
+        return isUrgent && !isImportant;
+      if (quadId === "eliminate")
+        return !isUrgent && !isImportant;
+      return false;
+    });
   };
   const getProjectName = (projectId) => {
     if (!projectId)
@@ -25609,125 +25729,165 @@ function KanbanView({ index, app, onEditIssue, activePomodoroTaskId, wipLimit })
     const proj = projects.find((p) => p.id === projectId);
     return proj ? proj.title : projectId.replace("PROJECT-", "");
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "kanban-board-container", children: COLUMNS.map((col) => {
-    const columnIssues = getIssuesForColumn(col.id);
-    const isDragOver = draggedOverColumn === col.id;
-    const isWipExceeded = col.id === "in-progress" && wipLimit && columnIssues.length > wipLimit;
+  const renderCard = (issue) => {
+    const blockers = getUnresolvedBlockers(issue);
+    const isBlocked = blockers.length > 0;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
       "div",
       {
-        className: "kanban-column",
-        onDragOver: (e) => handleDragOver(e, col.id),
-        onDragLeave: handleDragLeave,
-        onDrop: (e) => handleDrop(e, col.id),
+        className: `kanban-card ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
+        style: { opacity: isBlocked ? 0.65 : 1 },
+        draggable: true,
+        onDragStart: (e) => handleDragStart(e, issue.id),
+        onClick: () => onEditIssue(issue),
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-column-header", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: col.title }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-column-count", children: columnIssues.length })
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-header", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-card-id", children: issue.id }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: `badge badge-priority-${issue.priority}`, children: issue.priority })
           ] }),
-          isWipExceeded && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
-            background: "rgba(239, 68, 68, 0.12)",
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "kanban-card-title", children: issue.title }),
+          isBlocked && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
+            fontSize: "10px",
             color: "#ef4444",
-            padding: "8px 12px",
-            fontSize: "11px",
             fontWeight: 600,
-            borderBottom: "1px solid rgba(239, 68, 68, 0.15)",
-            textAlign: "center"
+            background: "rgba(239, 68, 68, 0.05)",
+            padding: "4px 8px",
+            borderRadius: "4px",
+            border: "1px solid rgba(239, 68, 68, 0.15)",
+            alignSelf: "flex-start"
           }, children: [
-            "\u26A0\uFE0F WIP Limit Reached (Max ",
-            wipLimit,
-            ")"
+            "Blocked by ",
+            blockers.join(", ")
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: `kanban-column-cards ${isDragOver ? "drag-over" : ""}`, children: columnIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: {
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-footer", children: [
+            issue.project ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: {
+              fontSize: "10px",
+              color: "var(--interactive-accent)",
+              fontWeight: 600,
+              background: "var(--background-secondary)",
+              padding: "1px 6px",
+              borderRadius: "4px",
+              border: "1px solid var(--background-modifier-border)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FolderKanban, { size: 10 }),
+              getProjectName(issue.project)
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", {}),
+            issue.due && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: {
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "3px",
+              color: new Date(issue.due) < /* @__PURE__ */ new Date() && issue.status !== "done" ? "#ef4444" : "var(--text-muted)"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Calendar, { size: 10 }),
+              issue.due
+            ] })
+          ] }),
+          issue.tags.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px" }, children: issue.tags.map((tag) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "badge", style: {
+            background: "var(--background-secondary)",
             color: "var(--text-muted)",
-            fontSize: "12px",
-            textAlign: "center",
-            padding: "32px 0",
-            border: "1px dashed var(--background-modifier-border)",
-            borderRadius: "8px"
-          }, children: "Drop tasks here" }) : columnIssues.map((issue) => {
-            const blockers = getUnresolvedBlockers(issue);
-            const isBlocked = blockers.length > 0;
-            return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-              "div",
-              {
-                className: `kanban-card ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
-                style: { opacity: isBlocked ? 0.65 : 1 },
-                draggable: true,
-                onDragStart: (e) => handleDragStart(e, issue.id),
-                onClick: () => onEditIssue(issue),
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-header", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-card-id", children: issue.id }),
-                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: `badge badge-priority-${issue.priority}`, children: issue.priority })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "kanban-card-title", children: issue.title }),
-                  isBlocked && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
-                    fontSize: "10px",
-                    color: "#ef4444",
-                    fontWeight: 600,
-                    background: "rgba(239, 68, 68, 0.05)",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    border: "1px solid rgba(239, 68, 68, 0.15)",
-                    alignSelf: "flex-start"
-                  }, children: [
-                    "\u{1F512} Blocked by ",
-                    blockers.join(", ")
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-footer", children: [
-                    issue.project ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: {
-                      fontSize: "10px",
-                      color: "var(--interactive-accent)",
-                      fontWeight: 600,
-                      background: "var(--background-secondary)",
-                      padding: "1px 6px",
-                      borderRadius: "4px",
-                      border: "1px solid var(--background-modifier-border)",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "4px"
-                    }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FolderKanban, { size: 10 }),
-                      getProjectName(issue.project)
-                    ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", {}),
-                    issue.due && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: {
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "3px",
-                      color: new Date(issue.due) < /* @__PURE__ */ new Date() && issue.status !== "done" ? "#ef4444" : "var(--text-muted)"
-                    }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Calendar, { size: 10 }),
-                      issue.due
-                    ] })
-                  ] }),
-                  issue.tags.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px" }, children: issue.tags.map((tag) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "badge", style: {
-                    background: "var(--background-secondary)",
-                    color: "var(--text-muted)",
-                    textTransform: "none",
-                    fontSize: "9px",
-                    fontWeight: 500,
-                    padding: "1px 4px"
-                  }, children: [
-                    "#",
-                    tag
-                  ] }, tag)) })
-                ]
-              },
-              issue.id
-            );
-          }) })
+            textTransform: "none",
+            fontSize: "9px",
+            fontWeight: 500,
+            padding: "1px 4px"
+          }, children: [
+            "#",
+            tag
+          ] }, tag)) })
         ]
       },
-      col.id
+      issue.id
     );
-  }) });
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "eisenhower-tabs-container", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "eisenhower-toggle-group", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        "button",
+        {
+          className: `eisenhower-toggle-btn ${boardMode === "kanban" ? "active" : ""}`,
+          onClick: () => setBoardMode("kanban"),
+          children: "Status Board"
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        "button",
+        {
+          className: `eisenhower-toggle-btn ${boardMode === "eisenhower" ? "active" : ""}`,
+          onClick: () => setBoardMode("eisenhower"),
+          children: "Eisenhower Matrix"
+        }
+      )
+    ] }) }),
+    boardMode === "kanban" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "kanban-board-container", style: { flex: 1, minHeight: 0 }, children: COLUMNS.map((col) => {
+      const columnIssues = getIssuesForColumn(col.id);
+      const isDragOver = draggedOverColumn === col.id;
+      const isWipExceeded = col.id === "in-progress" && wipLimit && columnIssues.length > wipLimit;
+      return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+        "div",
+        {
+          className: "kanban-column",
+          onDragOver: (e) => handleDragOver(e, col.id),
+          onDragLeave: handleDragLeave,
+          onDrop: (e) => handleDrop(e, col.id),
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-column-header", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: col.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-column-count", children: columnIssues.length })
+            ] }),
+            isWipExceeded && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
+              background: "rgba(239, 68, 68, 0.12)",
+              color: "#ef4444",
+              padding: "8px 12px",
+              fontSize: "11px",
+              fontWeight: 600,
+              borderBottom: "1px solid rgba(239, 68, 68, 0.15)",
+              textAlign: "center"
+            }, children: [
+              "WIP Limit Reached (Max ",
+              wipLimit,
+              ")"
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: `kanban-column-cards ${isDragOver ? "drag-over" : ""}`, children: columnIssues.map((issue) => renderCard(issue)) })
+          ]
+        },
+        col.id
+      );
+    }) }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "eisenhower-grid", children: EISENHOWER_QUADS.map((quad) => {
+      const quadIssues = getIssuesForQuadrant(quad.id);
+      const isDragOver = draggedOverColumn === quad.id;
+      return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+        "div",
+        {
+          className: `eisenhower-quadrant ${quad.id}`,
+          onDragOver: (e) => handleDragOver(e, quad.id),
+          onDragLeave: handleDragLeave,
+          onDrop: (e) => handleEisenhowerDrop(e, quad.id),
+          style: {
+            borderLeft: quad.id === "do-first" ? "4px solid #ef4444" : quad.id === "schedule" ? "4px solid #f59e0b" : quad.id === "delegate" ? "4px solid #3b82f6" : "4px solid var(--background-modifier-border)"
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "eisenhower-quadrant-header", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "14px", fontWeight: 700 }, children: quad.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: quad.subtitle })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-column-count", children: quadIssues.length })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: `eisenhower-quadrant-cards ${isDragOver ? "drag-over" : ""}`, children: quadIssues.map((issue) => renderCard(issue)) })
+          ]
+        },
+        quad.id
+      );
+    }) })
+  ] });
 }
 
-// src/components/BacklogView.tsx
+// src/components/TaskListView.tsx
 var import_react4 = __toESM(require_react());
 var import_jsx_runtime3 = __toESM(require_jsx_runtime());
-function BacklogView({ index, onEditIssue }) {
+function TaskListView({ index, onEditIssue }) {
   const { issues, projects, epics, tags } = index;
   const [search, setSearch] = (0, import_react4.useState)("");
   const [filterProject, setFilterProject] = (0, import_react4.useState)("all");
@@ -25735,8 +25895,8 @@ function BacklogView({ index, onEditIssue }) {
   const [filterStatus, setFilterStatus] = (0, import_react4.useState)("all");
   const [filterPriority, setFilterPriority] = (0, import_react4.useState)("all");
   const [filterTag, setFilterTag] = (0, import_react4.useState)("all");
-  const [sortField, setSortField] = (0, import_react4.useState)("id");
-  const [sortOrder, setSortOrder] = (0, import_react4.useState)("asc");
+  const [sortField, setSortField] = (0, import_react4.useState)("smart");
+  const [sortOrder, setSortOrder] = (0, import_react4.useState)("desc");
   const processedIssues = (0, import_react4.useMemo)(() => {
     let result = issues.filter((i) => !i.isInbox);
     if (search.trim()) {
@@ -25761,9 +25921,21 @@ function BacklogView({ index, onEditIssue }) {
       result = result.filter((issue) => issue.tags.includes(filterTag));
     }
     const priorityWeights = { high: 4, medium: 3, normal: 2, low: 1 };
+    const issueScores = /* @__PURE__ */ new Map();
+    if (sortField === "smart") {
+      result.forEach((issue) => {
+        issueScores.set(issue.id, calculateTaskScore(issue, issues));
+      });
+    }
     result.sort((a, b) => {
       let comparison = 0;
-      if (sortField === "id") {
+      if (sortField === "smart") {
+        const resA = issueScores.get(a.id);
+        const resB = issueScores.get(b.id);
+        const scoreA = resA ? resA.score : 0;
+        const scoreB = resB ? resB.score : 0;
+        comparison = scoreA - scoreB;
+      } else if (sortField === "id") {
         comparison = a.id.localeCompare(b.id, void 0, { numeric: true, sensitivity: "base" });
       } else if (sortField === "title") {
         comparison = a.title.localeCompare(b.title);
@@ -25780,14 +25952,14 @@ function BacklogView({ index, onEditIssue }) {
       }
       return sortOrder === "asc" ? comparison : -comparison;
     });
-    return result;
+    return { issues: result, scores: issueScores };
   }, [issues, search, filterProject, filterEpic, filterStatus, filterPriority, filterTag, sortField, sortOrder]);
   const toggleSort = (field) => {
     if (sortField === field) {
       setSortOrder((prev) => prev === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortOrder("asc");
+      setSortOrder(field === "smart" ? "desc" : "asc");
     }
   };
   const getProjectName = (projId) => {
@@ -25885,7 +26057,7 @@ function BacklogView({ index, onEditIssue }) {
       )
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issues-list", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-row issue-row-header", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-row issue-row-header", style: { gridTemplateColumns: "80px 1fr 90px 120px 120px 80px 100px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("id"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
           "ID ",
           sortField === "id" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
@@ -25895,41 +26067,68 @@ function BacklogView({ index, onEditIssue }) {
           sortField === "title" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("due"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
-          "Due Date ",
+          "Due ",
           sortField === "due" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: "Project" }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: "Epic" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("priority"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", justifySelf: "end" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("priority"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
           "Priority ",
           sortField === "priority" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("smart"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", justifySelf: "end", color: sortField === "smart" ? "var(--interactive-accent)" : void 0 }, children: [
+          "Smart Score ",
+          sortField === "smart" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] })
       ] }),
-      processedIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0", background: "var(--background-secondary)" }, children: "No issues found matching filters." }) : processedIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-        "div",
-        {
-          className: "issue-row",
-          onClick: () => onEditIssue(issue),
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "kanban-card-id", style: { display: "flex", alignItems: "center", gap: "4px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `badge-status-${issue.status}`, style: { width: "6px", height: "6px", borderRadius: "50%" } }),
-              issue.id
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "kanban-card-title", children: issue.title }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { color: "var(--text-muted)" }, children: issue.due || "-" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: getProjectName(issue.project) }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: getEpicName(issue.epic) }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `badge badge-priority-${issue.priority}`, style: { justifySelf: "end" }, children: issue.priority })
-          ]
-        },
-        issue.id
-      ))
+      processedIssues.issues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0", background: "var(--background-secondary)" }, children: "No issues found matching filters." }) : processedIssues.issues.map((issue, idx) => {
+        const res = processedIssues.scores.get(issue.id);
+        const score = res ? res.score : 0;
+        const tooltip = res ? res.breakdown.join("\n") : "";
+        const isTopPriority = sortField === "smart" && sortOrder === "desc" && idx < 3 && score > 100 && issue.status !== "done";
+        return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+          "div",
+          {
+            className: "issue-row",
+            onClick: () => onEditIssue(issue),
+            style: {
+              gridTemplateColumns: "80px 1fr 90px 120px 120px 80px 100px",
+              borderLeft: isTopPriority ? "3px solid #ef4444" : "3px solid transparent",
+              background: isTopPriority ? "var(--background-secondary-alt)" : void 0
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "kanban-card-id", style: { display: "flex", alignItems: "center", gap: "4px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `badge-status-${issue.status}`, style: { width: "6px", height: "6px", borderRadius: "50%" } }),
+                issue.id
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "kanban-card-title", children: issue.title }),
+                isTopPriority && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: "10px", color: "#ef4444", fontWeight: 600 }, children: "Needs Immediate Attention" })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { color: "var(--text-muted)" }, children: issue.due || "-" }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: getProjectName(issue.project) }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: getEpicName(issue.epic) }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `badge badge-priority-${issue.priority}`, children: issue.priority }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "span",
+                {
+                  title: tooltip,
+                  style: { justifySelf: "end", fontWeight: 600, color: score < 0 ? "var(--text-muted)" : "var(--text-normal)", cursor: "help", borderBottom: "1px dotted var(--text-muted)" },
+                  children: score > 0 ? `+${score}` : score
+                }
+              )
+            ]
+          },
+          issue.id
+        );
+      })
     ] })
   ] });
 }
 
 // src/components/ProjectsView.tsx
 var import_react5 = __toESM(require_react());
+var import_obsidian4 = require("obsidian");
 var import_jsx_runtime4 = __toESM(require_jsx_runtime());
 function ProjectsView({
   index,
@@ -25949,6 +26148,25 @@ function ProjectsView({
   const [newEpicId, setNewEpicId] = (0, import_react5.useState)("");
   const [newEpicTitle, setNewEpicTitle] = (0, import_react5.useState)("");
   const [newEpicProjId, setNewEpicProjId] = (0, import_react5.useState)("");
+  const handleDeleteProject = async (project) => {
+    if (confirm(`Are you sure you want to delete the project "${project.title}"?`)) {
+      const file = app.vault.getAbstractFileByPath(project.filePath);
+      if (file && file instanceof import_obsidian4.TFile) {
+        await app.vault.trash(file, true);
+        onSelectProject(null);
+      }
+    }
+  };
+  const handleDeleteEpic = async (epic) => {
+    if (confirm(`Are you sure you want to delete the epic "${epic.title}"?`)) {
+      const file = app.vault.getAbstractFileByPath(epic.filePath);
+      if (file && file instanceof import_obsidian4.TFile) {
+        await app.vault.trash(file, true);
+        onSelectEpic(null);
+      }
+    }
+  };
+  const [showCreateEpicInProject, setShowCreateEpicInProject] = (0, import_react5.useState)(false);
   const projectStats = (0, import_react5.useMemo)(() => {
     const stats = {};
     projects.forEach((p) => {
@@ -25986,17 +26204,18 @@ function ProjectsView({
       console.error("Failed to create project:", err);
     }
   };
-  const handleCreateEpicSubmit = async (e) => {
+  const handleCreateEpicSubmit = async (e, forceProjectId) => {
     e.preventDefault();
     if (!newEpicId || !newEpicTitle)
       return;
     try {
       const finalId = newEpicId.startsWith("EPIC-") ? newEpicId : `EPIC-${newEpicId.toUpperCase()}`;
-      await createEpicFile(app, settings, finalId, newEpicTitle, newEpicProjId || void 0);
+      await createEpicFile(app, settings, finalId, newEpicTitle, forceProjectId || newEpicProjId || void 0);
       setNewEpicId("");
       setNewEpicTitle("");
       setNewEpicProjId("");
       setShowCreateEpic(false);
+      setShowCreateEpicInProject(false);
     } catch (err) {
       console.error("Failed to create epic:", err);
     }
@@ -26017,11 +26236,22 @@ function ProjectsView({
     const stats = projectStats[activeProject.id] || { total: 0, completed: 0, progress: 0, epicsCount: 0 };
     const projectEpics = epics.filter((e) => e.project === activeProject.id);
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px", marginBottom: "8px" }, onClick: () => onSelectProject(null), children: "\u2190 Back to Overview" }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: activeProject.title }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: activeProject.id })
-      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px", marginBottom: "8px" }, onClick: () => onSelectProject(null), children: "\u2190 Back to Overview" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: activeProject.title }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: activeProject.id })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          "button",
+          {
+            className: "flow-action-btn",
+            style: { background: "transparent", color: "#ef4444", border: "1px solid #ef4444", boxShadow: "none" },
+            onClick: () => handleDeleteProject(activeProject),
+            children: "Delete Project"
+          }
+        ) })
+      ] }),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-dashboard-stats", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "stat-label", children: "Progress" }),
@@ -26045,8 +26275,56 @@ function ProjectsView({
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-grid", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-4", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { height: "100%" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "dashboard-card-title", children: "Epics in Project" }),
-          projectEpics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "12px", textAlign: "center", padding: "16px 0" }, children: "No epics linked to this project." }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: projectEpics.map((e) => {
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card-title", style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "Epics in Project" }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+              "button",
+              {
+                className: "flow-action-btn",
+                style: { padding: "2px 8px", fontSize: "11px" },
+                onClick: () => setShowCreateEpicInProject(!showCreateEpicInProject),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Plus, { size: 10 }),
+                  " Add Epic"
+                ]
+              }
+            )
+          ] }),
+          showCreateEpicInProject && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("form", { onSubmit: (e) => handleCreateEpicSubmit(e, activeProject.id), style: { display: "flex", flexDirection: "column", gap: "8px", marginBottom: "16px", background: "var(--background-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--interactive-accent)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { fontSize: "12px", fontWeight: 600, color: "var(--interactive-accent)" }, children: [
+              "New Epic for ",
+              activeProject.title
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                placeholder: "Epic ID (e.g. AUTH)",
+                style: { fontSize: "12px", padding: "4px 8px" },
+                value: newEpicId,
+                onChange: (e) => setNewEpicId(e.target.value),
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                placeholder: "Epic Title",
+                style: { fontSize: "12px", padding: "4px 8px" },
+                value: newEpicTitle,
+                onChange: (e) => setNewEpicTitle(e.target.value),
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", gap: "6px", justifyContent: "flex-end", marginTop: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "button", className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px" }, onClick: () => setShowCreateEpicInProject(false), children: "Cancel" }),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "4px 8px", fontSize: "11px" }, children: "Save" })
+            ] })
+          ] }),
+          projectEpics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", style: { padding: "24px 12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No epics linked to this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: projectEpics.map((e) => {
             const eStat = epicStats[e.id] || { progress: 0, total: 0 };
             return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
               "div",
@@ -26084,7 +26362,7 @@ function ProjectsView({
             currentProjectIssues.length,
             ")"
           ] }),
-          currentProjectIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0" }, children: "No issues in this project." }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentProjectIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+          currentProjectIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No issues in this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentProjectIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
             "div",
             {
               className: "issue-row",
@@ -26106,20 +26384,30 @@ function ProjectsView({
   if (activeEpic) {
     const stats = epicStats[activeEpic.id] || { total: 0, completed: 0, progress: 0 };
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px", marginBottom: "8px" }, onClick: () => {
-          if (activeEpic.project) {
-            onSelectProject(activeEpic.project);
-          } else {
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px", marginBottom: "8px" }, onClick: () => {
+            if (activeEpic.project) {
+              onSelectProject(activeEpic.project);
+            }
             onSelectEpic(null);
+          }, children: "\u2190 Back" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: activeEpic.title }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: activeEpic.id })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          "button",
+          {
+            className: "flow-action-btn",
+            style: { background: "transparent", color: "#ef4444", border: "1px solid #ef4444", boxShadow: "none" },
+            onClick: () => handleDeleteEpic(activeEpic),
+            children: "Delete Epic"
           }
-        }, children: "\u2190 Back" }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: activeEpic.title }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: activeEpic.id }),
-        activeEpic.project && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { marginTop: "4px", fontSize: "13px", color: "var(--text-muted)" }, children: [
-          "Project: ",
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--interactive-accent)", cursor: "pointer", fontWeight: 500 }, onClick: () => onSelectProject(activeEpic.project), children: activeEpic.project })
-        ] })
+        ) })
+      ] }),
+      activeEpic.project && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { marginTop: "4px", fontSize: "13px", color: "var(--text-muted)" }, children: [
+        "Project: ",
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--interactive-accent)", cursor: "pointer", fontWeight: 500 }, onClick: () => onSelectProject(activeEpic.project), children: activeEpic.project })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-dashboard-stats", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", children: [
@@ -26144,7 +26432,7 @@ function ProjectsView({
           currentEpicIssues.length,
           ")"
         ] }),
-        currentEpicIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0" }, children: "No issues linked to this epic yet." }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentEpicIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+        currentEpicIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No issues in this epic." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentEpicIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
           {
             className: "issue-row",
@@ -26256,7 +26544,7 @@ function ProjectsView({
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-12", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card-title", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
           "Projects (",
@@ -26271,7 +26559,7 @@ function ProjectsView({
           "Add Project"
         ] })
       ] }),
-      projects.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0" }, children: "No projects created yet." }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: projects.map((p) => {
+      projects.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No projects created yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: projects.map((p) => {
         const stats = projectStats[p.id] || { progress: 0, total: 0, completed: 0, epicsCount: 0 };
         return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
@@ -26313,7 +26601,7 @@ function ProjectsView({
         );
       }) })
     ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-12", style: { marginTop: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card-title", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
           "Epics (",
@@ -26328,7 +26616,7 @@ function ProjectsView({
           "Add Epic"
         ] })
       ] }),
-      epics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0" }, children: "No epics created yet." }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: epics.map((e) => {
+      epics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No epics created yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: epics.map((e) => {
         const stats = epicStats[e.id] || { progress: 0, total: 0, completed: 0 };
         return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
@@ -26373,7 +26661,7 @@ function ProjectsView({
 
 // src/components/IssueEditor.tsx
 var import_react6 = __toESM(require_react());
-var import_obsidian4 = require("obsidian");
+var import_obsidian5 = require("obsidian");
 var import_jsx_runtime5 = __toESM(require_jsx_runtime());
 function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   const isCreateMode = !issue;
@@ -26391,6 +26679,8 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   const [blockedByInput, setBlockedByInput] = (0, import_react6.useState)("");
   const [today, setToday] = (0, import_react6.useState)(false);
   const [energy, setEnergy] = (0, import_react6.useState)("");
+  const [urgent, setUrgent] = (0, import_react6.useState)(false);
+  const [important, setImportant] = (0, import_react6.useState)(false);
   const [estimate, setEstimate] = (0, import_react6.useState)("");
   const [logged, setLogged] = (0, import_react6.useState)(0);
   const [difficulty, setDifficulty] = (0, import_react6.useState)("normal");
@@ -26399,13 +26689,13 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   (0, import_react6.useEffect)(() => {
     if (issue) {
       let file = app.vault.getAbstractFileByPath(issue.filePath);
-      if (!(file instanceof import_obsidian4.TFile)) {
+      if (!(file instanceof import_obsidian5.TFile)) {
         const freshIssue = index.issues.find((i) => i.id === issue.id);
         if (freshIssue) {
           file = app.vault.getAbstractFileByPath(freshIssue.filePath);
         }
       }
-      if (!(file instanceof import_obsidian4.TFile)) {
+      if (!(file instanceof import_obsidian5.TFile)) {
         const files = app.vault.getMarkdownFiles();
         for (const f of files) {
           const cache = app.metadataCache.getFileCache(f);
@@ -26415,7 +26705,7 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
           }
         }
       }
-      if (file && file instanceof import_obsidian4.TFile) {
+      if (file && file instanceof import_obsidian5.TFile) {
         readIssueFile(app, file).then(({ frontmatter, body: fileBody }) => {
           setTitle(frontmatter.title || issue.title || "");
           setStatus(frontmatter.status || issue.status || "todo");
@@ -26431,6 +26721,8 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
           setBlockedByInput(blockers.join(", "));
           setToday(!!frontmatter.today || !!issue.today);
           setEnergy(frontmatter.energy || issue.energy || "");
+          setUrgent(!!frontmatter.urgent || !!issue.urgent);
+          setImportant(!!frontmatter.important || !!issue.important);
           setBody(fileBody);
           setEstimate(frontmatter.estimate ? frontmatter.estimate.toString() : issue.estimate ? issue.estimate.toString() : "");
           setLogged(parseInt(frontmatter.logged, 10) || issue.logged || 0);
@@ -26454,6 +26746,8 @@ ${fileBody}`);
       setBlockedByInput("");
       setToday(false);
       setEnergy("");
+      setUrgent(false);
+      setImportant(false);
       setBody("\n# Context\n\nNeed google/github login.\n\n# Notes\n\nImplementation details...\n");
       setEstimate("");
       setLogged(0);
@@ -26481,6 +26775,8 @@ ${fileBody}`);
         blockedBy: parsedBlockedBy,
         today: today ? true : void 0,
         energy: energy || void 0,
+        urgent: urgent ? true : void 0,
+        important: important ? true : void 0,
         estimate: estimate ? parseInt(estimate, 10) : void 0,
         logged: logged || 0,
         difficulty: difficulty !== "normal" ? difficulty : void 0
@@ -26494,7 +26790,7 @@ ${body}`);
   const handleToggleForm = () => {
     if (editorMode === "raw") {
       try {
-        const frontmatterInfo = (0, import_obsidian4.getFrontMatterInfo)(rawText);
+        const frontmatterInfo = (0, import_obsidian5.getFrontMatterInfo)(rawText);
         if (frontmatterInfo) {
           const fmPart = rawText.substring(0, frontmatterInfo.contentStart);
           const bodyPart = rawText.substring(frontmatterInfo.contentStart).trim();
@@ -26568,6 +26864,10 @@ ${body}`);
                   parsedToday = val === "true";
                 else if (key === "energy")
                   parsedEnergy = val;
+                else if (key === "urgent")
+                  setUrgent(val === "true");
+                else if (key === "important")
+                  setImportant(val === "true");
               }
             }
           }
@@ -26614,6 +26914,8 @@ ${body}`);
           blockedBy: parsedBlockedBy,
           today,
           energy: energy || void 0,
+          urgent,
+          important,
           estimate: estimate ? parseInt(estimate, 10) : void 0,
           logged: logged || 0,
           difficulty: difficulty !== "normal" ? difficulty : void 0,
@@ -26621,13 +26923,13 @@ ${body}`);
         });
       } else {
         let file = app.vault.getAbstractFileByPath(issue.filePath);
-        if (!(file instanceof import_obsidian4.TFile)) {
+        if (!(file instanceof import_obsidian5.TFile)) {
           const freshIssue = index.issues.find((i) => i.id === issue.id);
           if (freshIssue) {
             file = app.vault.getAbstractFileByPath(freshIssue.filePath);
           }
         }
-        if (!(file instanceof import_obsidian4.TFile)) {
+        if (!(file instanceof import_obsidian5.TFile)) {
           const files = app.vault.getMarkdownFiles();
           for (const f of files) {
             const cache = app.metadataCache.getFileCache(f);
@@ -26637,7 +26939,7 @@ ${body}`);
             }
           }
         }
-        if (file && file instanceof import_obsidian4.TFile) {
+        if (file && file instanceof import_obsidian5.TFile) {
           if (promote) {
             const nextId = getNextIssueId(index.issues);
             const fmData = {
@@ -26652,6 +26954,8 @@ ${body}`);
               blockedBy: parsedBlockedBy,
               today,
               energy: energy || void 0,
+              urgent,
+              important,
               estimate: estimate ? parseInt(estimate, 10) : void 0,
               logged: logged || 0,
               difficulty: difficulty !== "normal" ? difficulty : void 0
@@ -26676,6 +26980,8 @@ ${body}`);
                 blockedBy: parsedBlockedBy,
                 today,
                 energy: energy || void 0,
+                urgent,
+                important,
                 estimate: estimate ? parseInt(estimate, 10) : void 0,
                 logged: logged || 0,
                 difficulty: difficulty !== "normal" ? difficulty : void 0
@@ -26698,13 +27004,13 @@ ${body}`);
       return;
     try {
       let file = app.vault.getAbstractFileByPath(issue.filePath);
-      if (!(file instanceof import_obsidian4.TFile)) {
+      if (!(file instanceof import_obsidian5.TFile)) {
         const freshIssue = index.issues.find((i) => i.id === issue.id);
         if (freshIssue) {
           file = app.vault.getAbstractFileByPath(freshIssue.filePath);
         }
       }
-      if (!(file instanceof import_obsidian4.TFile)) {
+      if (!(file instanceof import_obsidian5.TFile)) {
         const files = app.vault.getMarkdownFiles();
         for (const f of files) {
           const cache = app.metadataCache.getFileCache(f);
@@ -26714,7 +27020,7 @@ ${body}`);
           }
         }
       }
-      if (file && file instanceof import_obsidian4.TFile) {
+      if (file && file instanceof import_obsidian5.TFile) {
         await deleteIssueFile(app, file);
       }
       onClose();
@@ -26802,6 +27108,7 @@ ${body}`);
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "todo", children: "Todo" }),
                   /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "in-progress", children: "In Progress" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "in-review", children: "In Review" }),
                   /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "blocked", children: "Blocked" }),
                   /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "done", children: "Done" })
                 ]
@@ -26849,11 +27156,19 @@ ${body}`);
               {
                 className: "filter-select",
                 value: epicId,
-                onChange: (e) => setEpicId(e.target.value),
-                disabled: !projectId,
+                onChange: (e) => {
+                  const selectedEpicId = e.target.value;
+                  setEpicId(selectedEpicId);
+                  if (selectedEpicId) {
+                    const selectedEpic = index.epics.find((ep) => ep.id === selectedEpicId);
+                    if (selectedEpic && selectedEpic.project) {
+                      setProjectId(selectedEpic.project);
+                    }
+                  }
+                },
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "", children: "None" }),
-                  index.epics.filter((e) => !projectId || e.project === projectId).map((e) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: e.id, children: e.title }, e.id))
+                  index.epics.filter((e) => !projectId || e.project === projectId || !e.project).map((e) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: e.id, children: e.title }, e.id))
                 ]
               }
             )
@@ -26961,6 +27276,34 @@ ${body}`);
                 ]
               }
             )
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { flexDirection: "row", alignItems: "center", gap: "8px", paddingTop: "10px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+              "input",
+              {
+                type: "checkbox",
+                id: "urgent-checkbox",
+                checked: urgent,
+                onChange: (e) => setUrgent(e.target.checked),
+                style: { cursor: "pointer" }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { htmlFor: "urgent-checkbox", className: "form-label", style: { cursor: "pointer", margin: 0 }, children: "Is Urgent" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { flexDirection: "row", alignItems: "center", gap: "8px", paddingTop: "10px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+              "input",
+              {
+                type: "checkbox",
+                id: "important-checkbox",
+                checked: important,
+                onChange: (e) => setImportant(e.target.checked),
+                style: { cursor: "pointer" }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { htmlFor: "important-checkbox", className: "form-label", style: { cursor: "pointer", margin: 0 }, children: "Is Important" })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
@@ -27189,7 +27532,7 @@ function SettingsView({ plugin, onSettingsChanged }) {
 
 // src/components/PomodoroTimer.tsx
 var import_react8 = __toESM(require_react());
-var import_obsidian5 = require("obsidian");
+var import_obsidian6 = require("obsidian");
 var import_jsx_runtime7 = __toESM(require_jsx_runtime());
 var MODE_TIMES = {
   "focus": 25 * 60,
@@ -27203,6 +27546,23 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   const [queue, setQueue] = (0, import_react8.useState)(["", "", ""]);
   const [activeQueueIndex, setActiveQueueIndex] = (0, import_react8.useState)(0);
   const timerRef = (0, import_react8.useRef)(null);
+  (0, import_react8.useEffect)(() => {
+    setQueue((prev) => {
+      let next = [...prev];
+      const todayIssues = issues.filter((i) => i.today && i.status !== "done");
+      let changed = false;
+      todayIssues.forEach((issue) => {
+        if (!next.includes(issue.id)) {
+          const emptyIdx = next.findIndex((id) => !id);
+          if (emptyIdx !== -1) {
+            next[emptyIdx] = issue.id;
+            changed = true;
+          }
+        }
+      });
+      return changed ? next : prev;
+    });
+  }, [issues]);
   const currentActiveTaskId = queue[activeQueueIndex] || "";
   (0, import_react8.useEffect)(() => {
     if (onSelectIssue) {
@@ -27324,7 +27684,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       });
       if (activeTask) {
         const file = app.vault.getAbstractFileByPath(activeTask.filePath);
-        if (file && file instanceof import_obsidian5.TFile) {
+        if (file && file instanceof import_obsidian6.TFile) {
           try {
             await updateIssueProperty(app, file, (fm) => {
               const currentLogged = parseInt(fm.logged, 10) || 0;
@@ -27381,15 +27741,10 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   const openIssues = issues.filter((i) => i.status !== "done");
   const selectedTask = issues.find((i) => i.id === currentActiveTaskId);
   return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
-    background: "var(--background-secondary)",
-    border: "1px solid var(--background-modifier-border)",
-    borderRadius: "12px",
-    padding: "16px",
     display: "flex",
     flexDirection: "column",
     gap: "12px",
-    width: "100%",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)"
+    width: "100%"
   }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "6px", background: "var(--background-primary)", padding: "2px", borderRadius: "8px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
@@ -27893,11 +28248,11 @@ function FlowApp({ plugin, app }) {
         /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
           "button",
           {
-            className: `flow-nav-tab ${activeTab === "kanban" ? "active" : ""}`,
-            onClick: () => setActiveTab("kanban"),
+            className: `flow-nav-tab ${activeTab === "board" ? "active" : ""}`,
+            onClick: () => setActiveTab("board"),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(KanbanSquare, { size: 16 }),
-              "Kanban"
+              "Board"
             ]
           }
         ),
@@ -27908,7 +28263,7 @@ function FlowApp({ plugin, app }) {
             onClick: () => setActiveTab("backlog"),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ListTodo, { size: 16 }),
-              "Backlog"
+              "Task List"
             ]
           }
         ),
@@ -27988,8 +28343,8 @@ function FlowApp({ plugin, app }) {
             onRefresh: reloadIndex
           }
         ),
-        activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          KanbanView,
+        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          BoardView,
           {
             index,
             app,
@@ -27999,7 +28354,7 @@ function FlowApp({ plugin, app }) {
           }
         ),
         activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          BacklogView,
+          TaskListView,
           {
             index,
             onEditIssue: handleEditIssue
@@ -28037,22 +28392,24 @@ function FlowApp({ plugin, app }) {
         )
       ] }),
       isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("aside", { className: "flow-sidebar", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
-          "Focus & Pomodoro"
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "sidebar-section", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
+            "Focus & Pomodoro"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            PomodoroTimer,
+            {
+              app,
+              plugin,
+              issues: index.issues,
+              onRefresh: reloadIndex,
+              activeIssueId: activePomodoroTaskId,
+              onSelectIssue: handleSelectPomodoroTask
+            }
+          )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          PomodoroTimer,
-          {
-            app,
-            plugin,
-            issues: index.issues,
-            onRefresh: reloadIndex,
-            activeIssueId: activePomodoroTaskId,
-            onSelectIssue: handleSelectPomodoroTask
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", borderTop: "1px solid rgba(127, 127, 127, 0.12)", paddingTop: "16px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "sidebar-section", children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Inbox, { size: 14, style: { color: "var(--interactive-accent)" } }),
             "Inbox Tasks"
@@ -28174,7 +28531,7 @@ function InboxList({ index, onEditIssue }) {
 // src/FlowView.tsx
 var import_jsx_runtime10 = __toESM(require_jsx_runtime());
 var FLOW_VIEW_TYPE = "flow-project-view";
-var FlowView = class extends import_obsidian6.ItemView {
+var FlowView = class extends import_obsidian7.ItemView {
   constructor(leaf, plugin) {
     super(leaf);
     this.root = null;
@@ -28211,7 +28568,7 @@ var FlowView = class extends import_obsidian6.ItemView {
 };
 
 // src/main.ts
-var FlowPlugin = class extends import_obsidian7.Plugin {
+var FlowPlugin = class extends import_obsidian8.Plugin {
   constructor() {
     super(...arguments);
     this.changeListeners = [];
@@ -28302,7 +28659,7 @@ var FlowPlugin = class extends import_obsidian7.Plugin {
     workspace.revealLeaf(leaf);
   }
 };
-var FlowSettingTab = class extends import_obsidian7.PluginSettingTab {
+var FlowSettingTab = class extends import_obsidian8.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -28311,31 +28668,31 @@ var FlowSettingTab = class extends import_obsidian7.PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "Flow Project Tracker Settings" });
-    new import_obsidian7.Setting(containerEl).setName("Inbox Folder").setDesc("Folder where new inbox tasks are placed.").addText((text) => text.setPlaceholder("2. WORK/INBOX").setValue(this.plugin.settings.inboxFolder).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("Inbox Folder").setDesc("Folder where new inbox tasks are placed.").addText((text) => text.setPlaceholder("2. WORK/INBOX").setValue(this.plugin.settings.inboxFolder).onChange(async (value) => {
       this.plugin.settings.inboxFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian7.Setting(containerEl).setName("Issues Folder").setDesc("Folder where standard tasks/issues are placed.").addText((text) => text.setPlaceholder("Issues").setValue(this.plugin.settings.issuesFolder).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("Issues Folder").setDesc("Folder where standard tasks/issues are placed.").addText((text) => text.setPlaceholder("Issues").setValue(this.plugin.settings.issuesFolder).onChange(async (value) => {
       this.plugin.settings.issuesFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian7.Setting(containerEl).setName("Projects Folder").setDesc("Folder where project files are stored.").addText((text) => text.setPlaceholder("Projects").setValue(this.plugin.settings.projectsFolder).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("Projects Folder").setDesc("Folder where project files are stored.").addText((text) => text.setPlaceholder("Projects").setValue(this.plugin.settings.projectsFolder).onChange(async (value) => {
       this.plugin.settings.projectsFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian7.Setting(containerEl).setName("Epics Folder").setDesc("Folder where epic files are stored.").addText((text) => text.setPlaceholder("Epics").setValue(this.plugin.settings.epicsFolder).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("Epics Folder").setDesc("Folder where epic files are stored.").addText((text) => text.setPlaceholder("Epics").setValue(this.plugin.settings.epicsFolder).onChange(async (value) => {
       this.plugin.settings.epicsFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian7.Setting(containerEl).setName("Docs Folder").setDesc("Folder where general documents are stored.").addText((text) => text.setPlaceholder("Docs").setValue(this.plugin.settings.docsFolder).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("Docs Folder").setDesc("Folder where general documents are stored.").addText((text) => text.setPlaceholder("Docs").setValue(this.plugin.settings.docsFolder).onChange(async (value) => {
       this.plugin.settings.docsFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian7.Setting(containerEl).setName("Daily Notes Folder").setDesc("Folder where daily notes are stored.").addText((text) => text.setPlaceholder("Daily Notes").setValue(this.plugin.settings.dailyNotesFolder).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("Daily Notes Folder").setDesc("Folder where daily notes are stored.").addText((text) => text.setPlaceholder("Daily Notes").setValue(this.plugin.settings.dailyNotesFolder).onChange(async (value) => {
       this.plugin.settings.dailyNotesFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian7.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
+    new import_obsidian8.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
       const num = parseInt(value, 10);
       this.plugin.settings.wipLimit = isNaN(num) ? 3 : num;
       await this.plugin.saveSettings();
