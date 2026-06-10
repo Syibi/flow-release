@@ -1093,7 +1093,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState11(initialState) {
+        function useState12(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1105,7 +1105,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect7(create, deps) {
+        function useEffect8(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1888,7 +1888,7 @@ var require_react_development = __commonJS({
         exports.useContext = useContext;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect7;
+        exports.useEffect = useEffect8;
         exports.useId = useId;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
@@ -1896,7 +1896,7 @@ var require_react_development = __commonJS({
         exports.useMemo = useMemo4;
         exports.useReducer = useReducer;
         exports.useRef = useRef2;
-        exports.useState = useState11;
+        exports.useState = useState12;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -2392,9 +2392,9 @@ var require_react_dom_development = __commonJS({
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
           __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
         }
-        var React4 = require_react();
+        var React5 = require_react();
         var Scheduler = require_scheduler();
-        var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         var suppressWarning = false;
         function setSuppressWarning(newSuppressWarning) {
           {
@@ -3999,7 +3999,7 @@ var require_react_dom_development = __commonJS({
           {
             if (props.value == null) {
               if (typeof props.children === "object" && props.children !== null) {
-                React4.Children.forEach(props.children, function(child) {
+                React5.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -23568,7 +23568,7 @@ var require_react_jsx_runtime_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React4 = require_react();
+        var React5 = require_react();
         var REACT_ELEMENT_TYPE = Symbol.for("react.element");
         var REACT_PORTAL_TYPE = Symbol.for("react.portal");
         var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -23594,7 +23594,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
           return null;
         }
-        var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function error(format) {
           {
             {
@@ -24479,7 +24479,7 @@ var import_obsidian8 = require("obsidian");
 var import_client = __toESM(require_client());
 
 // src/components/FlowApp.tsx
-var React3 = __toESM(require_react());
+var React4 = __toESM(require_react());
 var import_react12 = __toESM(require_react());
 
 // src/utils/obsidianUtils.ts
@@ -25135,13 +25135,13 @@ reviewedAt: ${todayStr}
   const content = await app.vault.read(file);
   let reviewSection = `## Weekly Review - ${todayStr}
 `;
-  reviewSection += `- **Tugas Selesai (Minggu Ini)**: ${stats.completed} \u{1F7E2}
+  reviewSection += `- **Tugas Selesai (Minggu Ini)**: ${stats.completed}
 `;
-  reviewSection += `- **Tugas Terblokir**: ${stats.blocked} \u{1F512}
+  reviewSection += `- **Tugas Terblokir**: ${stats.blocked}
 `;
-  reviewSection += `- **Tugas Terlambat (Overdue)**: ${stats.overdue} \u26A0\uFE0F
+  reviewSection += `- **Tugas Terlambat (Overdue)**: ${stats.overdue}
 `;
-  reviewSection += `- **Tugas Terbuka di Backlog**: ${stats.open} \u{1F4C2}
+  reviewSection += `- **Tugas Terbuka di Backlog**: ${stats.open}
 
 `;
   const reviewRegex = /## Weekly Review - \d{4}-\d{2}-\d{2}[\s\S]*?(?=\n## |$)/;
@@ -25825,7 +25825,7 @@ function DashboardView({
       gap: "8px",
       margin: "20px 0"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "32px" }, children: "\u{1F3AF}" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "var(--text-accent)", marginBottom: "4px", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckCircle2, { size: 32 }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", { style: { margin: 0, fontWeight: 700, color: "var(--text-normal)" }, children: "Semua Bersih & Rapi!" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, fontSize: "13px", color: "var(--text-muted)", maxWidth: "400px", lineHeight: 1.5 }, children: "Belum ada project aktif atau tugas yang direncanakan untuk hari ini. Mulai dengan membuat project baru atau rencanakan tugas Anda di Backlog." }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "10px", marginTop: "12px" }, children: [
@@ -26015,10 +26015,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-header", children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-card-id", children: issue.id }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: "4px", alignItems: "center" }, children: [
-              issue.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "badge", style: { fontSize: "9px", fontWeight: 600, color: "var(--interactive-accent)", borderColor: "rgba(99, 102, 241, 0.2)" }, title: "Smart Score", children: [
-                "\u{1F3AF} ",
-                calculateTaskScore(issue, issues).score
-              ] }),
+              issue.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "badge", style: { fontSize: "9px", fontWeight: 600, color: "var(--interactive-accent)", borderColor: "rgba(99, 102, 241, 0.2)" }, title: "Smart Score", children: calculateTaskScore(issue, issues).score }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: `badge badge-priority-${issue.priority}`, children: issue.priority })
             ] })
           ] }),
@@ -26122,7 +26119,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
               borderBottom: "1px solid rgba(239, 68, 68, 0.15)",
               textAlign: "center"
             }, children: [
-              "\u26A0\uFE0F WIP Limit Reached (Max ",
+              "WIP Limit Reached (Max ",
               wipLimit,
               ")"
             ] }),
@@ -27679,7 +27676,6 @@ ${body}`);
         lineHeight: 1.5,
         marginBottom: "4px"
       }, children: [
-        "\u{1F4A1} ",
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("strong", { children: "Inbox Capture Mode" }),
         ": Assign parameters and click ",
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("strong", { children: "Promote to Task" }),
@@ -27968,7 +27964,7 @@ ${body}`);
               style: { cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "4px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
               title: `Open [[${note}]] in Obsidian`,
               children: [
-                "\u{1F4C4} [[",
+                "[[",
                 note,
                 "]]"
               ]
@@ -28350,7 +28346,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       return;
     let text = "";
     if (isRunning) {
-      text = `Flow: \u{1F3AF} ${formatTime(timeLeft)} (${currentActiveTaskId || "No Task"})`;
+      text = `Flow: ${formatTime(timeLeft)} (${currentActiveTaskId || "No Task"})`;
     } else {
       const isInitial = timeLeft === MODE_TIMES[mode];
       text = `Flow: ${isInitial ? "Idle" : "Paused"} (${formatTime(timeLeft)})`;
@@ -28796,7 +28792,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       flexDirection: "column",
       gap: "4px"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "\u{1F4A1} Recommended Task" }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Recommended Task" }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { fontSize: "11px", fontWeight: 600, color: "var(--text-normal)" }, children: [
         recommendedTask.id,
         " - ",
@@ -29036,7 +29032,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
       };
       await logWeeklyReviewToDailyNote(app, plugin.settings, stats);
       setIsReviewedToday(true);
-      setReviewMessage("Review Mingguan berhasil disimpan di Daily Note Anda! \u{1F7E2}");
+      setReviewMessage("Review Mingguan berhasil disimpan di Daily Note Anda!");
       setTimeout(() => setReviewMessage(null), 5e3);
       onRefresh();
     } catch (err) {
@@ -29061,7 +29057,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             className: `flow-nav-tab ${subTab === "overview" ? "active" : ""}`,
             onClick: () => setSubTab("overview"),
             style: { fontSize: "12px", padding: "6px 12px" },
-            children: "\u{1F3AF} Active Cycle (Overview)"
+            children: "Active Cycle (Overview)"
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
@@ -29070,7 +29066,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             className: `flow-nav-tab ${subTab === "planning" ? "active" : ""}`,
             onClick: () => setSubTab("planning"),
             style: { fontSize: "12px", padding: "6px 12px" },
-            children: "\u{1F4C2} Scope Planner"
+            children: "Scope Planner"
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
@@ -29079,7 +29075,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             className: `flow-nav-tab ${subTab === "reflection" ? "active" : ""}`,
             onClick: () => setSubTab("reflection"),
             style: { fontSize: "12px", padding: "6px 12px" },
-            children: "\u270D\uFE0F Reflection & Review"
+            children: "Reflection & Review"
           }
         )
       ] })
@@ -29117,7 +29113,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             ] })
           ] }),
           plannedTasks.length > weeklyPlanning.capacity && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "11px", borderLeft: "4px solid #ef4444", marginBottom: "12px" }, children: [
-            "\u26A0\uFE0F Planned issues exceed weekly capacity (",
+            "Planned issues exceed weekly capacity (",
             weeklyPlanning.capacity,
             "). Consider pruning."
           ] }),
@@ -29148,7 +29144,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           )) })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #8b5cf6" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "\u{1F4CA} Focus Insights" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Focus Insights" }) }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Time by Project" }),
@@ -29298,7 +29294,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #a855f7" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card-title", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "\u270D\uFE0F Daily Reflection Note" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Daily Reflection Note" }),
             saveReflectionStatus && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "11px", color: "#10b981", fontWeight: 600 }, children: saveReflectionStatus })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
@@ -29353,7 +29349,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0 0 10px 0", fontSize: "13px", fontWeight: 600 }, children: "\u{1F4CB} Today's Activity Log" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0 0 10px 0", fontSize: "13px", fontWeight: 600 }, children: "Today's Activity Log" }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: "10px", color: "var(--text-muted)", margin: "0 0 12px 0" }, children: "Log aktivitas otomatis yang tercatat di Daily Note Anda hari ini." }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("pre", { style: {
             background: "var(--background-primary)",
@@ -29431,7 +29427,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           )
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #ef4444" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "\u26A0\uFE0F Active Cycle Risks" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Active Cycle Risks" }) }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px", fontSize: "11px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "#ef4444" }, children: [
@@ -29570,10 +29566,12 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
 }
 
 // src/components/ProductivityView.tsx
+var React3 = __toESM(require_react());
 var import_react11 = __toESM(require_react());
 var import_jsx_runtime10 = __toESM(require_jsx_runtime());
 function ProductivityView({ index, app, onRefresh }) {
   const { dailyNotes } = index;
+  const [currentPage, setCurrentPage] = React3.useState(0);
   const stats = (0, import_react11.useMemo)(() => {
     const activeDays = /* @__PURE__ */ new Set();
     let totalPomos = 0;
@@ -29738,8 +29736,19 @@ function ProductivityView({ index, app, onRefresh }) {
     }
   };
   const recentNotes = (0, import_react11.useMemo)(() => {
-    return [...dailyNotes].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+    return [...dailyNotes].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 16);
   }, [dailyNotes]);
+  const cardsPerPage = 4;
+  const totalPages = Math.ceil(recentNotes.length / cardsPerPage);
+  React3.useEffect(() => {
+    if (currentPage >= totalPages && totalPages > 0) {
+      setCurrentPage(totalPages - 1);
+    }
+  }, [totalPages, currentPage]);
+  const pagedNotes = (0, import_react11.useMemo)(() => {
+    const startIndex = currentPage * cardsPerPage;
+    return recentNotes.slice(startIndex, startIndex + cardsPerPage);
+  }, [recentNotes, currentPage]);
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: "Productivity & Consistency" }),
@@ -29868,8 +29877,54 @@ function ProductivityView({ index, app, onRefresh }) {
       ] })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "dashboard-card", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "dashboard-card-title", children: "Recent Daily Reports" }),
-      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: recentNotes.map((note) => {
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "dashboard-card-title", style: { margin: 0 }, children: "Recent Daily Reports" }),
+        recentNotes.length > 0 && totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: [
+            "Page ",
+            currentPage + 1,
+            " of ",
+            totalPages
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: "6px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              "button",
+              {
+                className: "flow-nav-tab",
+                disabled: currentPage === 0,
+                style: {
+                  padding: "3px 8px",
+                  fontSize: "11px",
+                  background: currentPage === 0 ? "transparent" : "var(--background-secondary)",
+                  border: "1px solid var(--background-modifier-border)",
+                  opacity: currentPage === 0 ? 0.4 : 1,
+                  cursor: currentPage === 0 ? "not-allowed" : "pointer"
+                },
+                onClick: () => setCurrentPage((prev) => Math.max(0, prev - 1)),
+                children: "\u2190 Prev"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              "button",
+              {
+                className: "flow-nav-tab",
+                disabled: currentPage === totalPages - 1,
+                style: {
+                  padding: "3px 8px",
+                  fontSize: "11px",
+                  background: currentPage === totalPages - 1 ? "transparent" : "var(--background-secondary)",
+                  border: "1px solid var(--background-modifier-border)",
+                  opacity: currentPage === totalPages - 1 ? 0.4 : 1,
+                  cursor: currentPage === totalPages - 1 ? "not-allowed" : "pointer"
+                },
+                onClick: () => setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1)),
+                children: "Next \u2192"
+              }
+            )
+          ] })
+        ] })
+      ] }),
+      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", alignItems: "stretch" }, children: pagedNotes.map((note) => {
         const pomos = note.pomodorosRun || 0;
         const estimate = note.totalEstimate || 0;
         const hasReportData = pomos > 0 || note.tasksTaken && note.tasksTaken.length > 0;
@@ -29888,40 +29943,37 @@ function ProductivityView({ index, app, onRefresh }) {
             style: {
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              padding: "12px 16px",
+              justifyContent: "space-between",
+              gap: "12px",
+              padding: "12px 14px",
               background: "var(--background-primary)",
               border: "1px solid var(--background-modifier-border)",
-              borderRadius: "8px"
+              borderRadius: "8px",
+              minHeight: "180px"
             },
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontWeight: 700, fontSize: "14px", color: "var(--text-normal)" }, children: [
-                  "Daily Note - ",
-                  note.date
-                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontWeight: 700, fontSize: "12px", color: "var(--text-normal)" }, children: note.date }),
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                   "button",
                   {
                     className: "flow-nav-tab",
-                    style: { padding: "3px 8px", fontSize: "11px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
+                    style: { padding: "2px 6px", fontSize: "10px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
                     onClick: () => handleOpenNote(note.date),
-                    children: "Open Note"
+                    children: "Open"
                   }
                 )
               ] }),
-              hasReportData ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)" }, children: [
+              hasReportData ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px", flexGrow: 1, justifyContent: "space-between" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)" }, children: [
                       /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
-                        "Focus sessions: ",
+                        "Focus: ",
                         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: pomos }),
-                        " / ",
+                        "/",
                         estimate || 0,
-                        " pmd (",
-                        estimate > 0 ? Math.round(pomos / estimate * 100) : pomos > 0 ? 100 : 0,
-                        "%)"
+                        " pmd"
                       ] }),
                       /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
                         pomos * 25,
@@ -29940,11 +29992,11 @@ function ProductivityView({ index, app, onRefresh }) {
                       }
                     ) })
                   ] }),
-                  mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
-                      "Completed tasks: ",
+                  mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+                      "Tasks: ",
                       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: completedCount }),
-                      " / ",
+                      "/",
                       mappedTasks.length,
                       " (",
                       Math.round(completedCount / mappedTasks.length * 100),
@@ -29963,24 +30015,42 @@ function ProductivityView({ index, app, onRefresh }) {
                     ) })
                   ] })
                 ] }),
-                mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: "6px" }, children: mappedTasks.map((t, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                  "span",
-                  {
-                    className: `badge ${t.isDone ? "badge-status-done" : "badge-status-in-progress"}`,
-                    style: {
-                      padding: "3px 8px",
-                      fontSize: "11px",
-                      textTransform: "none",
-                      letterSpacing: "normal",
-                      textDecoration: t.isDone ? "line-through" : "none",
-                      opacity: t.isDone ? 0.75 : 1
+                mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "4px" }, children: [
+                  mappedTasks.slice(0, 3).map((t, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "span",
+                    {
+                      className: `badge ${t.isDone ? "badge-status-done" : "badge-status-in-progress"}`,
+                      style: {
+                        padding: "1px 5px",
+                        fontSize: "9px",
+                        textTransform: "none",
+                        letterSpacing: "normal",
+                        textDecoration: t.isDone ? "line-through" : "none",
+                        opacity: t.isDone ? 0.7 : 1,
+                        maxWidth: "100%",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap"
+                      },
+                      title: `${t.id} - ${t.isDone ? "Completed today" : "Active/Planned"}`,
+                      children: t.name
                     },
-                    title: `${t.id} - ${t.isDone ? "Completed today" : "Active/Planned"}`,
-                    children: t.name
-                  },
-                  idx
-                )) })
-              ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { fontSize: "11px", color: "var(--text-muted)", fontStyle: "italic" }, children: "No focus activity or tasks were recorded in metadata on this day." })
+                    idx
+                  )),
+                  mappedTasks.length > 3 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                    "span",
+                    {
+                      className: "badge",
+                      style: { padding: "1px 5px", fontSize: "9px", background: "var(--background-secondary)", color: "var(--text-muted)" },
+                      title: `${mappedTasks.length - 3} more tasks`,
+                      children: [
+                        "+",
+                        mappedTasks.length - 3
+                      ]
+                    }
+                  )
+                ] })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "10px 0" }, children: "No focus activity or tasks were recorded in metadata." })
             ]
           },
           note.date
@@ -30008,7 +30078,7 @@ function FlowApp({ plugin, app }) {
   const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react12.useState)("");
   const [selectedProjectId, setSelectedProjectId] = (0, import_react12.useState)(null);
   const [selectedEpicId, setSelectedEpicId] = (0, import_react12.useState)(null);
-  const reloadIndex = React3.useCallback(() => {
+  const reloadIndex = React4.useCallback(() => {
     const freshIndex = scanVault(app, plugin.settings);
     setIndex(freshIndex);
     if (freshIndex.issues.length > 0) {
@@ -30059,9 +30129,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "dashboard" ? "active" : ""}`,
             onClick: () => setActiveTab("dashboard"),
+            title: "Dashboard",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LayoutDashboard, { size: 16 }),
-              "Dashboard"
+              activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Dashboard" })
             ]
           }
         ),
@@ -30070,9 +30141,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "inbox" ? "active" : ""}`,
             onClick: () => setActiveTab("inbox"),
+            title: "Inbox",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Inbox, { size: 16 }),
-              "Inbox"
+              activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Inbox" })
             ]
           }
         ),
@@ -30081,9 +30153,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "board" ? "active" : ""}`,
             onClick: () => setActiveTab("board"),
+            title: "Board",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(KanbanSquare, { size: 16 }),
-              "Board"
+              activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Board" })
             ]
           }
         ),
@@ -30092,9 +30165,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "backlog" ? "active" : ""}`,
             onClick: () => setActiveTab("backlog"),
+            title: "Task List",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ListTodo, { size: 16 }),
-              "Task List"
+              activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Task List" })
             ]
           }
         ),
@@ -30107,9 +30181,10 @@ function FlowApp({ plugin, app }) {
               setSelectedProjectId(null);
               setSelectedEpicId(null);
             },
+            title: "Projects & Epics",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(FolderKanban, { size: 16 }),
-              "Projects & Epics"
+              activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Projects & Epics" })
             ]
           }
         ),
@@ -30118,9 +30193,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "weekly-review" ? "active" : ""}`,
             onClick: () => setActiveTab("weekly-review"),
+            title: "Weekly Review",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CheckSquare, { size: 16 }),
-              "Weekly Review"
+              activeTab === "weekly-review" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Weekly Review" })
             ]
           }
         ),
@@ -30129,9 +30205,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "productivity" ? "active" : ""}`,
             onClick: () => setActiveTab("productivity"),
+            title: "Productivity",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TrendingUp, { size: 16 }),
-              "Productivity"
+              activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Productivity" })
             ]
           }
         ),
@@ -30140,9 +30217,10 @@ function FlowApp({ plugin, app }) {
           {
             className: `flow-nav-tab ${activeTab === "settings" ? "active" : ""}`,
             onClick: () => setActiveTab("settings"),
+            title: "Settings",
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Settings, { size: 16 }),
-              "Settings"
+              activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Settings" })
             ]
           }
         )
@@ -30352,7 +30430,7 @@ var FlowPlugin = class extends import_obsidian9.Plugin {
       this.settings.lastVersion = currentVersion;
       await this.saveSettings();
       setTimeout(() => {
-        new ChangelogModal(this.app).open();
+        new ChangelogModal(this.app, this, currentVersion).open();
       }, 1e3);
     }
     this.statusBarEl = this.addStatusBarItem();
@@ -30477,32 +30555,51 @@ var FlowSettingTab = class extends import_obsidian9.PluginSettingTab {
   }
 };
 var ChangelogModal = class extends import_obsidian9.Modal {
-  constructor(app) {
+  constructor(app, plugin, version) {
     super(app);
+    this.plugin = plugin;
+    this.version = version;
   }
-  onOpen() {
+  async onOpen() {
     const { contentEl } = this;
     contentEl.empty();
     const title = contentEl.createEl("h2", { text: "Flow Tracker Updated! \u{1F389}" });
     title.style.marginBottom = "8px";
-    const subtitle = contentEl.createEl("p", { text: "Berikut adalah pembaruan terbaru di versi ini:" });
+    const subtitle = contentEl.createEl("p");
     subtitle.style.color = "var(--text-muted)";
     subtitle.style.marginBottom = "16px";
+    subtitle.createSpan({ text: "Berikut adalah pembaruan terbaru di versi ini. Rilis publik di " });
+    const link = subtitle.createEl("a", {
+      text: "github.com/Syibi/flow-release",
+      href: "https://github.com/Syibi/flow-release"
+    });
+    link.style.color = "var(--interactive-accent)";
+    link.style.textDecoration = "underline";
     const listContainer = contentEl.createEl("div");
     listContainer.style.maxHeight = "300px";
     listContainer.style.overflowY = "auto";
     listContainer.style.paddingRight = "8px";
     listContainer.style.marginBottom = "20px";
-    const ul = listContainer.createEl("ul");
-    ul.style.paddingLeft = "20px";
-    ul.style.lineHeight = "1.6";
-    ul.createEl("li", { text: "Tab Baru: Dashboard Produktivitas & Streaks untuk memantau konsistensi pengerjaan tugas dan total waktu fokus Anda." });
-    ul.createEl("li", { text: "Kalender Kontribusi Heatmap: Grid konsistensi 12 minggu (Monday-Sunday) yang terintegrasi penuh dengan warna tema Obsidian Anda." });
-    ul.createEl("li", { text: "Visualisasi Progress Bar: Laporan harian pada timeline dilengkapi indikator persentase pengerjaan Pomodoro dan daftar tugas." });
-    ul.createEl("li", { text: "Timezone-Safe Local Rollover: Seluruh data, catatan, dan rollover harian otomatis sinkron tepat pukul 00:00 waktu lokal (bukan jam 07:00 pagi UTC)." });
-    ul.createEl("li", { text: "Status Perencanaan Kalender: Hari aktif di kalender kontribusi kini juga terdeteksi dari tugas yang direncanakan meskipun Pomodoro belum berjalan." });
-    ul.createEl("li", { text: "Redesign Projects & Epics: Tampilan Graph Card Layout minimalis tanpa emotikon untuk presentasi visual proyek yang lebih bersih." });
-    ul.createEl("li", { text: "Proteksi Tutup Editor: Memerlukan klik ganda (double-click) pada overlay background untuk menutup editor, mencegah hilangnya draf ketikan Anda secara tidak sengaja." });
+    listContainer.style.background = "var(--background-secondary)";
+    listContainer.style.padding = "12px";
+    listContainer.style.borderRadius = "8px";
+    listContainer.style.border = "1px solid var(--background-modifier-border)";
+    let changelogRendered = false;
+    try {
+      if ('### Added\n- **Horizontal Pagination for Daily Reports**: Refactored the Recent Daily Reports list in the Productivity tab into a horizontal, stretch-aligned grid row. Displays 4 cards at a time with sleek Prev/Next pagination buttons to eliminate vertical scroll clutter.\n- **Collapsible Navigation Tab Bar**: Redesigned the main header tabs using the "Active Tab Text Only" pattern. Inactive tabs collapse into compact icons with native hover tooltips, and the active tab expands smoothly to fill a stable-width container, preventing adjacent element layout shifts.\n\n### Changed\n- **Minimalist Icon Cleanup**: Replaced empty dashboard state target emoji with a styled Lucide check SVG icon.\n- **Emoji Removal**: Stripped all casual emojis and emoticons from the Kanban Board, Weekly Review tabs, Pomodoro Timer, Issue Editor, and Daily Note review markdown templates to maintain a professional, developer-focused aesthetic.\n\n### Fixed\n- **Changelog Type Error**: Fixed a TypeScript compilation warning in `src/main.ts` by passing the `FlowPlugin` instance (which implements `Component`) to `ChangelogModal` for markdown rendering.\n\n---'.trim()) {
+        await import_obsidian9.MarkdownRenderer.render(this.app, '### Added\n- **Horizontal Pagination for Daily Reports**: Refactored the Recent Daily Reports list in the Productivity tab into a horizontal, stretch-aligned grid row. Displays 4 cards at a time with sleek Prev/Next pagination buttons to eliminate vertical scroll clutter.\n- **Collapsible Navigation Tab Bar**: Redesigned the main header tabs using the "Active Tab Text Only" pattern. Inactive tabs collapse into compact icons with native hover tooltips, and the active tab expands smoothly to fill a stable-width container, preventing adjacent element layout shifts.\n\n### Changed\n- **Minimalist Icon Cleanup**: Replaced empty dashboard state target emoji with a styled Lucide check SVG icon.\n- **Emoji Removal**: Stripped all casual emojis and emoticons from the Kanban Board, Weekly Review tabs, Pomodoro Timer, Issue Editor, and Daily Note review markdown templates to maintain a professional, developer-focused aesthetic.\n\n### Fixed\n- **Changelog Type Error**: Fixed a TypeScript compilation warning in `src/main.ts` by passing the `FlowPlugin` instance (which implements `Component`) to `ChangelogModal` for markdown rendering.\n\n---', listContainer, "", this.plugin);
+        changelogRendered = true;
+      }
+    } catch (err) {
+      console.warn("Failed to render embedded release notes:", err);
+    }
+    if (!changelogRendered) {
+      const ul = listContainer.createEl("ul");
+      ul.style.paddingLeft = "20px";
+      ul.style.lineHeight = "1.6";
+      ul.createEl("li", { text: "Pembaruan dan peningkatan kinerja sistem." });
+      ul.createEl("li", { text: "Kunjungi github.com/Syibi/flow-release untuk melihat changelog lengkap." });
+    }
     const footer = contentEl.createEl("div");
     footer.style.display = "flex";
     footer.style.justifyContent = "flex-end";

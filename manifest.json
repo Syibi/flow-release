@@ -1,7 +1,7 @@
 {
   "id": "obsidian-flow-tracker",
   "name": "Flow Tracker",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "minAppVersion": "1.0.0",
   "description": "A local-first, Markdown-native personal project OS for Obsidian — Kanban board, Pomodoro timer, Daily Planning, Weekly Review, and task dependency tracking.",
   "author": "Syibi",
