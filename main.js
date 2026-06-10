@@ -1093,7 +1093,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState10(initialState) {
+        function useState11(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1121,7 +1121,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo3(create, deps) {
+        function useMemo4(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1893,10 +1893,10 @@ var require_react_development = __commonJS({
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
         exports.useLayoutEffect = useLayoutEffect;
-        exports.useMemo = useMemo3;
+        exports.useMemo = useMemo4;
         exports.useReducer = useReducer;
         exports.useRef = useRef2;
-        exports.useState = useState10;
+        exports.useState = useState11;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -24444,11 +24444,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx11 = jsxWithValidationDynamic;
-        var jsxs10 = jsxWithValidationStatic;
+        var jsx13 = jsxWithValidationDynamic;
+        var jsxs12 = jsxWithValidationStatic;
         exports.Fragment = REACT_FRAGMENT_TYPE;
-        exports.jsx = jsx11;
-        exports.jsxs = jsxs10;
+        exports.jsx = jsx13;
+        exports.jsxs = jsxs12;
       })();
     }
   }
@@ -24480,10 +24480,16 @@ var import_client = __toESM(require_client());
 
 // src/components/FlowApp.tsx
 var React3 = __toESM(require_react());
-var import_react10 = __toESM(require_react());
+var import_react12 = __toESM(require_react());
 
 // src/utils/obsidianUtils.ts
 var import_obsidian = require("obsidian");
+function getLocalDateString(d = /* @__PURE__ */ new Date()) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 var DEFAULT_SETTINGS = {
   issuesFolder: "Issues",
   projectsFolder: "Projects",
@@ -24567,7 +24573,7 @@ function scanVault(app, settings) {
       const issueId = frontmatter.id || `INBOX-${file.basename}`;
       const status = frontmatter.status || "todo";
       const priority = frontmatter.priority || "normal";
-      const created = frontmatter.created || (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+      const created = frontmatter.created || getLocalDateString();
       const parsedTags = Array.isArray(frontmatter.tags) ? frontmatter.tags : frontmatter.tags ? [frontmatter.tags] : [];
       const parsedRelated = Array.isArray(frontmatter.related) ? frontmatter.related : frontmatter.related ? [frontmatter.related] : [];
       const parsedBlockedBy = Array.isArray(frontmatter.blockedBy) ? frontmatter.blockedBy : frontmatter.blockedBy ? [frontmatter.blockedBy] : [];
@@ -24602,7 +24608,7 @@ function scanVault(app, settings) {
       const issueId = frontmatter.id || file.basename;
       const status = frontmatter.status || "todo";
       const priority = frontmatter.priority || "normal";
-      const created = frontmatter.created || (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+      const created = frontmatter.created || getLocalDateString();
       const parsedTags = Array.isArray(frontmatter.tags) ? frontmatter.tags : frontmatter.tags ? [frontmatter.tags] : [];
       const parsedRelated = Array.isArray(frontmatter.related) ? frontmatter.related : frontmatter.related ? [frontmatter.related] : [];
       const parsedBlockedBy = Array.isArray(frontmatter.blockedBy) ? frontmatter.blockedBy : frontmatter.blockedBy ? [frontmatter.blockedBy] : [];
@@ -24660,7 +24666,11 @@ function scanVault(app, settings) {
         dailyNotes.push({
           date: file.basename,
           filePath: file.path,
-          reviewedAt: frontmatter.reviewedAt || void 0
+          reviewedAt: frontmatter.reviewedAt || void 0,
+          pomodorosRun: frontmatter.pomodorosRun ? parseInt(frontmatter.pomodorosRun, 10) : 0,
+          totalEstimate: frontmatter.totalEstimate ? parseInt(frontmatter.totalEstimate, 10) : 0,
+          tasksTaken: Array.isArray(frontmatter.tasksTaken) ? frontmatter.tasksTaken : [],
+          taskNames: Array.isArray(frontmatter.taskNames) ? frontmatter.taskNames : []
         });
       }
     }
@@ -24786,7 +24796,7 @@ async function createInboxFile(app, settings, title, body) {
   const frontmatterData = {
     type: "inbox",
     title,
-    created: (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+    created: getLocalDateString()
   };
   const frontmatterStr = serializeFrontmatter(frontmatterData);
   const bodyText = body || "\n# Context\n\n# Notes\n";
@@ -24814,7 +24824,7 @@ async function promoteInboxIssue(app, settings, file, issueId, frontmatterData) 
     fm.blockedBy = frontmatterData.blockedBy || [];
     fm.today = frontmatterData.today || false;
     fm.thisWeek = frontmatterData.thisWeek || false;
-    fm.completedDate = frontmatterData.status === "done" ? frontmatterData.completedDate || (/* @__PURE__ */ new Date()).toISOString().split("T")[0] : null;
+    fm.completedDate = frontmatterData.status === "done" ? frontmatterData.completedDate || getLocalDateString() : null;
     fm.energy = frontmatterData.energy || null;
     fm.urgent = frontmatterData.urgent || false;
     fm.important = frontmatterData.important || false;
@@ -24862,7 +24872,7 @@ async function deleteIssueFile(app, file) {
   await app.vault.delete(file);
 }
 async function syncDailyPlanToDailyNote(app, settings, issues) {
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   const notePath = `${settings.dailyNotesFolder}/${todayStr}.md`;
   let file = app.vault.getAbstractFileByPath(notePath);
   if (!file) {
@@ -24877,8 +24887,6 @@ type: daily-note
   if (!(file instanceof import_obsidian.TFile))
     return;
   const content = await app.vault.read(file);
-  const todayIssues = issues.filter((i) => i.today && i.status !== "done");
-  const doneTodayIssues = issues.filter((i) => i.today && i.status === "done" && (!i.completedDate || i.completedDate === todayStr));
   const activityRegex = /## Activity[\s\S]*?(?=\n## |$)/;
   const match = content.match(activityRegex);
   let todayPomodoros = 0;
@@ -24892,45 +24900,84 @@ type: daily-note
   const focusTimeMin = todayPomodoros * 25;
   const focusHours = Math.floor(focusTimeMin / 60);
   const focusMins = focusTimeMin % 60;
-  const focusTimeStr = `${todayPomodoros} Pomodoros (${focusHours}h ${focusMins}m)`;
-  let planSection = "## Flow\n\n### Today's Focus\n";
-  if (todayIssues.length === 0) {
-    planSection += "*Tidak ada tugas fokus hari ini.*\n";
-  } else {
-    todayIssues.forEach((i) => {
-      const checkbox = i.status === "in-progress" ? "[/]" : "[ ]";
-      planSection += `- ${checkbox} [[${i.id}]] - ${i.title}
-`;
-    });
+  const allTodayTasks = issues.filter((i) => i.today || i.status === "done" && i.completedDate === todayStr);
+  const totalEstimate = allTodayTasks.reduce((acc, curr) => acc + (curr.estimate || 0), 0);
+  const frontmatterInfo = (0, import_obsidian.getFrontMatterInfo)(content);
+  let currentFm = {};
+  let body = content;
+  if (frontmatterInfo) {
+    body = content.substring(frontmatterInfo.contentStart);
+    const rawFm = content.substring(0, frontmatterInfo.contentStart).replace(/^---\r?\n/, "").replace(/\r?\n---\r?\n$/, "").trim();
+    try {
+      currentFm = (0, import_obsidian.parseYaml)(rawFm) || {};
+    } catch (e) {
+      console.warn("Failed to parse YAML of daily note:", e);
+    }
   }
-  planSection += "\n### Completed Today\n";
-  if (doneTodayIssues.length === 0) {
-    planSection += "*Belum ada tugas selesai hari ini.*\n";
-  } else {
-    doneTodayIssues.forEach((i) => {
-      planSection += `- [x] [[${i.id}]] - ${i.title}
+  const newFm = {
+    ...currentFm,
+    type: "daily-note",
+    pomodorosRun: todayPomodoros,
+    totalEstimate,
+    tasksTaken: allTodayTasks.map((i) => i.id),
+    taskNames: allTodayTasks.map((i) => i.title)
+  };
+  const frontmatterStr = serializeFrontmatter(newFm);
+  let reportSection = "## Flow Daily Report\n\n";
+  reportSection += "### Focus Summary\n";
+  reportSection += `- **Pomodoros Run**: ${todayPomodoros} session(s)
 `;
-    });
-  }
-  planSection += `
-### Focus Time
-- **Total Focus Session**: ${focusTimeStr}
+  reportSection += `- **Total Focus Time**: ${focusHours}h ${focusMins}m
+`;
+  reportSection += `- **Planned Task Estimates**: ${totalEstimate} pomodoro(s)
 
 `;
+  reportSection += "### Completed Tasks\n";
+  const completedToday = allTodayTasks.filter((i) => i.status === "done");
+  if (completedToday.length === 0) {
+    reportSection += "_Belum ada tugas selesai hari ini._\n";
+  } else {
+    completedToday.forEach((i) => {
+      const estStr = i.estimate ? ` / ${i.estimate} pmd` : "";
+      reportSection += `- **${i.title}** (\`[[${i.id}]]\`) \u2014 ${i.logged}${estStr} pomodoro(s) logged
+`;
+    });
+  }
+  reportSection += "\n### Active & Uncompleted Tasks\n";
+  const uncompletedToday = allTodayTasks.filter((i) => i.status !== "done");
+  if (uncompletedToday.length === 0) {
+    reportSection += "_Tidak ada tugas aktif yang belum selesai hari ini._\n";
+  } else {
+    uncompletedToday.forEach((i) => {
+      const estStr = i.estimate ? ` / ${i.estimate} pmd` : "";
+      const statusStr = i.status === "in-progress" ? "In Progress" : i.status.toUpperCase();
+      reportSection += `- **${i.title}** (\`[[${i.id}]]\`) \u2014 ${i.logged}${estStr} pomodoro(s) logged (${statusStr})
+`;
+    });
+  }
   const oldPlanRegex = /## Flow Daily Plan[\s\S]*?(?=\n## |$)/;
   const newPlanRegex = /## Flow[\s\S]*?(?=\n## |$)/;
-  let newContent = content;
-  if (newPlanRegex.test(content)) {
-    newContent = content.replace(newPlanRegex, planSection.trim());
-  } else if (oldPlanRegex.test(content)) {
-    newContent = content.replace(oldPlanRegex, planSection.trim());
+  const reportRegex = /## Flow Daily Report[\s\S]*?(?=\n## |$)/;
+  let newBody = body;
+  if (reportRegex.test(body)) {
+    newBody = body.replace(reportRegex, reportSection.trim());
+  } else if (newPlanRegex.test(body)) {
+    newBody = body.replace(newPlanRegex, reportSection.trim());
+  } else if (oldPlanRegex.test(body)) {
+    newBody = body.replace(oldPlanRegex, reportSection.trim());
   } else {
-    newContent = content.trim() + "\n\n" + planSection;
+    newBody = body.trim() + "\n\n" + reportSection.trim() + "\n";
   }
-  await app.vault.modify(file, newContent);
+  const fullContent = `${frontmatterStr}
+${newBody.trim()}
+`;
+  if (content.trim() === fullContent.trim()) {
+    return;
+  }
+  await app.vault.modify(file, fullContent);
 }
 async function logActivityToDailyNote(app, settings, message) {
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   const notePath = `${settings.dailyNotesFolder}/${todayStr}.md`;
   let file = app.vault.getAbstractFileByPath(notePath);
   if (!file) {
@@ -24977,7 +25024,7 @@ ${logEntry}`;
   await app.vault.modify(file, newContent);
 }
 async function readReflectionFromDailyNote(app, settings) {
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   const notePath = `${settings.dailyNotesFolder}/${todayStr}.md`;
   const file = app.vault.getAbstractFileByPath(notePath);
   const defaultReflection = { wentWell: "", blocked: "", tomorrow: "" };
@@ -25013,7 +25060,7 @@ async function readReflectionFromDailyNote(app, settings) {
   };
 }
 async function saveReflectionToDailyNote(app, settings, reflection) {
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   const notePath = `${settings.dailyNotesFolder}/${todayStr}.md`;
   let file = app.vault.getAbstractFileByPath(notePath);
   if (!file) {
@@ -25067,7 +25114,7 @@ ${reflectionSection}`;
   await app.vault.modify(file, newContent);
 }
 async function logWeeklyReviewToDailyNote(app, settings, stats) {
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   const notePath = `${settings.dailyNotesFolder}/${todayStr}.md`;
   let file = app.vault.getAbstractFileByPath(notePath);
   if (!file) {
@@ -25126,7 +25173,7 @@ function calculateTaskScore(issue, allIssues) {
     breakdown.push("In Progress (+100)");
   }
   if (issue.due) {
-    const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    const todayStr = getLocalDateString();
     const dueDate = new Date(issue.due);
     const todayDate = new Date(todayStr);
     dueDate.setHours(0, 0, 0, 0);
@@ -25348,6 +25395,12 @@ var Pause = createLucideIcon("Pause", [
   ["rect", { width: "4", height: "16", x: "14", y: "4", key: "sjin7j" }]
 ]);
 
+// node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/icons/pen-line.js
+var PenLine = createLucideIcon("PenLine", [
+  ["path", { d: "M12 20h9", key: "t2du7b" }],
+  ["path", { d: "M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z", key: "ymcmye" }]
+]);
+
 // node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/icons/play.js
 var Play = createLucideIcon("Play", [
   ["polygon", { points: "5 3 19 12 5 21 5 3", key: "191637" }]
@@ -25423,7 +25476,7 @@ function DashboardView({
 }) {
   const { issues, projects } = index;
   const [energyFilter, setEnergyFilter] = (0, import_react2.useState)("all");
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   React.useEffect(() => {
     const staleCompletedIssues = issues.filter(
       (i) => i.today && i.status === "done" && i.completedDate && i.completedDate !== todayStr
@@ -25485,7 +25538,7 @@ function DashboardView({
         await updateIssueProperty(app, file, (fm) => {
           fm.status = nextStatus;
           if (nextStatus === "done") {
-            fm.completedDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+            fm.completedDate = getLocalDateString();
           } else {
             fm.completedDate = null;
           }
@@ -25864,7 +25917,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
         await updateIssueProperty(app, file, (frontmatter) => {
           frontmatter.status = targetStatus;
           if (targetStatus === "done") {
-            frontmatter.completedDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+            frontmatter.completedDate = getLocalDateString();
           } else {
             frontmatter.completedDate = null;
           }
@@ -26461,6 +26514,58 @@ function ProjectsView({
   onEditIssue
 }) {
   const { projects, epics, issues } = index;
+  const getProjectBadge = (projectId) => {
+    if (!projectId) {
+      return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: {
+        fontSize: "11px",
+        background: "var(--background-modifier-border)",
+        color: "var(--text-muted)",
+        padding: "3px 10px",
+        borderRadius: "6px",
+        fontWeight: 600,
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "5px",
+        marginTop: "4px",
+        border: "1px solid rgba(127, 127, 127, 0.15)"
+      }, children: "No Project" });
+    }
+    const parentProj = projects.find((p) => p.id === projectId);
+    const projectTitle = parentProj ? parentProj.title : projectId;
+    const themes = [
+      { bg: "rgba(139, 92, 246, 0.12)", fg: "var(--text-accent, #8b5cf6)", border: "rgba(139, 92, 246, 0.25)" },
+      // violet
+      { bg: "rgba(59, 130, 246, 0.12)", fg: "#3b82f6", border: "rgba(59, 130, 246, 0.25)" },
+      // blue
+      { bg: "rgba(16, 185, 129, 0.12)", fg: "#10b981", border: "rgba(16, 185, 129, 0.25)" },
+      // green
+      { bg: "rgba(245, 158, 11, 0.12)", fg: "#f59e0b", border: "rgba(245, 158, 11, 0.25)" },
+      // orange/amber
+      { bg: "rgba(236, 72, 153, 0.12)", fg: "#ec4899", border: "rgba(236, 72, 153, 0.25)" },
+      // red/pink
+      { bg: "rgba(14, 165, 233, 0.12)", fg: "#0ea5e9", border: "rgba(14, 165, 233, 0.25)" }
+      // sky
+    ];
+    let hash = 0;
+    for (let i = 0; i < projectId.length; i++) {
+      hash = projectId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const themeIndex = Math.abs(hash) % themes.length;
+    const theme = themes[themeIndex];
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: {
+      fontSize: "11px",
+      background: theme.bg,
+      color: theme.fg,
+      padding: "3px 10px",
+      borderRadius: "6px",
+      fontWeight: 600,
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "5px",
+      marginTop: "4px",
+      border: `1px solid ${theme.border}`
+    }, children: projectTitle });
+  };
   const [showCreateProject, setShowCreateProject] = (0, import_react5.useState)(false);
   const [showCreateEpic, setShowCreateEpic] = (0, import_react5.useState)(false);
   const [newProjId, setNewProjId] = (0, import_react5.useState)("");
@@ -26573,12 +26678,13 @@ function ProjectsView({
         ) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-dashboard-stats", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", style: { display: "flex", flexDirection: "column", justifySelf: "stretch" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "stat-label", children: "Progress" }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "stat-value", children: [
             stats.progress,
             "%"
-          ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-container", style: { height: "4px", marginTop: "6px", width: "80%" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-bar", style: { width: `${stats.progress}%` } }) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "stat-label", children: "Total Issues" }),
@@ -26644,32 +26750,26 @@ function ProjectsView({
               /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "4px 8px", fontSize: "11px" }, children: "Save" })
             ] })
           ] }),
-          projectEpics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", style: { padding: "24px 12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No epics linked to this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: projectEpics.map((e) => {
+          projectEpics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state", style: { padding: "24px 12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state-subtitle", children: "No epics linked to this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: projectEpics.map((e) => {
             const eStat = epicStats[e.id] || { progress: 0, total: 0 };
             return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
               "div",
               {
-                style: {
-                  padding: "10px",
-                  background: "var(--background-primary)",
-                  border: "1px solid var(--background-modifier-border)",
-                  borderRadius: "6px",
-                  cursor: "pointer"
-                },
+                className: "project-detail-epic-item",
                 onClick: () => onSelectEpic(e.id),
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { fontWeight: 600, fontSize: "13px" }, children: e.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)", marginTop: "4px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { fontWeight: 600, fontSize: "13px", color: "var(--text-normal)" }, children: e.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)" }, children: [
                     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                      "Progress: ",
+                      eStat.total,
+                      " Issues"
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("strong", { children: [
                       eStat.progress,
                       "%"
-                    ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                      "Issues: ",
-                      eStat.total
                     ] })
-                  ] })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-container", style: { height: "3px", margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-bar", style: { width: `${eStat.progress}%` } }) })
                 ]
               },
               e.id
@@ -26682,7 +26782,31 @@ function ProjectsView({
             currentProjectIssues.length,
             ")"
           ] }),
-          currentProjectIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No issues in this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentProjectIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+          currentProjectIssues.length > 0 && (() => {
+            const todoCount = currentProjectIssues.filter((i) => i.status === "todo").length;
+            const inProgressCount = currentProjectIssues.filter((i) => i.status === "in-progress" || i.status === "in-review").length;
+            const blockedCount = currentProjectIssues.filter((i) => i.status === "blocked").length;
+            const doneCount = currentProjectIssues.filter((i) => i.status === "done").length;
+            return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px", fontSize: "11px", color: "var(--text-muted)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-todo", style: { padding: "3px 8px" }, children: [
+                "Todo: ",
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: todoCount })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-in-progress", style: { padding: "3px 8px" }, children: [
+                "Active: ",
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: inProgressCount })
+              ] }),
+              blockedCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-blocked", style: { padding: "3px 8px" }, children: [
+                "Blocked: ",
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: blockedCount })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-done", style: { padding: "3px 8px" }, children: [
+                "Done: ",
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: doneCount })
+              ] })
+            ] });
+          })(),
+          currentProjectIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state-subtitle", children: "No issues in this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentProjectIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
             "div",
             {
               className: "issue-row",
@@ -26725,17 +26849,27 @@ function ProjectsView({
           }
         ) })
       ] }),
-      activeEpic.project && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { marginTop: "4px", fontSize: "13px", color: "var(--text-muted)" }, children: [
-        "Project: ",
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--interactive-accent)", cursor: "pointer", fontWeight: 500 }, onClick: () => onSelectProject(activeEpic.project), children: activeEpic.project })
-      ] }),
+      activeEpic.project && (() => {
+        const parentProj = projects.find((p) => p.id === activeEpic.project);
+        const projectTitle = parentProj ? parentProj.title : activeEpic.project;
+        return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { marginTop: "4px", fontSize: "13px", color: "var(--text-muted)" }, children: [
+          "Project: ",
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { style: { color: "var(--interactive-accent)", cursor: "pointer", fontWeight: 600 }, onClick: () => onSelectProject(activeEpic.project), children: [
+            projectTitle,
+            " (",
+            activeEpic.project,
+            ")"
+          ] })
+        ] });
+      })(),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-dashboard-stats", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", style: { display: "flex", flexDirection: "column", justifySelf: "stretch" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "stat-label", children: "Epic Progress" }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "stat-value", children: [
             stats.progress,
             "%"
-          ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-container", style: { height: "4px", marginTop: "6px", width: "80%" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-bar", style: { width: `${stats.progress}%` } }) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "project-stat-box", children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "stat-label", children: "Total Epic Issues" }),
@@ -26752,7 +26886,31 @@ function ProjectsView({
           currentEpicIssues.length,
           ")"
         ] }),
-        currentEpicIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No issues in this epic." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentEpicIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+        currentEpicIssues.length > 0 && (() => {
+          const todoCount = currentEpicIssues.filter((i) => i.status === "todo").length;
+          const inProgressCount = currentEpicIssues.filter((i) => i.status === "in-progress" || i.status === "in-review").length;
+          const blockedCount = currentEpicIssues.filter((i) => i.status === "blocked").length;
+          const doneCount = currentEpicIssues.filter((i) => i.status === "done").length;
+          return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px", fontSize: "11px", color: "var(--text-muted)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-todo", style: { padding: "3px 8px" }, children: [
+              "Todo: ",
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: todoCount })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-in-progress", style: { padding: "3px 8px" }, children: [
+              "Active: ",
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: inProgressCount })
+            ] }),
+            blockedCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-blocked", style: { padding: "3px 8px" }, children: [
+              "Blocked: ",
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: blockedCount })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-done", style: { padding: "3px 8px" }, children: [
+              "Done: ",
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: doneCount })
+            ] })
+          ] });
+        })(),
+        currentEpicIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state-subtitle", children: "No issues in this epic." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "issues-list", children: currentEpicIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
           {
             className: "issue-row",
@@ -26864,9 +27022,9 @@ function ProjectsView({
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-12", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card-title", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "col-12", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { style: { margin: 0, fontSize: "15px", fontWeight: 600, color: "var(--text-normal)" }, children: [
           "Projects (",
           projects.length,
           ")"
@@ -26879,51 +27037,67 @@ function ProjectsView({
           "Add Project"
         ] })
       ] }),
-      projects.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No projects created yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: projects.map((p) => {
+      projects.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state-subtitle", children: "No projects created yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "12px" }, children: projects.map((p) => {
         const stats = projectStats[p.id] || { progress: 0, total: 0, completed: 0, epicsCount: 0 };
         return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
           {
-            className: "issue-row",
+            className: "flow-project-card",
             onClick: () => onSelectProject(p.id),
-            style: {
-              gridTemplateColumns: "1fr 80px 100px",
-              background: "var(--background-primary)",
-              border: "1px solid var(--background-modifier-border)",
-              borderRadius: "6px",
-              padding: "12px"
-            },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { fontWeight: 600 }, children: p.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: p.id })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", fontSize: "11px", color: "var(--text-muted)" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                  "Issues: ",
-                  stats.total
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-header", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-title-group", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "flow-card-title", children: p.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", style: { fontSize: "10px" }, children: p.id })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                  "Epics: ",
-                  stats.epicsCount
-                ] })
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", gap: "6px", fontSize: "10px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge", style: { padding: "2px 6px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: stats.total }),
+                  " Issues"
+                ] }) })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", justifySelf: "end", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", fontWeight: "bold" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "Progress" }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                  stats.progress,
-                  "%"
-                ] })
-              ] }) })
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", fontWeight: 600 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Progress" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
+                    stats.progress,
+                    "%"
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-container", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-bar", style: { width: `${stats.progress}%` } }) })
+              ] }),
+              (() => {
+                const projectEpics = epics.filter((e) => e.project === p.id);
+                if (projectEpics.length === 0)
+                  return null;
+                return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-linked-epics", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "flow-card-linked-epics-title", children: [
+                    "Linked Epics (",
+                    projectEpics.length,
+                    ")"
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-card-linked-epics-list", children: projectEpics.map((epic) => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                    "span",
+                    {
+                      className: "flow-epic-mini-pill",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onSelectEpic(epic.id);
+                      },
+                      children: epic.title
+                    },
+                    epic.id
+                  )) })
+                ] });
+              })()
             ]
           },
           p.id
         );
       }) })
-    ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "col-12", style: { marginTop: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dashboard-card-title", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "col-12", style: { display: "flex", flexDirection: "column", gap: "16px", marginTop: "24px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { style: { margin: 0, fontSize: "15px", fontWeight: 600, color: "var(--text-normal)" }, children: [
           "Epics (",
           epics.length,
           ")"
@@ -26936,46 +27110,41 @@ function ProjectsView({
           "Add Epic"
         ] })
       ] }),
-      epics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "empty-state-subtitle", children: "No epics created yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: epics.map((e) => {
+      epics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state-subtitle", children: "No epics created yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "12px" }, children: epics.map((e) => {
         const stats = epicStats[e.id] || { progress: 0, total: 0, completed: 0 };
         return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
           {
-            className: "issue-row",
+            className: "flow-epic-card",
             onClick: () => onSelectEpic(e.id),
-            style: {
-              gridTemplateColumns: "1fr 80px 100px",
-              background: "var(--background-primary)",
-              border: "1px solid var(--background-modifier-border)",
-              borderRadius: "6px",
-              padding: "12px"
-            },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { fontWeight: 600 }, children: e.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "kanban-card-id", children: [
-                  e.id,
-                  " ",
-                  e.project ? `(${e.project})` : ""
-                ] })
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-header", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-title-group", style: { alignItems: "flex-start" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "flow-card-title", children: e.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", style: { fontSize: "10px" }, children: e.id }),
+                  getProjectBadge(e.project)
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", gap: "6px", fontSize: "10px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge", style: { padding: "2px 6px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: stats.total }),
+                  " Issues"
+                ] }) })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", fontSize: "11px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                "Issues: ",
-                stats.total
-              ] }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", justifySelf: "end", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", fontWeight: "bold" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "Progress" }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
-                  stats.progress,
-                  "%"
-                ] })
-              ] }) })
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", marginTop: "auto" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", fontWeight: 600 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Progress" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
+                    stats.progress,
+                    "%"
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-container", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-progress-bar", style: { width: `${stats.progress}%` } }) })
+              ] })
             ]
           },
           e.id
         );
       }) })
-    ] }) })
+    ] })
   ] });
 }
 
@@ -27201,7 +27370,7 @@ ${fileBody}`);
         priority,
         project: projectId || void 0,
         epic: epicId || void 0,
-        created: issue?.created || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+        created: issue?.created || getLocalDateString(),
         due: due || void 0,
         tags: parsedTags,
         related: parsedRelated,
@@ -27338,7 +27507,7 @@ ${body}`);
     const parsedBlockedBy = blockedByInput.split(",").map((b) => b.trim()).filter(Boolean);
     try {
       if (isCreateMode) {
-        const createdDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+        const createdDate = getLocalDateString();
         await createIssueFile(app, settings, index.issues, {
           title,
           status,
@@ -27471,7 +27640,7 @@ ${body}`);
       console.error("Failed to delete issue:", err);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "flow-modal-overlay", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "flow-modal-panel", onClick: (e) => e.stopPropagation(), children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "flow-modal-overlay", onDoubleClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "flow-modal-panel", onDoubleClick: (e) => e.stopPropagation(), children: [
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "flow-modal-header", children: [
       /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h3", { className: "flow-modal-title", style: { margin: 0 }, children: isCreateMode ? "Create New Issue" : isInboxTask ? `Inbox Item: ${issue?.title}` : `Edit Issue: ${issue?.id}` }),
@@ -28067,8 +28236,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
         return id;
       });
-      const todayIssues = issues.filter((i) => i.today && i.status !== "done");
-      todayIssues.forEach((issue) => {
+      const todayIssues2 = issues.filter((i) => i.today && i.status !== "done");
+      todayIssues2.forEach((issue) => {
         if (!next.includes(issue.id)) {
           const emptyIdx = next.findIndex((id) => !id);
           if (emptyIdx !== -1) {
@@ -28258,14 +28427,6 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
       }
       setMode("short-break");
-      const nextSlotIndex = activeQueueIndex + 1;
-      if (nextSlotIndex < queue.length && queue[nextSlotIndex]) {
-        const nextTask = issues.find((i) => i.id === queue[nextSlotIndex]);
-        new Notification("Flow Tracker", {
-          body: `Mulai fokus pada tugas berikutnya: ${queue[nextSlotIndex]} - ${nextTask ? nextTask.title : ""}?`
-        });
-        setActiveQueueIndex(nextSlotIndex);
-      }
     } else {
       new Notification("Flow Tracker", {
         body: "Break completed! Ready to focus?"
@@ -28301,7 +28462,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   };
   const openBacklogIssues = issues.filter((i) => i.status !== "done" && !queue.includes(i.id) && !i.isInbox);
   const recommendedTask = openBacklogIssues.length > 0 ? [...openBacklogIssues].map((i) => ({ issue: i, score: calculateTaskScore(i, issues).score })).sort((a, b) => b.score - a.score)[0]?.issue : null;
+  const todayIssues = issues.filter((i) => i.today);
+  const totalTodayEstimate = todayIssues.reduce((acc, curr) => acc + (curr.estimate || 0), 0);
+  const isQueueFull = queue.filter((id) => !!id).length >= 3;
+  const isTimeOverCapacity = totalTodayEstimate >= 14;
+  const showRecommendation = recommendedTask && !isQueueFull && !isTimeOverCapacity;
   const selectedTask = issues.find((i) => i.id === currentActiveTaskId);
+  const progressPercent = (MODE_TIMES[mode] - timeLeft) / MODE_TIMES[mode] * 100;
   return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
     display: "flex",
     flexDirection: "column",
@@ -28385,9 +28552,10 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", margin: "8px 0" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "42px", fontWeight: 800, fontFamily: "monospace", color: "var(--text-normal)", letterSpacing: "1px" }, children: formatTime(timeLeft) }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600 }, children: mode.replace("-", " ") })
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", margin: "4px 0" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "42px", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "1px", lineHeight: "1.1" }, children: formatTime(timeLeft) }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600, marginTop: "4px" }, children: mode.replace("-", " ") }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "flow-timer-progress-container", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "flow-timer-progress-bar", style: { width: `${progressPercent}%` } }) })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("label", { className: "form-label", style: { fontSize: "11px", display: "flex", alignItems: "center", gap: "4px", color: "var(--text-muted)" }, children: [
@@ -28396,76 +28564,145 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       ] }),
       queue.map((issueId, idx) => {
         const isSlotActive = activeQueueIndex === idx;
-        return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: `focus-queue-slot ${isSlotActive ? "active" : ""}`, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-            "input",
+        if (!issueId) {
+          return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            "div",
             {
-              type: "radio",
-              name: "active-queue-slot",
-              checked: isSlotActive,
-              onChange: () => setActiveQueueIndex(idx),
-              style: { cursor: "pointer", margin: 0 },
-              title: "Set active focus task"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
-            "select",
-            {
-              className: "focus-queue-select",
-              value: issueId,
-              onChange: (e) => handleSlotChange(idx, e.target.value),
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("option", { value: "", children: "-- Kosong --" }),
-                issues.filter((i) => i.today && i.status !== "done" || i.id === issueId).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
-                  i.id,
-                  " - ",
-                  i.title,
-                  " ",
-                  i.status === "done" ? "(Done)" : ""
-                ] }, i.id))
-              ]
-            }
-          ),
-          issueId && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-            "button",
-            {
-              onClick: () => handleClearSlot(idx),
-              style: {
-                background: "transparent",
-                border: "none",
-                color: "var(--text-muted)",
-                cursor: "pointer",
-                fontSize: "11px",
-                padding: "2px 4px"
-              },
-              title: "Clear slot",
-              children: "\u2715"
-            }
-          )
-        ] }, idx);
+              className: `focus-queue-slot empty-slot ${isSlotActive ? "active" : ""}`,
+              onClick: () => setActiveQueueIndex(idx),
+              children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", width: "100%", position: "relative" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Plus, { size: 12 }),
+                  "Slot ",
+                  idx + 1,
+                  ": Assign Task..."
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "focus-queue-select-wrapper", style: { opacity: 0, position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+                  "select",
+                  {
+                    className: "focus-queue-select",
+                    value: issueId,
+                    onChange: (e) => handleSlotChange(idx, e.target.value),
+                    style: { height: "100%", width: "100%" },
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("option", { value: "", children: "Assign Task..." }),
+                      (() => {
+                        const otherSelected = queue.filter((id, qIdx) => qIdx !== idx && !!id);
+                        return issues.filter((i) => i.today && i.status !== "done" && !otherSelected.includes(i.id)).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
+                          i.id,
+                          " - ",
+                          i.title
+                        ] }, i.id));
+                      })()
+                    ]
+                  }
+                ) })
+              ] })
+            },
+            idx
+          );
+        }
+        return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+          "div",
+          {
+            className: `focus-queue-slot ${isSlotActive ? "active" : ""}`,
+            onClick: () => setActiveQueueIndex(idx),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
+                width: "12px",
+                height: "12px",
+                borderRadius: "50%",
+                border: isSlotActive ? "2.5px solid var(--interactive-accent)" : "1.5px solid var(--text-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0
+              }, children: isSlotActive && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
+                width: "4px",
+                height: "4px",
+                borderRadius: "50%",
+                backgroundColor: "var(--interactive-accent)"
+              } }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "focus-queue-select-wrapper", onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+                "select",
+                {
+                  className: "focus-queue-select",
+                  value: issueId,
+                  onChange: (e) => handleSlotChange(idx, e.target.value),
+                  children: (() => {
+                    const otherSelected = queue.filter((id, qIdx) => qIdx !== idx && !!id);
+                    return issues.filter((i) => i.today && i.status !== "done" && !otherSelected.includes(i.id) || i.id === issueId).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
+                      i.id,
+                      " - ",
+                      i.title
+                    ] }, i.id));
+                  })()
+                }
+              ) }),
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+                "button",
+                {
+                  onClick: (e) => {
+                    e.stopPropagation();
+                    handleClearSlot(idx);
+                  },
+                  style: {
+                    background: "transparent",
+                    border: "none",
+                    color: "var(--text-muted)",
+                    cursor: "pointer",
+                    fontSize: "11px",
+                    padding: "2px 6px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  },
+                  title: "Clear slot",
+                  children: "\u2715"
+                }
+              )
+            ]
+          },
+          idx
+        );
       })
     ] }),
     selectedTask && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
-        background: "var(--background-primary)",
-        padding: "8px 12px",
-        borderRadius: "6px",
-        fontSize: "11px",
         display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: "column",
+        gap: "8px",
+        background: "var(--background-secondary)",
+        padding: "10px 12px",
+        borderRadius: "8px",
         border: "1px solid var(--background-modifier-border)"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { color: "var(--text-muted)" }, children: [
-          "Difficulty: ",
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("strong", { children: selectedTask.difficulty || "normal" })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Difficulty" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: `flow-difficulty-badge ${selectedTask.difficulty || "normal"}`, children: selectedTask.difficulty || "normal" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { color: "var(--text-muted)" }, children: [
-          "Logged: ",
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("strong", { children: selectedTask.logged || 0 }),
-          " / ",
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("strong", { children: selectedTask.estimate || "-" }),
-          " pomodoros"
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: [
+            "Pomodoros (",
+            selectedTask.logged || 0,
+            "/",
+            selectedTask.estimate || "-",
+            ")"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "pomodoro-tally", children: (() => {
+            const logged = parseInt(selectedTask.logged, 10) || 0;
+            const estimate = parseInt(selectedTask.estimate, 10) || 0;
+            const totalDots = Math.max(logged, estimate, 1);
+            const dots = [];
+            for (let i = 0; i < totalDots; i++) {
+              if (i < logged) {
+                dots.push(/* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "pomodoro-tally-dot filled" }, i));
+              } else {
+                dots.push(/* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "pomodoro-tally-dot empty" }, i));
+              }
+            }
+            return dots;
+          })() })
         ] })
       ] }),
       selectedTask.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
@@ -28476,7 +28713,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             if (file && file instanceof import_obsidian6.TFile) {
               await updateIssueProperty(app, file, (fm) => {
                 fm.status = "done";
-                fm.completedDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+                fm.completedDate = getLocalDateString();
               });
               await logActivityToDailyNote(app, plugin.settings, `${selectedTask.id} moved to Done`);
               onRefresh();
@@ -28489,12 +28726,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             gap: "6px",
             fontSize: "11px",
             fontWeight: 600,
-            padding: "6px",
+            width: "100%",
+            padding: "8px",
             borderRadius: "6px",
             border: "1px solid var(--background-modifier-border)",
-            background: "var(--background-secondary)",
+            background: "var(--background-primary)",
             color: "var(--text-normal)",
-            cursor: "pointer"
+            cursor: "pointer",
+            marginTop: "4px"
           },
           children: "\u2713 Tandai Selesai (Mark Done)"
         }
@@ -28505,15 +28744,23 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         "button",
         {
           onClick: toggleTimer,
-          className: "flow-action-btn",
           style: {
             flex: 2,
+            display: "flex",
+            alignItems: "center",
             justifyContent: "center",
-            background: isRunning ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)" : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-            boxShadow: "none"
+            gap: "6px",
+            fontSize: "12px",
+            fontWeight: 600,
+            padding: "8px",
+            borderRadius: "6px",
+            border: "none",
+            background: isRunning ? "var(--text-error, #ef4444)" : "var(--text-success, #10b981)",
+            color: "white",
+            cursor: "pointer"
           },
           children: [
-            isRunning ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Pause, { size: 14 }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Play, { size: 14 }),
+            isRunning ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Pause, { size: 13 }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Play, { size: 13 }),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: isRunning ? "Pause" : "Start Focus" })
           ]
         }
@@ -28522,60 +28769,64 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         "button",
         {
           onClick: resetTimer,
-          className: "flow-nav-tab",
           style: {
             flex: 1,
+            display: "flex",
+            alignItems: "center",
             justifyContent: "center",
             border: "1px solid var(--background-modifier-border)",
-            background: "var(--background-primary)",
-            padding: "8px"
+            background: "var(--background-secondary)",
+            color: "var(--text-muted)",
+            borderRadius: "6px",
+            padding: "8px",
+            cursor: "pointer"
           },
-          children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(RotateCcw, { size: 14 })
+          title: "Reset timer",
+          children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(RotateCcw, { size: 13 })
         }
       )
     ] }),
-    recommendedTask && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
-      marginTop: "12px",
-      background: "var(--background-secondary-alt)",
-      border: "1px dashed var(--interactive-accent)",
-      borderRadius: "8px",
-      padding: "10px 12px",
+    showRecommendation && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
+      marginTop: "8px",
+      background: "var(--background-secondary)",
+      borderLeft: "3px solid var(--interactive-accent)",
+      borderRadius: "4px",
+      padding: "8px 12px",
       display: "flex",
       flexDirection: "column",
-      gap: "6px"
+      gap: "4px"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", fontWeight: 600, color: "var(--text-muted)" }, children: "\u{1F4A1} Next Recommended Task" }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { fontSize: "11px", fontWeight: 600, color: "var(--text-normal)", display: "flex", flexDirection: "column", gap: "2px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: recommendedTask.id }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontWeight: "normal", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: recommendedTask.title })
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "\u{1F4A1} Recommended Task" }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { fontSize: "11px", fontWeight: 600, color: "var(--text-normal)" }, children: [
+        recommendedTask.id,
+        " - ",
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontWeight: "normal", color: "var(--text-muted)" }, children: recommendedTask.title })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         "button",
         {
-          onClick: () => {
-            setQueue((prev) => {
-              const next = [...prev];
-              const emptyIdx = next.findIndex((id) => !id);
-              if (emptyIdx !== -1) {
-                next[emptyIdx] = recommendedTask.id;
-              } else {
-                next[activeQueueIndex] = recommendedTask.id;
-              }
-              return next;
-            });
+          onClick: async () => {
+            const file = app.vault.getAbstractFileByPath(recommendedTask.filePath);
+            if (file && file instanceof import_obsidian6.TFile) {
+              await updateIssueProperty(app, file, (fm) => {
+                fm.today = true;
+              });
+              onRefresh();
+            }
           },
           style: {
             background: "var(--background-primary)",
             border: "1px solid var(--background-modifier-border)",
             borderRadius: "4px",
-            padding: "4px 8px",
+            padding: "3px 8px",
             fontSize: "10px",
             cursor: "pointer",
             color: "var(--text-normal)",
             alignSelf: "flex-start",
-            fontWeight: 600
+            fontWeight: 600,
+            marginTop: "4px"
           },
-          children: "+ Add to Focus Queue"
+          children: "+ Add to Today's Tasks"
         }
       )
     ] })
@@ -28600,7 +28851,7 @@ function getISOWeekString(date = /* @__PURE__ */ new Date()) {
 }
 function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
   const { issues, projects } = index;
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const todayStr = getLocalDateString();
   const weekStr = getISOWeekString();
   const [subTab, setSubTab] = (0, import_react9.useState)("overview");
   const [weeklyPlanning, setWeeklyPlanning] = (0, import_react9.useState)({ target: "", capacity: 10 });
@@ -29213,10 +29464,536 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
   ] });
 }
 
-// src/components/FlowApp.tsx
+// src/components/InboxView.tsx
+var import_react10 = __toESM(require_react());
 var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
+  const [title, setTitle] = (0, import_react10.useState)("");
+  const inboxIssues = index.issues.filter((i) => i.isInbox);
+  const handleCapture = async (e) => {
+    e.preventDefault();
+    if (!title.trim())
+      return;
+    try {
+      await createInboxFile(app, settings, title);
+      setTitle("");
+      onRefresh();
+    } catch (err) {
+      console.error("Failed to capture inbox task:", err);
+    }
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "800px", margin: "0 auto", padding: "10px 0" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h2", { style: { margin: 0, fontSize: "20px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Inbox, { size: 20, style: { color: "var(--interactive-accent)" } }),
+        "Inbox Tasks"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { margin: 0, fontSize: "12px", color: "var(--text-muted)" }, children: "Quickly capture raw tasks and thoughts, then process them later into projects, epics, or the backlog." })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: handleCapture, style: { display: "flex", gap: "10px", background: "var(--background-secondary)", padding: "16px", borderRadius: "10px", border: "1px solid var(--background-modifier-border)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        "input",
+        {
+          type: "text",
+          className: "form-input",
+          placeholder: "What's on your mind? Capture it here...",
+          style: { fontSize: "13px", padding: "10px 14px", flex: 1 },
+          value: title,
+          onChange: (e) => setTitle(e.target.value),
+          autoFocus: true
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("button", { type: "submit", className: "flow-action-btn", style: { padding: "10px 16px", display: "flex", alignItems: "center", gap: "6px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Plus, { size: 14 }),
+        "Capture Task"
+      ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "13px", fontWeight: 600, color: "var(--text-muted)" }, children: [
+        "Unprocessed Items (",
+        inboxIssues.length,
+        ")"
+      ] }) }),
+      inboxIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "flow-empty-state", style: { padding: "48px 24px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "flow-empty-state-title", children: "Inbox is clear!" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "flow-empty-state-subtitle", children: "All captured tasks have been processed or completed." })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: inboxIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        "div",
+        {
+          style: {
+            background: "var(--background-secondary)",
+            border: "1px solid var(--background-modifier-border)",
+            borderRadius: "8px",
+            padding: "12px 16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            transition: "border-color 0.2s, transform 0.15s"
+          },
+          className: "inbox-item-card",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontWeight: 600, fontSize: "13px", color: "var(--text-normal)" }, children: issue.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: [
+                "Captured: ",
+                issue.filePath.split("/").pop()?.replace(".md", "")
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+              "button",
+              {
+                onClick: () => onEditIssue(issue),
+                style: {
+                  padding: "6px 12px",
+                  fontSize: "12px",
+                  background: "var(--background-primary)",
+                  border: "1px solid var(--background-modifier-border)",
+                  color: "var(--text-normal)",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px"
+                },
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(PenLine, { size: 12 }),
+                  "Process Item"
+                ]
+              }
+            )
+          ]
+        },
+        issue.id
+      )) })
+    ] })
+  ] });
+}
+
+// src/components/ProductivityView.tsx
+var import_react11 = __toESM(require_react());
+var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+function ProductivityView({ index, app, onRefresh }) {
+  const { dailyNotes } = index;
+  const stats = (0, import_react11.useMemo)(() => {
+    const activeDays = /* @__PURE__ */ new Set();
+    let totalPomos = 0;
+    let activeDaysCount = 0;
+    dailyNotes.forEach((dn) => {
+      const pomos = dn.pomodorosRun || 0;
+      const tasksCount = dn.tasksTaken?.length || 0;
+      if (pomos > 0 || tasksCount > 0) {
+        activeDays.add(dn.date);
+        activeDaysCount++;
+      }
+      totalPomos += pomos;
+    });
+    const todayStr = getLocalDateString();
+    const yesterdayStr = getLocalDateString(new Date(Date.now() - 864e5));
+    let currentStreak = 0;
+    let startStr = "";
+    if (activeDays.has(todayStr)) {
+      startStr = todayStr;
+    } else if (activeDays.has(yesterdayStr)) {
+      startStr = yesterdayStr;
+    }
+    if (startStr) {
+      const cur = new Date(startStr);
+      while (true) {
+        const curStr = getLocalDateString(cur);
+        if (activeDays.has(curStr)) {
+          currentStreak++;
+          cur.setDate(cur.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+    }
+    const sortedActiveDates = Array.from(activeDays).sort();
+    let bestStreak = 0;
+    let tempStreak = 0;
+    let prevTime = 0;
+    sortedActiveDates.forEach((dateStr) => {
+      const curTime = new Date(dateStr).getTime();
+      if (prevTime === 0) {
+        tempStreak = 1;
+      } else {
+        const diff = Math.round((curTime - prevTime) / (1e3 * 60 * 60 * 24));
+        if (diff === 1) {
+          tempStreak++;
+        } else if (diff > 1) {
+          tempStreak = 1;
+        }
+      }
+      if (tempStreak > bestStreak) {
+        bestStreak = tempStreak;
+      }
+      prevTime = curTime;
+    });
+    const totalHours = Math.floor(totalPomos * 25 / 60);
+    const totalMins = totalPomos * 25 % 60;
+    const averagePomos = activeDaysCount > 0 ? (totalPomos / activeDaysCount).toFixed(1) : "0";
+    let totalTasksTaken = 0;
+    let completedTasksCount = 0;
+    dailyNotes.forEach((dn) => {
+      const taken = dn.tasksTaken || [];
+      totalTasksTaken += taken.length;
+      taken.forEach((taskId) => {
+        const issue = index.issues.find((i) => i.id === taskId);
+        if (issue && (issue.status === "done" && issue.completedDate === dn.date)) {
+          completedTasksCount++;
+        }
+      });
+    });
+    const completionRate = totalTasksTaken > 0 ? Math.round(completedTasksCount / totalTasksTaken * 100) : 0;
+    const consistencyRate = Math.round(activeDaysCount / 84 * 100);
+    return {
+      currentStreak,
+      bestStreak,
+      totalPomos,
+      totalHours,
+      totalMins,
+      averagePomos,
+      activeDays,
+      activeDaysCount,
+      totalTasksTaken,
+      completedTasksCount,
+      completionRate,
+      consistencyRate
+    };
+  }, [dailyNotes, index.issues]);
+  const heatmapWeeks = (0, import_react11.useMemo)(() => {
+    const today = /* @__PURE__ */ new Date();
+    const currentDay = today.getDay();
+    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
+    const currentMonday = new Date(today);
+    currentMonday.setDate(today.getDate() + mondayOffset);
+    currentMonday.setHours(0, 0, 0, 0);
+    const startMonday = new Date(currentMonday);
+    startMonday.setDate(currentMonday.getDate() - 11 * 7);
+    const columns = [];
+    for (let w = 0; w < 12; w++) {
+      const week = [];
+      for (let d = 0; d < 7; d++) {
+        const dateObj = new Date(startMonday);
+        dateObj.setDate(startMonday.getDate() + w * 7 + d);
+        week.push(dateObj);
+      }
+      columns.push(week);
+    }
+    return columns;
+  }, []);
+  const renderMonthHeader = () => {
+    let prevMonth = "";
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", gap: "4px", marginBottom: "2px", paddingLeft: "32px" }, children: heatmapWeeks.map((week, idx) => {
+      const firstDay = week[0];
+      const monthName = firstDay.toLocaleString("default", { month: "short" });
+      const showMonth = monthName !== prevMonth;
+      if (showMonth) {
+        prevMonth = monthName;
+      }
+      return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        "div",
+        {
+          style: {
+            width: "12px",
+            fontSize: "9px",
+            color: "var(--text-muted)",
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            overflow: "visible"
+          },
+          children: showMonth ? monthName : ""
+        },
+        idx
+      );
+    }) });
+  };
+  const getHeatmapColorClass = (pomos, hasTasks) => {
+    if (pomos === 0 && !hasTasks)
+      return "flow-cell-empty";
+    if (pomos === 0 && hasTasks)
+      return "flow-cell-level-1";
+    if (pomos <= 2)
+      return "flow-cell-level-1";
+    if (pomos <= 4)
+      return "flow-cell-level-2";
+    if (pomos <= 6)
+      return "flow-cell-level-3";
+    return "flow-cell-level-4";
+  };
+  const getPomosForDate = (dateStr) => {
+    const note = dailyNotes.find((n) => n.date === dateStr);
+    return note ? note.pomodorosRun || 0 : 0;
+  };
+  const hasTasksForDate = (dateStr) => {
+    const note = dailyNotes.find((n) => n.date === dateStr);
+    return note ? !!(note.tasksTaken && note.tasksTaken.length > 0) : false;
+  };
+  const handleOpenNote = (dateStr) => {
+    const note = dailyNotes.find((n) => n.date === dateStr);
+    if (note) {
+      app.workspace.openLinkText(note.filePath, "");
+    } else {
+      app.workspace.openLinkText(dateStr, "");
+    }
+  };
+  const recentNotes = (0, import_react11.useMemo)(() => {
+    return [...dailyNotes].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+  }, [dailyNotes]);
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: "Productivity & Consistency" }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: "4px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }, children: "Visualize your focus metrics, streak consistency, and review historical daily note summaries." })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "stat-widget-list", style: { gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "stat-label", children: "Current Streak" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
+          stats.currentStreak,
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "12px", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: [
+          "Consistency: ",
+          stats.consistencyRate,
+          "% (",
+          stats.activeDaysCount,
+          " focus days)"
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #f59e0b" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "stat-label", children: "Best Streak" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
+          stats.bestStreak,
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "12px", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: "All-time consistency high" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #10b981" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "stat-label", children: "Total Focus Time" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "stat-value", style: { fontSize: "20px", fontWeight: 700 }, children: [
+          stats.totalHours,
+          "h ",
+          stats.totalMins,
+          "m"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: [
+          stats.totalPomos,
+          " Pomodoros (",
+          stats.averagePomos,
+          " avg/active day)"
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #8b5cf6" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "stat-label", children: "Task Planning Accuracy" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
+          stats.completionRate,
+          "%"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: [
+          stats.completedTasksCount,
+          "/",
+          stats.totalTasksTaken,
+          " planned tasks completed"
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "dashboard-card-title", style: { margin: 0 }, children: "Consistency Calendar (Last 12 Weeks)" }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", overflowX: "auto", paddingBottom: "4px" }, children: [
+        renderMonthHeader(),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "start", alignSelf: "start" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", fontSize: "9px", color: "var(--text-muted)", marginRight: "8px", width: "24px", textAlign: "right", paddingTop: "1px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Mon" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Wed" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Fri" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { height: "12px", lineHeight: "12px" } })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", gap: "4px" }, children: heatmapWeeks.map((week, wIdx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "div",
+            {
+              className: "flow-heatmap-column",
+              style: { display: "flex", flexDirection: "column", gap: "4px" },
+              children: week.map((dateObj, dIdx) => {
+                const dateStr = getLocalDateString(dateObj);
+                const pomos = getPomosForDate(dateStr);
+                const hasTasks = hasTasksForDate(dateStr);
+                const isCurrentDay = dateStr === getLocalDateString();
+                const isFuture = dateObj.getTime() > (/* @__PURE__ */ new Date()).setHours(23, 59, 59, 999);
+                return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  "div",
+                  {
+                    className: `flow-heatmap-cell ${getHeatmapColorClass(pomos, hasTasks)}`,
+                    onClick: () => !isFuture && handleOpenNote(dateStr),
+                    title: isFuture ? "Future day" : `${dateStr}: ${pomos} Pomodoro(s)`,
+                    style: {
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "2px",
+                      cursor: isFuture ? "default" : "pointer",
+                      boxSizing: "border-box",
+                      border: isCurrentDay ? "1.5px solid var(--interactive-accent)" : "none",
+                      transition: "transform 0.1s ease",
+                      visibility: isFuture ? "hidden" : "visible"
+                    },
+                    onMouseEnter: (e) => {
+                      if (!isFuture)
+                        e.currentTarget.style.transform = "scale(1.2)";
+                    },
+                    onMouseLeave: (e) => {
+                      if (!isFuture)
+                        e.currentTarget.style.transform = "scale(1)";
+                    }
+                  },
+                  dIdx
+                );
+              })
+            },
+            wIdx
+          )) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "var(--text-muted)", alignSelf: "end", marginTop: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "Less" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-heatmap-cell flow-cell-empty", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-1", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-2", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-3", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-4", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "More" })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "dashboard-card", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "dashboard-card-title", children: "Recent Daily Reports" }),
+      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: recentNotes.map((note) => {
+        const pomos = note.pomodorosRun || 0;
+        const estimate = note.totalEstimate || 0;
+        const hasReportData = pomos > 0 || note.tasksTaken && note.tasksTaken.length > 0;
+        let completedCount = 0;
+        const mappedTasks = note.tasksTaken?.map((taskId, idx) => {
+          const name = note.taskNames?.[idx] || taskId;
+          const issue = index.issues.find((i) => i.id === taskId);
+          const isDone = issue ? issue.status === "done" && issue.completedDate === note.date : false;
+          if (isDone)
+            completedCount++;
+          return { id: taskId, name, isDone };
+        }) || [];
+        return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          "div",
+          {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              padding: "12px 16px",
+              background: "var(--background-primary)",
+              border: "1px solid var(--background-modifier-border)",
+              borderRadius: "8px"
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontWeight: 700, fontSize: "14px", color: "var(--text-normal)" }, children: [
+                  "Daily Note - ",
+                  note.date
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  "button",
+                  {
+                    className: "flow-nav-tab",
+                    style: { padding: "3px 8px", fontSize: "11px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
+                    onClick: () => handleOpenNote(note.date),
+                    children: "Open Note"
+                  }
+                )
+              ] }),
+              hasReportData ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+                        "Focus sessions: ",
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: pomos }),
+                        " / ",
+                        estimate || 0,
+                        " pmd (",
+                        estimate > 0 ? Math.round(pomos / estimate * 100) : pomos > 0 ? 100 : 0,
+                        "%)"
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+                        pomos * 25,
+                        "m"
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { width: "100%", height: "4px", background: "var(--background-secondary)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      "div",
+                      {
+                        style: {
+                          width: `${estimate > 0 ? Math.min(pomos / estimate * 100, 100) : pomos > 0 ? 100 : 0}%`,
+                          height: "100%",
+                          background: "var(--interactive-accent)",
+                          borderRadius: "2px"
+                        }
+                      }
+                    ) })
+                  ] }),
+                  mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+                      "Completed tasks: ",
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: completedCount }),
+                      " / ",
+                      mappedTasks.length,
+                      " (",
+                      Math.round(completedCount / mappedTasks.length * 100),
+                      "%)"
+                    ] }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { width: "100%", height: "4px", background: "var(--background-secondary)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      "div",
+                      {
+                        style: {
+                          width: `${Math.round(completedCount / mappedTasks.length * 100)}%`,
+                          height: "100%",
+                          background: "#10b981",
+                          borderRadius: "2px"
+                        }
+                      }
+                    ) })
+                  ] })
+                ] }),
+                mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: "6px" }, children: mappedTasks.map((t, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  "span",
+                  {
+                    className: `badge ${t.isDone ? "badge-status-done" : "badge-status-in-progress"}`,
+                    style: {
+                      padding: "3px 8px",
+                      fontSize: "11px",
+                      textTransform: "none",
+                      letterSpacing: "normal",
+                      textDecoration: t.isDone ? "line-through" : "none",
+                      opacity: t.isDone ? 0.75 : 1
+                    },
+                    title: `${t.id} - ${t.isDone ? "Completed today" : "Active/Planned"}`,
+                    children: t.name
+                  },
+                  idx
+                )) })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { fontSize: "11px", color: "var(--text-muted)", fontStyle: "italic" }, children: "No focus activity or tasks were recorded in metadata on this day." })
+            ]
+          },
+          note.date
+        );
+      }) })
+    ] })
+  ] });
+}
+
+// src/components/FlowApp.tsx
+var import_jsx_runtime11 = __toESM(require_jsx_runtime());
 function FlowApp({ plugin, app }) {
-  const [index, setIndex] = (0, import_react10.useState)({
+  const [index, setIndex] = (0, import_react12.useState)({
     issues: [],
     projects: [],
     epics: [],
@@ -29224,18 +30001,23 @@ function FlowApp({ plugin, app }) {
     dailyNotes: [],
     tags: []
   });
-  const [activeTab, setActiveTab] = (0, import_react10.useState)("dashboard");
-  const [editingIssue, setEditingIssue] = (0, import_react10.useState)(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = (0, import_react10.useState)(false);
-  const [isSidebarOpen, setIsSidebarOpen] = (0, import_react10.useState)(true);
-  const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react10.useState)("");
-  const [selectedProjectId, setSelectedProjectId] = (0, import_react10.useState)(null);
-  const [selectedEpicId, setSelectedEpicId] = (0, import_react10.useState)(null);
+  const [activeTab, setActiveTab] = (0, import_react12.useState)("dashboard");
+  const [editingIssue, setEditingIssue] = (0, import_react12.useState)(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = (0, import_react12.useState)(false);
+  const [isSidebarOpen, setIsSidebarOpen] = (0, import_react12.useState)(true);
+  const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react12.useState)("");
+  const [selectedProjectId, setSelectedProjectId] = (0, import_react12.useState)(null);
+  const [selectedEpicId, setSelectedEpicId] = (0, import_react12.useState)(null);
   const reloadIndex = React3.useCallback(() => {
     const freshIndex = scanVault(app, plugin.settings);
     setIndex(freshIndex);
+    if (freshIndex.issues.length > 0) {
+      syncDailyPlanToDailyNote(app, plugin.settings, freshIndex.issues).catch((err) => {
+        console.error("Failed to sync daily note report:", err);
+      });
+    }
   }, [app, plugin.settings]);
-  (0, import_react10.useEffect)(() => {
+  (0, import_react12.useEffect)(() => {
     ensureFolderStructure(app, plugin.settings).then(() => {
       reloadIndex();
     });
@@ -29265,47 +30047,58 @@ function FlowApp({ plugin, app }) {
   const handleSelectPomodoroTask = (taskId) => {
     setActivePomodoroTaskId(taskId);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "flow-tracker-container", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("header", { className: "flow-header", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "flow-logo-area", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "flow-logo-icon", children: "F" }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "flow-title", children: "Flow Tracker" })
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "flow-tracker-container", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("header", { className: "flow-header", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "flow-logo-area", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "flow-logo-icon", children: "F" }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { className: "flow-title", children: "Flow Tracker" })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("nav", { className: "flow-nav-tabs", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("nav", { className: "flow-nav-tabs", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "dashboard" ? "active" : ""}`,
             onClick: () => setActiveTab("dashboard"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(LayoutDashboard, { size: 16 }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LayoutDashboard, { size: 16 }),
               "Dashboard"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+          "button",
+          {
+            className: `flow-nav-tab ${activeTab === "inbox" ? "active" : ""}`,
+            onClick: () => setActiveTab("inbox"),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Inbox, { size: 16 }),
+              "Inbox"
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "board" ? "active" : ""}`,
             onClick: () => setActiveTab("board"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(KanbanSquare, { size: 16 }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(KanbanSquare, { size: 16 }),
               "Board"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "backlog" ? "active" : ""}`,
             onClick: () => setActiveTab("backlog"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ListTodo, { size: 16 }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ListTodo, { size: 16 }),
               "Task List"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "projects" ? "active" : ""}`,
@@ -29315,36 +30108,47 @@ function FlowApp({ plugin, app }) {
               setSelectedEpicId(null);
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(FolderKanban, { size: 16 }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(FolderKanban, { size: 16 }),
               "Projects & Epics"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "weekly-review" ? "active" : ""}`,
             onClick: () => setActiveTab("weekly-review"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(CheckSquare, { size: 16 }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CheckSquare, { size: 16 }),
               "Weekly Review"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+          "button",
+          {
+            className: `flow-nav-tab ${activeTab === "productivity" ? "active" : ""}`,
+            onClick: () => setActiveTab("productivity"),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TrendingUp, { size: 16 }),
+              "Productivity"
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "settings" ? "active" : ""}`,
             onClick: () => setActiveTab("settings"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Settings, { size: 16 }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Settings, { size: 16 }),
               "Settings"
             ]
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           "button",
           {
             className: `flow-nav-tab ${isSidebarOpen ? "active" : ""}`,
@@ -29356,18 +30160,18 @@ function FlowApp({ plugin, app }) {
             },
             onClick: () => setIsSidebarOpen(!isSidebarOpen),
             title: "Toggle Focus Sidebar",
-            children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Timer, { size: 16, style: { color: "var(--text-normal)" } })
+            children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Timer, { size: 16, style: { color: "var(--text-normal)" } })
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("button", { className: "flow-action-btn", onClick: handleCreateIssue, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Plus, { size: 16 }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("button", { className: "flow-action-btn", onClick: handleCreateIssue, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Plus, { size: 16 }),
           "New Issue"
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flex: 1, overflow: "hidden" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("main", { className: "flow-content", style: { flex: 1, overflowY: "auto" }, children: [
-        activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flex: 1, overflow: "hidden" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("main", { className: "flow-content", style: { flex: 1, overflowY: "auto" }, children: [
+        activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           DashboardView,
           {
             index,
@@ -29381,7 +30185,17 @@ function FlowApp({ plugin, app }) {
             onRefresh: reloadIndex
           }
         ),
-        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          InboxView,
+          {
+            app,
+            index,
+            settings: plugin.settings,
+            onRefresh: reloadIndex,
+            onEditIssue: handleEditIssue
+          }
+        ),
+        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           BoardView,
           {
             index,
@@ -29392,14 +30206,14 @@ function FlowApp({ plugin, app }) {
             wipLimit: plugin.settings.wipLimit
           }
         ),
-        activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           TaskListView,
           {
             index,
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           ProjectsView,
           {
             index,
@@ -29412,7 +30226,7 @@ function FlowApp({ plugin, app }) {
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "weekly-review" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        activeTab === "weekly-review" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           WeeklyReviewView,
           {
             index,
@@ -29422,43 +30236,43 @@ function FlowApp({ plugin, app }) {
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          ProductivityView,
+          {
+            index,
+            app,
+            onRefresh: reloadIndex
+          }
+        ),
+        activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           SettingsView,
           {
             plugin,
-            onSettingsChanged: reloadIndex
+            onSettingsChanged: () => {
+              reloadIndex();
+            }
           }
         )
       ] }),
-      isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("aside", { className: "flow-sidebar", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "sidebar-section", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
-            "Focus & Pomodoro"
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-            PomodoroTimer,
-            {
-              app,
-              plugin,
-              issues: index.issues,
-              onRefresh: reloadIndex,
-              activeIssueId: activePomodoroTaskId,
-              onSelectIssue: handleSelectPomodoroTask
-            }
-          )
+      isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("aside", { className: "flow-sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sidebar-section", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
+          "Focus & Pomodoro"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "sidebar-section", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Inbox, { size: 14, style: { color: "var(--interactive-accent)" } }),
-            "Inbox Tasks"
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(QuickInboxCapture, { app, settings: plugin.settings, onRefresh: reloadIndex }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(InboxList, { index, onEditIssue: handleEditIssue })
-        ] })
-      ] })
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          PomodoroTimer,
+          {
+            app,
+            plugin,
+            issues: index.issues,
+            onRefresh: reloadIndex,
+            activeIssueId: activePomodoroTaskId,
+            onSelectIssue: handleSelectPomodoroTask
+          }
+        )
+      ] }) })
     ] }),
-    editingIssue && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    editingIssue && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
       IssueEditor,
       {
         issue: editingIssue,
@@ -29469,7 +30283,7 @@ function FlowApp({ plugin, app }) {
         onSave: reloadIndex
       }
     ),
-    isCreateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    isCreateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
       IssueEditor,
       {
         issue: null,
@@ -29482,93 +30296,9 @@ function FlowApp({ plugin, app }) {
     )
   ] });
 }
-function QuickInboxCapture({ app, settings, onRefresh }) {
-  const [title, setTitle] = (0, import_react10.useState)("");
-  const handleCapture = async (e) => {
-    e.preventDefault();
-    if (!title.trim())
-      return;
-    try {
-      await createInboxFile(app, settings, title);
-      setTitle("");
-      onRefresh();
-    } catch (err) {
-      console.error("Failed to capture inbox task:", err);
-    }
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: handleCapture, style: { display: "flex", gap: "6px" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-      "input",
-      {
-        type: "text",
-        className: "form-input",
-        placeholder: "Quick capture task...",
-        style: { fontSize: "12px", padding: "6px 10px" },
-        value: title,
-        onChange: (e) => setTitle(e.target.value)
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "6px 10px", boxShadow: "none" }, children: "+" })
-  ] });
-}
-function InboxList({ index, onEditIssue }) {
-  const inboxIssues = index.issues.filter((i) => i.isInbox);
-  if (inboxIssues.length === 0) {
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "11px", textAlign: "center", padding: "12px 0" }, children: "No items in Inbox." });
-  }
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", maxHeight: "250px", overflowY: "auto" }, children: inboxIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-    "div",
-    {
-      onClick: () => onEditIssue(issue),
-      style: {
-        background: "var(--background-primary)",
-        border: "1px solid var(--background-modifier-border)",
-        borderRadius: "6px",
-        padding: "8px 10px",
-        fontSize: "12px",
-        cursor: "pointer",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        transition: "border-color 0.2s"
-      },
-      className: "inbox-item-card",
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: {
-          fontWeight: 500,
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-          maxWidth: "180px",
-          color: "var(--text-normal)"
-        }, children: issue.title }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          "button",
-          {
-            onClick: (e) => {
-              e.stopPropagation();
-              onEditIssue(issue);
-            },
-            style: {
-              background: "transparent",
-              border: "none",
-              color: "var(--interactive-accent)",
-              fontSize: "11px",
-              fontWeight: 600,
-              cursor: "pointer",
-              padding: 0
-            },
-            children: "Process"
-          }
-        )
-      ]
-    },
-    issue.id
-  )) });
-}
 
 // src/FlowView.tsx
-var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 var FLOW_VIEW_TYPE = "flow-project-view";
 var FlowView = class extends import_obsidian8.ItemView {
   constructor(leaf, plugin) {
@@ -29595,7 +30325,7 @@ var FlowView = class extends import_obsidian8.ItemView {
     container.addClass("flow-tracker-view-container");
     this.root = (0, import_client.createRoot)(container);
     this.root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(FlowApp, { plugin: this.plugin, app: this.app })
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(FlowApp, { plugin: this.plugin, app: this.app })
     );
   }
   async onClose() {
@@ -29766,17 +30496,13 @@ var ChangelogModal = class extends import_obsidian9.Modal {
     const ul = listContainer.createEl("ul");
     ul.style.paddingLeft = "20px";
     ul.style.lineHeight = "1.6";
-    ul.createEl("li", { text: "Autosave draft input di editor agar data tidak hilang saat tidak sengaja tertutup." });
-    ul.createEl("li", { text: "Tombol Reset Form/Input untuk mengosongkan/mengembalikan input editor ke kondisi awal." });
-    ul.createEl("li", { text: "Style selector task Pomodoro lebih kontras dan menonjol agar lebih terlihat." });
-    ul.createEl("li", { text: "Pagination pada Task List agar navigasi daftar tugas lebih ringan dan cepat." });
-    ul.createEl("li", { text: "Dashboard lebih bersih dengan menghilangkan empty state kosong." });
-    ul.createEl("li", { text: "Sorting interaktif di Task List (ID, Title, Due, Priority, Smart Score)." });
-    ul.createEl("li", { text: "Pemberitahuan pembaruan/changelog setelah update." });
-    ul.createEl("li", { text: "Bisa menandai task sebagai Done langsung dari sidebar Pomodoro meskipun timer berjalan." });
-    ul.createEl("li", { text: "Task selesai sebelum 1 Pomodoro penuh tetap dicatat sebagai 1 sesi fokus (logged+1)." });
-    ul.createEl("li", { text: "Timer otomatis reset saat mengganti active task di Focus Queue." });
-    ul.createEl("li", { text: "Default sorting Kanban berdasarkan poin tertinggi (Smart Score)." });
+    ul.createEl("li", { text: "Tab Baru: Dashboard Produktivitas & Streaks untuk memantau konsistensi pengerjaan tugas dan total waktu fokus Anda." });
+    ul.createEl("li", { text: "Kalender Kontribusi Heatmap: Grid konsistensi 12 minggu (Monday-Sunday) yang terintegrasi penuh dengan warna tema Obsidian Anda." });
+    ul.createEl("li", { text: "Visualisasi Progress Bar: Laporan harian pada timeline dilengkapi indikator persentase pengerjaan Pomodoro dan daftar tugas." });
+    ul.createEl("li", { text: "Timezone-Safe Local Rollover: Seluruh data, catatan, dan rollover harian otomatis sinkron tepat pukul 00:00 waktu lokal (bukan jam 07:00 pagi UTC)." });
+    ul.createEl("li", { text: "Status Perencanaan Kalender: Hari aktif di kalender kontribusi kini juga terdeteksi dari tugas yang direncanakan meskipun Pomodoro belum berjalan." });
+    ul.createEl("li", { text: "Redesign Projects & Epics: Tampilan Graph Card Layout minimalis tanpa emotikon untuk presentasi visual proyek yang lebih bersih." });
+    ul.createEl("li", { text: "Proteksi Tutup Editor: Memerlukan klik ganda (double-click) pada overlay background untuk menutup editor, mencegah hilangnya draf ketikan Anda secara tidak sengaja." });
     const footer = contentEl.createEl("div");
     footer.style.display = "flex";
     footer.style.justifyContent = "flex-end";
@@ -29974,6 +30700,14 @@ lucide-react/dist/esm/icons/list-todo.js:
    *)
 
 lucide-react/dist/esm/icons/pause.js:
+  (**
+   * @license lucide-react v0.312.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/pen-line.js:
   (**
    * @license lucide-react v0.312.0 - ISC
    *
