@@ -26344,58 +26344,55 @@ function TaskListView({ index, onEditIssue }) {
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 600, marginLeft: "6px" }, children: "SORT BY:" }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
         "select",
         {
           className: "filter-select",
-          value: sortField,
-          onChange: (e) => setSortField(e.target.value),
+          value: `${sortField}-${sortOrder}`,
+          onChange: (e) => {
+            const [field, order] = e.target.value.split("-");
+            setSortField(field);
+            setSortOrder(order);
+          },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "smart", children: "Smart Score" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "id", children: "ID" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "title", children: "Title" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "due", children: "Due Date" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "created", children: "Created Date" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "priority", children: "Priority" })
-          ]
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-        "select",
-        {
-          className: "filter-select",
-          value: sortOrder,
-          onChange: (e) => setSortOrder(e.target.value),
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "asc", children: "Ascending" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "desc", children: "Descending" })
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "smart-desc", children: "Sort: Smart Score (High-Low)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "smart-asc", children: "Sort: Smart Score (Low-High)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "id-asc", children: "Sort: ID (A-Z)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "id-desc", children: "Sort: ID (Z-A)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "title-asc", children: "Sort: Title (A-Z)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "title-desc", children: "Sort: Title (Z-A)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "due-asc", children: "Sort: Due Date (Oldest)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "due-desc", children: "Sort: Due Date (Newest)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "created-asc", children: "Sort: Created (Oldest)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "created-desc", children: "Sort: Created (Newest)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "priority-desc", children: "Sort: Priority (High-Low)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "priority-asc", children: "Sort: Priority (Low-High)" })
           ]
         }
       )
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issues-list", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-row issue-row-header", style: { gridTemplateColumns: "80px 1fr 90px 120px 120px 80px 100px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("id"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-row issue-row-header", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("id"), className: "issue-col-id", style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
           "ID ",
           sortField === "id" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("title"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("title"), className: "issue-col-title", style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
           "Title ",
           sortField === "title" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("due"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("due"), className: "issue-col-due", style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
           "Due ",
           sortField === "due" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: "Project" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: "Epic" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("priority"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "issue-col-project", children: "Project" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "issue-col-epic", children: "Epic" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("priority"), className: "issue-col-priority", style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }, children: [
           "Priority ",
           sortField === "priority" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("smart"), style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", justifySelf: "end", color: sortField === "smart" ? "var(--interactive-accent)" : void 0 }, children: [
-          "Smart Score ",
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { onClick: () => toggleSort("smart"), className: "issue-col-score", style: { cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", justifySelf: "end", color: sortField === "smart" ? "var(--interactive-accent)" : void 0 }, children: [
+          "Smart ",
           sortField === "smart" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] })
       ] }),
@@ -26411,26 +26408,44 @@ function TaskListView({ index, onEditIssue }) {
             className: "issue-row",
             onClick: () => onEditIssue(issue),
             style: {
-              gridTemplateColumns: "80px 1fr 90px 120px 120px 80px 100px",
               borderLeft: isTopPriority ? "3px solid #ef4444" : "3px solid transparent",
               background: isTopPriority ? "var(--background-secondary-alt)" : void 0
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "kanban-card-id", style: { display: "flex", alignItems: "center", gap: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "kanban-card-id issue-col-id", style: { display: "flex", alignItems: "center", gap: "4px" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `badge-status-${issue.status}`, style: { width: "6px", height: "6px", borderRadius: "50%" } }),
                 issue.id
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-col-title", style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "kanban-card-title", children: issue.title }),
-                isTopPriority && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: "10px", color: "#ef4444", fontWeight: 600 }, children: "Needs Immediate Attention" })
+                isTopPriority && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: "10px", color: "#ef4444", fontWeight: 600 }, children: "Needs Immediate Attention" }),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-mobile-meta", style: { gap: "6px 10px", flexWrap: "wrap", marginTop: "4px", fontSize: "11px", color: "var(--text-muted)" }, children: [
+                  issue.due && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                    "\u{1F4C5} ",
+                    issue.due
+                  ] }),
+                  issue.project && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                    "\u{1F4C1} ",
+                    getProjectName(issue.project)
+                  ] }),
+                  issue.epic && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                    "\u26A1 ",
+                    getEpicName(issue.epic)
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { style: { fontWeight: 600 }, className: `priority-text-${issue.priority}`, children: [
+                    "Priority: ",
+                    issue.priority.toUpperCase()
+                  ] })
+                ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { color: "var(--text-muted)" }, children: issue.due || "-" }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: getProjectName(issue.project) }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: getEpicName(issue.epic) }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `badge badge-priority-${issue.priority}`, children: issue.priority }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "issue-col-due", style: { color: "var(--text-muted)" }, children: issue.due || "-" }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "issue-col-project", children: getProjectName(issue.project) }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "issue-col-epic", children: getEpicName(issue.epic) }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: `issue-col-priority badge badge-priority-${issue.priority}`, children: issue.priority }),
               /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
                 "span",
                 {
+                  className: "issue-col-score",
                   title: tooltip,
                   style: { justifySelf: "end", fontWeight: 600, color: score < 0 ? "var(--text-muted)" : "var(--text-normal)", cursor: "help", borderBottom: "1px dotted var(--text-muted)" },
                   children: score > 0 ? `+${score}` : score
@@ -26440,59 +26455,59 @@ function TaskListView({ index, onEditIssue }) {
           },
           issue.id
         );
-      })
-    ] }),
-    processedIssues.issues.length > 0 && (() => {
-      const totalIssues = processedIssues.issues.length;
-      const totalPages = Math.max(1, Math.ceil(totalIssues / PAGE_SIZE));
-      return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flow-pagination", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "flow-pagination-info", children: [
-          "Showing ",
-          Math.min(totalIssues, (currentPage - 1) * PAGE_SIZE + 1),
-          "-",
-          Math.min(totalIssues, currentPage * PAGE_SIZE),
-          " of ",
-          totalIssues,
-          " tasks"
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "button",
-          {
-            className: "flow-pagination-btn",
-            disabled: currentPage === 1,
-            onClick: () => setCurrentPage((prev) => Math.max(1, prev - 1)),
-            children: "Previous"
-          }
-        ),
-        Array.from({ length: totalPages }).map((_, idx) => {
-          const pageNum = idx + 1;
-          if (pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1) {
-            return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-              "button",
-              {
-                className: `flow-pagination-btn ${currentPage === pageNum ? "active" : ""}`,
-                onClick: () => setCurrentPage(pageNum),
-                children: pageNum
-              },
-              pageNum
-            );
-          }
-          if (pageNum === 2 || pageNum === totalPages - 1) {
-            return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { padding: "0 4px", color: "var(--text-muted)" }, children: "..." }, pageNum);
-          }
-          return null;
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "button",
-          {
-            className: "flow-pagination-btn",
-            disabled: currentPage === totalPages,
-            onClick: () => setCurrentPage((prev) => Math.min(totalPages, prev + 1)),
-            children: "Next"
-          }
-        )
-      ] });
-    })()
+      }),
+      processedIssues.issues.length > 0 && (() => {
+        const totalIssues = processedIssues.issues.length;
+        const totalPages = Math.max(1, Math.ceil(totalIssues / PAGE_SIZE));
+        return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flow-pagination", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "flow-pagination-info", children: [
+            "Showing ",
+            Math.min(totalIssues, (currentPage - 1) * PAGE_SIZE + 1),
+            "-",
+            Math.min(totalIssues, currentPage * PAGE_SIZE),
+            " of ",
+            totalIssues,
+            " tasks"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              className: "flow-pagination-btn",
+              disabled: currentPage === 1,
+              onClick: () => setCurrentPage((prev) => Math.max(1, prev - 1)),
+              children: "Previous"
+            }
+          ),
+          Array.from({ length: totalPages }).map((_, idx) => {
+            const pageNum = idx + 1;
+            if (pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1) {
+              return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "button",
+                {
+                  className: `flow-pagination-btn ${currentPage === pageNum ? "active" : ""}`,
+                  onClick: () => setCurrentPage(pageNum),
+                  children: pageNum
+                },
+                pageNum
+              );
+            }
+            if (pageNum === 2 || pageNum === totalPages - 1) {
+              return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { padding: "0 4px", color: "var(--text-muted)" }, children: "..." }, pageNum);
+            }
+            return null;
+          }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              className: "flow-pagination-btn",
+              disabled: currentPage === totalPages,
+              onClick: () => setCurrentPage((prev) => Math.min(totalPages, prev + 1)),
+              children: "Next"
+            }
+          )
+        ] });
+      })()
+    ] })
   ] });
 }
 
@@ -27171,6 +27186,82 @@ var toggleSubtask = (bodyText, subtaskIndex, completed) => {
   lines[subtaskIndex] = updatedLine;
   return lines.join("\n");
 };
+var deleteSubtask = (bodyText, subtaskIndex) => {
+  const lines = bodyText.split("\n");
+  lines.splice(subtaskIndex, 1);
+  return lines.join("\n");
+};
+var addSubtask = (bodyText, text) => {
+  const cleanText = text.trim();
+  if (!cleanText)
+    return bodyText;
+  const lines = bodyText.split("\n");
+  let lastSubtaskIndex = -1;
+  lines.forEach((line, index) => {
+    if (line.match(/^\s*-\s*\[([ xX/])\]\s*(.*)/)) {
+      lastSubtaskIndex = index;
+    }
+  });
+  const subtaskLine = `- [ ] ${cleanText}`;
+  if (lastSubtaskIndex !== -1) {
+    lines.splice(lastSubtaskIndex + 1, 0, subtaskLine);
+  } else {
+    if (!bodyText.trim()) {
+      return subtaskLine;
+    }
+    if (lines[lines.length - 1].trim() === "") {
+      lines[lines.length - 1] = subtaskLine;
+    } else {
+      lines.push(subtaskLine);
+    }
+  }
+  return lines.join("\n");
+};
+var editSubtask = (bodyText, subtaskIndex, newText) => {
+  const lines = bodyText.split("\n");
+  const line = lines[subtaskIndex];
+  const match = line.match(/^(\s*-\s*\[[ xX/]\]\s*)(.*)/);
+  if (match) {
+    lines[subtaskIndex] = `${match[1]}${newText}`;
+  }
+  return lines.join("\n");
+};
+var parseNotes = (bodyText) => {
+  const lines = bodyText.split("\n");
+  const notesLines = lines.filter((line) => !line.match(/^\s*-\s*\[([ xX/])\]\s*(.*)/));
+  return notesLines.join("\n").trim();
+};
+var updateNotesInBody = (bodyText, newNotes) => {
+  const lines = bodyText.split("\n");
+  const checklistLines = lines.filter((line) => line.match(/^\s*-\s*\[([ xX/])\]\s*(.*)/));
+  const parts = [];
+  if (checklistLines.length > 0) {
+    parts.push(checklistLines.join("\n"));
+  }
+  if (newNotes) {
+    parts.push(newNotes);
+  }
+  return parts.join("\n\n");
+};
+var parseTagsValue = (val) => {
+  if (!val)
+    return [];
+  if (Array.isArray(val)) {
+    const list = [];
+    val.forEach((item) => {
+      if (typeof item === "string") {
+        item.split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => list.push(t));
+      } else if (item) {
+        list.push(String(item));
+      }
+    });
+    return Array.from(new Set(list));
+  }
+  if (typeof val === "string") {
+    return val.split(",").map((t) => t.trim()).filter(Boolean);
+  }
+  return [String(val)];
+};
 function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   const isCreateMode = !issue;
   const isInboxTask = issue?.isInbox === true;
@@ -27182,7 +27273,8 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   const [projectId, setProjectId] = (0, import_react6.useState)("");
   const [epicId, setEpicId] = (0, import_react6.useState)("");
   const [due, setDue] = (0, import_react6.useState)("");
-  const [tagsInput, setTagsInput] = (0, import_react6.useState)("");
+  const [tags, setTags] = (0, import_react6.useState)([]);
+  const [currentTagInput, setCurrentTagInput] = (0, import_react6.useState)("");
   const [relatedInput, setRelatedInput] = (0, import_react6.useState)("");
   const [body, setBody] = (0, import_react6.useState)("");
   const [blockedByInput, setBlockedByInput] = (0, import_react6.useState)("");
@@ -27194,6 +27286,8 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   const [logged, setLogged] = (0, import_react6.useState)(0);
   const [difficulty, setDifficulty] = (0, import_react6.useState)("normal");
   const [rawText, setRawText] = (0, import_react6.useState)("");
+  const [newSubtaskText, setNewSubtaskText] = (0, import_react6.useState)("");
+  const [notesInput, setNotesInput] = (0, import_react6.useState)("");
   const getDraftKey = () => {
     return isCreateMode ? "flow_draft_new" : `flow_draft_edit_${issue?.id}`;
   };
@@ -27207,14 +27301,16 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
       setProjectId("");
       setEpicId("");
       setDue("");
-      setTagsInput("");
+      setTags([]);
+      setCurrentTagInput("");
       setRelatedInput("");
       setBlockedByInput("");
       setToday(false);
       setEnergy("");
       setUrgent(false);
       setImportant(false);
-      setBody("\n# Context\n\nNeed google/github login.\n\n# Notes\n\nImplementation details...\n");
+      setBody("");
+      setNotesInput("");
       setEstimate("");
       setLogged(0);
       setDifficulty("normal");
@@ -27246,8 +27342,9 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
           setProjectId(frontmatter.project || issue.project || "");
           setEpicId(frontmatter.epic || issue.epic || "");
           setDue(frontmatter.due || issue.due || "");
-          const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : frontmatter.tags ? [frontmatter.tags] : issue.tags || [];
-          setTagsInput(tags.join(", "));
+          const tagsVal = parseTagsValue(frontmatter.tags ? frontmatter.tags : issue.tags);
+          setTags(tagsVal);
+          setCurrentTagInput("");
           const related = Array.isArray(frontmatter.related) ? frontmatter.related : frontmatter.related ? [frontmatter.related] : issue.related || [];
           setRelatedInput(related.join(", "));
           const blockers = Array.isArray(frontmatter.blockedBy) ? frontmatter.blockedBy : frontmatter.blockedBy ? [frontmatter.blockedBy] : issue.blockedBy || [];
@@ -27258,6 +27355,7 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
           setUrgent(!!frontmatter.urgent || !!issue.urgent);
           setImportant(!!frontmatter.important || !!issue.important);
           setBody(fileBody);
+          setNotesInput(parseNotes(fileBody));
           setEstimate(frontmatter.estimate ? frontmatter.estimate.toString() : issue.estimate ? issue.estimate.toString() : "");
           setLogged(parseInt(frontmatter.logged, 10) || issue.logged || 0);
           setDifficulty(frontmatter.difficulty || issue.difficulty || "normal");
@@ -27284,9 +27382,17 @@ ${fileBody}`);
         setProjectId(draft.projectId || "");
         setEpicId(draft.epicId || "");
         setDue(draft.due || "");
-        setTagsInput(draft.tagsInput || "");
+        let tagsVal = [];
+        if (draft.tags) {
+          tagsVal = draft.tags;
+        } else if (draft.tagsInput) {
+          tagsVal = parseTagsValue(draft.tagsInput);
+        }
+        setTags(tagsVal);
+        setCurrentTagInput(draft.currentTagInput || "");
         setRelatedInput(draft.relatedInput || "");
         setBody(draft.body || "");
+        setNotesInput(parseNotes(draft.body || ""));
         setEstimate(draft.estimate || "");
         setLogged(draft.logged || 0);
         setDifficulty(draft.difficulty || "normal");
@@ -27306,7 +27412,7 @@ ${fileBody}`);
     resetForm();
   }, [issueId, app]);
   (0, import_react6.useEffect)(() => {
-    if (isCreateMode && !title && !body && !tagsInput && !relatedInput) {
+    if (isCreateMode && !title && !body && tags.length === 0 && !currentTagInput && !relatedInput) {
       return;
     }
     const draftData = {
@@ -27316,7 +27422,8 @@ ${fileBody}`);
       projectId,
       epicId,
       due,
-      tagsInput,
+      tags,
+      currentTagInput,
       relatedInput,
       body,
       estimate,
@@ -27339,7 +27446,8 @@ ${fileBody}`);
     projectId,
     epicId,
     due,
-    tagsInput,
+    tags,
+    currentTagInput,
     relatedInput,
     body,
     estimate,
@@ -27356,7 +27464,11 @@ ${fileBody}`);
   ]);
   const handleToggleRaw = () => {
     if (editorMode === "form") {
-      const parsedTags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
+      const finalTags = [...tags];
+      const clean = currentTagInput.trim();
+      if (clean && !finalTags.includes(clean)) {
+        finalTags.push(clean);
+      }
       const parsedRelated = relatedInput.split(",").map((r) => r.trim()).filter(Boolean);
       const parsedBlockedBy = blockedByInput.split(",").map((b) => b.trim()).filter(Boolean);
       const fmData = {
@@ -27369,7 +27481,7 @@ ${fileBody}`);
         epic: epicId || void 0,
         created: issue?.created || getLocalDateString(),
         due: due || void 0,
-        tags: parsedTags,
+        tags: finalTags,
         related: parsedRelated,
         blockedBy: parsedBlockedBy,
         today: today ? true : void 0,
@@ -27395,6 +27507,7 @@ ${body}`);
           const fmPart = rawText.substring(0, frontmatterInfo.contentStart);
           const bodyPart = rawText.substring(frontmatterInfo.contentStart).trim();
           setBody(bodyPart);
+          setNotesInput(parseNotes(bodyPart));
           const lines = fmPart.split("\n");
           let parsedTitle = title;
           let parsedStatus = status;
@@ -27486,7 +27599,8 @@ ${body}`);
           setToday(parsedToday);
           setThisWeek(parsedThisWeek);
           setEnergy(parsedEnergy);
-          setTagsInput(parsedTags.join(", "));
+          setTags(parseTagsValue(parsedTags));
+          setCurrentTagInput("");
           setRelatedInput(parsedRelated.join(", "));
           setBlockedByInput(parsedBlockedBy.join(", "));
         }
@@ -27496,10 +27610,72 @@ ${body}`);
     }
     setEditorMode("form");
   };
+  const handleRemoveTag = (tagToRemove) => {
+    setTags((prev) => prev.filter((t) => t !== tagToRemove));
+  };
+  const handleTagsInputChange = (e) => {
+    const value = e.target.value;
+    if (value.includes(",")) {
+      const parts = value.split(",");
+      const newTags = [];
+      parts.forEach((part, index2) => {
+        const clean = part.trim();
+        if (clean) {
+          if (index2 < parts.length - 1 || value.endsWith(",")) {
+            newTags.push(clean);
+          }
+        }
+      });
+      if (newTags.length > 0) {
+        setTags((prev) => {
+          const combined = [...prev, ...newTags];
+          return Array.from(new Set(combined));
+        });
+      }
+      if (value.endsWith(",")) {
+        setCurrentTagInput("");
+      } else {
+        setCurrentTagInput(parts[parts.length - 1]);
+      }
+    } else {
+      setCurrentTagInput(value);
+    }
+  };
+  const handleTagsInputKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === "Tab") {
+      e.preventDefault();
+      const clean = currentTagInput.trim();
+      if (clean) {
+        setTags((prev) => {
+          if (prev.includes(clean))
+            return prev;
+          return [...prev, clean];
+        });
+        setCurrentTagInput("");
+      }
+    } else if (e.key === "Backspace" && !currentTagInput) {
+      setTags((prev) => prev.slice(0, -1));
+    }
+  };
+  const handleTagsInputBlur = () => {
+    const clean = currentTagInput.trim();
+    if (clean) {
+      setTags((prev) => {
+        if (prev.includes(clean))
+          return prev;
+        return [...prev, clean];
+      });
+      setCurrentTagInput("");
+    }
+  };
   const handleSave = async (promote = false) => {
     if (!title.trim())
       return;
-    const parsedTags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
+    const finalTags = [...tags];
+    const clean = currentTagInput.trim();
+    if (clean && !finalTags.includes(clean)) {
+      finalTags.push(clean);
+    }
     const parsedRelated = relatedInput.split(",").map((r) => r.trim()).filter(Boolean);
     const parsedBlockedBy = blockedByInput.split(",").map((b) => b.trim()).filter(Boolean);
     try {
@@ -27513,7 +27689,7 @@ ${body}`);
           epic: epicId || void 0,
           created: createdDate,
           due: due || void 0,
-          tags: parsedTags,
+          tags: finalTags,
           related: parsedRelated,
           blockedBy: parsedBlockedBy,
           today,
@@ -27554,7 +27730,7 @@ ${body}`);
               project: projectId || void 0,
               epic: epicId || void 0,
               due: due || void 0,
-              tags: parsedTags,
+              tags: finalTags,
               related: parsedRelated,
               blockedBy: parsedBlockedBy,
               today,
@@ -27581,7 +27757,7 @@ ${body}`);
                 epic: epicId || void 0,
                 created: issue.created,
                 due: due || void 0,
-                tags: parsedTags,
+                tags: finalTags,
                 related: parsedRelated,
                 blockedBy: parsedBlockedBy,
                 today,
@@ -27704,22 +27880,27 @@ ${body}`);
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-3", style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Status" }),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
               "select",
               {
                 className: "filter-select",
+                style: {
+                  borderColor: status === "blocked" ? "rgba(239, 68, 68, 0.4)" : status === "in-progress" ? "rgba(59, 130, 246, 0.4)" : status === "in-review" ? "rgba(168, 85, 247, 0.4)" : status === "done" ? "rgba(16, 185, 129, 0.4)" : "var(--background-modifier-border)",
+                  color: status === "blocked" ? "#ef4444" : status === "in-progress" ? "#3b82f6" : status === "in-review" ? "#a855f7" : status === "done" ? "#10b981" : "var(--text-normal)",
+                  fontWeight: status === "blocked" || status === "in-progress" || status === "in-review" ? 600 : "normal"
+                },
                 value: status,
                 onChange: (e) => setStatus(e.target.value),
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "backlog", children: "Backlog" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "todo", children: "Todo" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "in-progress", children: "In Progress" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "in-review", children: "In Review" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "blocked", children: "Blocked" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "done", children: "Done" })
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "backlog", style: { color: "#6b7280" }, children: "Backlog" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "todo", style: { color: "var(--text-normal)" }, children: "Todo" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "in-progress", style: { color: "#3b82f6", fontWeight: 600 }, children: "In Progress" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "in-review", style: { color: "#a855f7", fontWeight: 600 }, children: "In Review" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "blocked", style: { color: "#ef4444", fontWeight: 600 }, children: "Blocked" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "done", style: { color: "#10b981" }, children: "Done" })
                 ]
               }
             )
@@ -27730,19 +27911,46 @@ ${body}`);
               "select",
               {
                 className: "filter-select",
+                style: {
+                  borderColor: priority === "high" ? "rgba(239, 68, 68, 0.4)" : priority === "medium" ? "rgba(245, 158, 11, 0.4)" : priority === "low" ? "rgba(16, 185, 129, 0.4)" : "var(--background-modifier-border)",
+                  color: priority === "high" ? "#ef4444" : priority === "medium" ? "#f59e0b" : priority === "low" ? "#10b981" : "var(--text-normal)",
+                  fontWeight: priority === "high" || priority === "medium" ? 600 : "normal"
+                },
                 value: priority,
                 onChange: (e) => setPriority(e.target.value),
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "normal", children: "Normal" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "high", children: "High" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "medium", children: "Medium" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "low", children: "Low" })
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "normal", style: { color: "var(--text-normal)" }, children: "Normal" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "high", style: { color: "#ef4444", fontWeight: 600 }, children: "High" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "medium", style: { color: "#f59e0b", fontWeight: 600 }, children: "Medium" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "low", style: { color: "#10b981" }, children: "Low" })
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Difficulty" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+              "select",
+              {
+                className: "filter-select",
+                style: {
+                  borderColor: difficulty === "hard" ? "rgba(239, 68, 68, 0.4)" : difficulty === "medium" ? "rgba(245, 158, 11, 0.4)" : difficulty === "easy" ? "rgba(16, 185, 129, 0.4)" : "var(--background-modifier-border)",
+                  color: difficulty === "hard" ? "#ef4444" : difficulty === "medium" ? "#f59e0b" : difficulty === "easy" ? "#10b981" : "var(--text-normal)",
+                  fontWeight: difficulty === "hard" || difficulty === "medium" ? 600 : "normal"
+                },
+                value: difficulty,
+                onChange: (e) => setDifficulty(e.target.value),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "normal", style: { color: "var(--text-normal)" }, children: "Normal" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "easy", style: { color: "#10b981" }, children: "Easy" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "medium", style: { color: "#f59e0b", fontWeight: 600 }, children: "Medium" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "hard", style: { color: "#ef4444", fontWeight: 600 }, children: "Hard" })
                 ]
               }
             )
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-3", style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Project" }),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
@@ -27781,9 +27989,7 @@ ${body}`);
                 ]
               }
             )
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-2", children: [
+          ] }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Due Date" }),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
@@ -27795,96 +28001,9 @@ ${body}`);
                 onChange: (e) => setDue(e.target.value)
               }
             )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Tags (comma separated)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                placeholder: "e.g. backend, oauth",
-                value: tagsInput,
-                onChange: (e) => setTagsInput(e.target.value)
-              }
-            )
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-3", style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Estimate (Pomodoros)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-              "input",
-              {
-                type: "number",
-                min: "0",
-                className: "form-input",
-                placeholder: "e.g. 4",
-                value: estimate,
-                onChange: (e) => setEstimate(e.target.value)
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Logged Pomodoros" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-              "input",
-              {
-                type: "number",
-                min: "0",
-                className: "form-input",
-                value: logged,
-                onChange: (e) => setLogged(parseInt(e.target.value, 10) || 0)
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Difficulty" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
-              "select",
-              {
-                className: "filter-select",
-                value: difficulty,
-                onChange: (e) => setDifficulty(e.target.value),
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "normal", children: "Normal" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "easy", children: "Easy" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "medium", children: "Medium" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "hard", children: "Hard" })
-                ]
-              }
-            )
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { flexDirection: "column", gap: "8px", paddingTop: "10px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-                "input",
-                {
-                  type: "checkbox",
-                  id: "today-checkbox",
-                  checked: today,
-                  onChange: (e) => setToday(e.target.checked),
-                  style: { cursor: "pointer" }
-                }
-              ),
-              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { htmlFor: "today-checkbox", className: "form-label", style: { cursor: "pointer", margin: 0 }, children: "Add to Today's Plan" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-                "input",
-                {
-                  type: "checkbox",
-                  id: "thisweek-checkbox",
-                  checked: thisWeek,
-                  onChange: (e) => setThisWeek(e.target.checked),
-                  style: { cursor: "pointer" }
-                }
-              ),
-              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { htmlFor: "thisweek-checkbox", className: "form-label", style: { cursor: "pointer", margin: 0 }, children: "Add to Weekly Plan" })
-            ] })
-          ] }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "ADHD Energy Level" }),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
@@ -27894,133 +28013,462 @@ ${body}`);
                 value: energy,
                 onChange: (e) => setEnergy(e.target.value),
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "", children: "Normal / Unspecified" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "low", children: "Low Energy (Task ringan)" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "high", children: "High Energy (Butuh fokus tinggi)" })
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "", children: "Normal" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "low", children: "Low Energy" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "high", children: "High Energy" })
                 ]
               }
             )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Estimate (Pomodoros)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+              "select",
+              {
+                className: "filter-select",
+                value: estimate,
+                onChange: (e) => setEstimate(e.target.value),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("option", { value: "", children: "None" }),
+                  [1, 2, 3, 4, 5, 6, 7, 8].map((n) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("option", { value: n.toString(), children: [
+                    n,
+                    " Pomodoros"
+                  ] }, n)),
+                  estimate && !["", "1", "2", "3", "4", "5", "6", "7", "8"].includes(estimate) && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("option", { value: estimate, children: [
+                    estimate,
+                    " Pomodoros"
+                  ] })
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Logged Pomodoros" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "button",
+                {
+                  type: "button",
+                  className: "flow-nav-tab",
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "32px",
+                    height: "32px",
+                    padding: 0,
+                    margin: 0,
+                    border: "1px solid var(--background-modifier-border)",
+                    background: "var(--background-secondary)",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    color: "var(--text-normal)"
+                  },
+                  onClick: () => setLogged((prev) => Math.max(0, prev - 1)),
+                  children: "-"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "input",
+                {
+                  type: "number",
+                  min: "0",
+                  className: "form-input",
+                  style: { textAlign: "center", flex: 1, height: "32px", margin: 0 },
+                  value: logged,
+                  onChange: (e) => setLogged(parseInt(e.target.value, 10) || 0)
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "button",
+                {
+                  type: "button",
+                  className: "flow-nav-tab",
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "32px",
+                    height: "32px",
+                    padding: 0,
+                    margin: 0,
+                    border: "1px solid var(--background-modifier-border)",
+                    background: "var(--background-secondary)",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    color: "var(--text-normal)"
+                  },
+                  onClick: () => setLogged((prev) => prev + 1),
+                  children: "+"
+                }
+              )
+            ] })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-row-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { flexDirection: "row", alignItems: "center", gap: "8px", paddingTop: "10px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "16px", paddingTop: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "input",
               {
                 type: "checkbox",
-                id: "urgent-checkbox",
+                checked: today,
+                onChange: (e) => setToday(e.target.checked),
+                style: { cursor: "pointer", margin: 0 }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Today's Plan" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+              "input",
+              {
+                type: "checkbox",
                 checked: urgent,
                 onChange: (e) => setUrgent(e.target.checked),
-                style: { cursor: "pointer" }
+                style: { cursor: "pointer", margin: 0 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { htmlFor: "urgent-checkbox", className: "form-label", style: { cursor: "pointer", margin: 0 }, children: "Is Urgent" })
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Is Urgent" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { flexDirection: "row", alignItems: "center", gap: "8px", paddingTop: "10px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "input",
               {
                 type: "checkbox",
-                id: "important-checkbox",
-                checked: important,
-                onChange: (e) => setImportant(e.target.checked),
-                style: { cursor: "pointer" }
+                checked: thisWeek,
+                onChange: (e) => setThisWeek(e.target.checked),
+                style: { cursor: "pointer", margin: 0 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { htmlFor: "important-checkbox", className: "form-label", style: { cursor: "pointer", margin: 0 }, children: "Is Important" })
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Weekly Plan" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+              "input",
+              {
+                type: "checkbox",
+                checked: important,
+                onChange: (e) => setImportant(e.target.checked),
+                style: { cursor: "pointer", margin: 0 }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Is Important" })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Blocked By (comma separated ISSUE IDs)" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-            "input",
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { marginBottom: "16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Tags (comma separated)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+            "div",
             {
-              type: "text",
               className: "form-input",
-              placeholder: "e.g. ISSUE-001, ISSUE-002",
-              value: blockedByInput,
-              onChange: (e) => setBlockedByInput(e.target.value)
+              style: {
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "6px",
+                padding: "6px 12px",
+                minHeight: "38px",
+                alignItems: "center",
+                cursor: "text"
+              },
+              onClick: (e) => {
+                const input = e.currentTarget.querySelector("input");
+                if (input)
+                  input.focus();
+              },
+              children: [
+                tags.map((tag, i) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+                  "span",
+                  {
+                    style: {
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      padding: "2px 8px",
+                      background: "var(--background-secondary)",
+                      border: "1px solid var(--background-modifier-border)",
+                      color: "var(--text-normal)",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      fontWeight: 500,
+                      lineHeight: 1.2
+                    },
+                    children: [
+                      tag,
+                      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                        "span",
+                        {
+                          onClick: (e) => {
+                            e.stopPropagation();
+                            handleRemoveTag(tag);
+                          },
+                          style: {
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            color: "var(--text-muted)",
+                            fontSize: "12px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "14px",
+                            height: "14px",
+                            borderRadius: "50%",
+                            transition: "color 0.2s, background-color 0.2s"
+                          },
+                          onMouseEnter: (e) => {
+                            e.currentTarget.style.color = "#ef4444";
+                            e.currentTarget.style.backgroundColor = "rgba(239, 68, 68, 0.1)";
+                          },
+                          onMouseLeave: (e) => {
+                            e.currentTarget.style.color = "var(--text-muted)";
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          },
+                          children: "\xD7"
+                        }
+                      )
+                    ]
+                  },
+                  i
+                )),
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  "input",
+                  {
+                    type: "text",
+                    placeholder: tags.length === 0 ? "e.g. backend, oauth" : "",
+                    value: currentTagInput,
+                    onChange: handleTagsInputChange,
+                    onKeyDown: handleTagsInputKeyDown,
+                    onBlur: handleTagsInputBlur,
+                    style: {
+                      border: "none",
+                      background: "transparent",
+                      outline: "none",
+                      boxShadow: "none",
+                      padding: 0,
+                      flex: 1,
+                      minWidth: "120px",
+                      color: "var(--text-normal)",
+                      fontSize: "13px",
+                      margin: 0,
+                      height: "22px"
+                    }
+                  }
+                )
+              ]
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Related Notes & Documents (comma separated)" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-            "input",
-            {
-              type: "text",
-              className: "form-input",
-              placeholder: "e.g. oauth-research, ADR-001",
-              value: relatedInput,
-              onChange: (e) => setRelatedInput(e.target.value)
-            }
-          ),
-          relatedInput.split(",").map((r) => r.trim()).filter(Boolean).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "6px" }, children: relatedInput.split(",").map((r) => r.trim()).filter(Boolean).map((note) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
-            "button",
-            {
-              type: "button",
-              onClick: () => app.workspace.openLinkText(note, ""),
-              className: "badge",
-              style: { cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "4px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
-              title: `Open [[${note}]] in Obsidian`,
-              children: [
-                "[[",
-                note,
-                "]]"
-              ]
-            },
-            note
-          )) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "form-label", style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Subtasks / Checklist" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: { fontSize: "10px", color: "var(--text-muted)" }, children: "Auto-parsed from description checklist items" })
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { marginBottom: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "form-label", style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Subtasks & Checklist" }),
+            parseSubtasks(body).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: "normal" }, children: [
+              parseSubtasks(body).filter((s) => s.completed).length,
+              " of ",
+              parseSubtasks(body).length,
+              " completed"
+            ] })
           ] }),
-          parseSubtasks(body).length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { fontSize: "11px", color: "var(--text-muted)", background: "var(--background-secondary)", padding: "8px 12px", borderRadius: "6px", border: "1px solid var(--background-modifier-border)" }, children: [
-            "Tulis checklist di Notes (e.g. ",
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("code", { children: "- [ ] Task A" }),
-            ") untuk membuat subtask di sini."
-          ] }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-            background: "var(--background-secondary)",
-            padding: "10px 14px",
-            borderRadius: "6px",
-            border: "1px solid var(--background-modifier-border)",
-            maxHeight: "150px",
-            overflowY: "auto"
-          }, children: parseSubtasks(body).map((sub) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-              "input",
-              {
-                type: "checkbox",
-                checked: sub.completed,
-                onChange: (e) => {
-                  const newBody = toggleSubtask(body, sub.index, e.target.checked);
-                  setBody(newBody);
+          (() => {
+            const subtasks = parseSubtasks(body);
+            if (subtasks.length === 0)
+              return null;
+            const completedCount = subtasks.filter((s) => s.completed).length;
+            const progressPercent = Math.round(completedCount / subtasks.length * 100);
+            return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+              width: "100%",
+              height: "5px",
+              background: "var(--background-modifier-border)",
+              borderRadius: "3px",
+              overflow: "hidden",
+              marginTop: "4px",
+              marginBottom: "10px"
+            }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+              width: `${progressPercent}%`,
+              height: "100%",
+              background: "var(--interactive-accent)",
+              transition: "width 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+            } }) });
+          })(),
+          (() => {
+            const subtasks = parseSubtasks(body);
+            return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px"
+            }, children: [
+              subtasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: {
+                display: "flex",
+                flexDirection: "column",
+                gap: "2px",
+                background: "var(--background-primary)",
+                padding: "6px",
+                borderRadius: "6px",
+                border: "1px solid var(--background-modifier-border)",
+                maxHeight: "180px",
+                overflowY: "auto"
+              }, children: subtasks.map((sub) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+                "div",
+                {
+                  className: "subtask-item-row",
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    transition: "background-color 0.2s ease"
+                  },
+                  onMouseEnter: (e) => {
+                    e.currentTarget.style.backgroundColor = "var(--background-secondary)";
+                  },
+                  onMouseLeave: (e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                      "input",
+                      {
+                        type: "checkbox",
+                        checked: sub.completed,
+                        onChange: (e) => {
+                          const newBody = toggleSubtask(body, sub.index, e.target.checked);
+                          setBody(newBody);
+                        },
+                        style: { cursor: "pointer", width: "15px", height: "15px", accentColor: "var(--interactive-accent)" }
+                      }
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                      "input",
+                      {
+                        type: "text",
+                        value: sub.text,
+                        onChange: (e) => {
+                          const newBody = editSubtask(body, sub.index, e.target.value);
+                          setBody(newBody);
+                        },
+                        style: {
+                          flex: 1,
+                          border: "none",
+                          background: "transparent",
+                          padding: "2px 4px",
+                          margin: 0,
+                          fontSize: "13px",
+                          color: sub.completed ? "var(--text-muted)" : "var(--text-normal)",
+                          textDecoration: sub.completed ? "line-through" : "none",
+                          outline: "none"
+                        },
+                        placeholder: "Subtask name..."
+                      }
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => {
+                          const newBody = deleteSubtask(body, sub.index);
+                          setBody(newBody);
+                        },
+                        style: {
+                          background: "transparent",
+                          border: "none",
+                          padding: "4px",
+                          cursor: "pointer",
+                          color: "var(--text-muted)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: "4px",
+                          transition: "color 0.2s ease, background-color 0.2s ease"
+                        },
+                        onMouseEnter: (e) => {
+                          e.currentTarget.style.color = "#ef4444";
+                          e.currentTarget.style.backgroundColor = "rgba(239, 68, 68, 0.1)";
+                        },
+                        onMouseLeave: (e) => {
+                          e.currentTarget.style.color = "var(--text-muted)";
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        },
+                        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Trash2, { size: 14 })
+                      }
+                    )
+                  ]
                 },
-                style: { cursor: "pointer" }
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: {
-              fontSize: "12px",
-              color: sub.completed ? "var(--text-muted)" : "var(--text-normal)",
-              textDecoration: sub.completed ? "line-through" : "none"
-            }, children: sub.text })
-          ] }, sub.index)) })
+                sub.index
+              )) }),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  "input",
+                  {
+                    type: "text",
+                    className: "form-input",
+                    style: { flex: 1, fontSize: "13px", padding: "6px 10px" },
+                    placeholder: "Add new subtask... (press Enter to save)",
+                    value: newSubtaskText,
+                    onChange: (e) => setNewSubtaskText(e.target.value),
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        if (newSubtaskText.trim()) {
+                          const newBody = addSubtask(body, newSubtaskText);
+                          setBody(newBody);
+                          setNewSubtaskText("");
+                        }
+                      }
+                    }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+                  "button",
+                  {
+                    type: "button",
+                    className: "flow-nav-tab",
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "6px 12px",
+                      height: "34px",
+                      fontSize: "13px",
+                      background: "var(--interactive-accent)",
+                      color: "var(--text-on-accent)",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer"
+                    },
+                    onClick: () => {
+                      if (newSubtaskText.trim()) {
+                        const newBody = addSubtask(body, newSubtaskText);
+                        setBody(newBody);
+                        setNewSubtaskText("");
+                      }
+                    },
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Plus, { size: 14, style: { marginRight: "4px" } }),
+                      "Add"
+                    ]
+                  }
+                )
+              ] })
+            ] });
+          })()
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Notes & Description Context" }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { display: "flex", flexDirection: "column", marginTop: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("label", { className: "form-label", children: "Catatan" }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
             "textarea",
             {
               className: "form-input",
-              style: { flex: 1, resize: "none", minHeight: "120px", fontFamily: "var(--font-monospace)", fontSize: "13px" },
-              value: body,
-              onChange: (e) => setBody(e.target.value),
-              placeholder: "# Context\nAdd description details..."
+              style: { resize: "none", minHeight: "100px", fontSize: "13px" },
+              value: notesInput,
+              onChange: (e) => {
+                const val = e.target.value;
+                setNotesInput(val);
+                setBody(updateNotesInBody(body, val));
+              },
+              placeholder: "Tulis catatan di sini..."
             }
           )
         ] })
@@ -28213,12 +28661,64 @@ var MODE_TIMES = {
   "long-break": 15 * 60
 };
 function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelectIssue }) {
-  const [mode, setMode] = (0, import_react8.useState)("focus");
-  const [timeLeft, setTimeLeft] = (0, import_react8.useState)(MODE_TIMES[mode]);
-  const [isRunning, setIsRunning] = (0, import_react8.useState)(false);
-  const [queue, setQueue] = (0, import_react8.useState)(["", "", ""]);
-  const [activeQueueIndex, setActiveQueueIndex] = (0, import_react8.useState)(0);
+  const [mode, setMode] = (0, import_react8.useState)(() => {
+    return localStorage.getItem("flow_timer_mode") || "focus";
+  });
+  const [timeLeft, setTimeLeft] = (0, import_react8.useState)(() => {
+    const savedMode = localStorage.getItem("flow_timer_mode") || "focus";
+    const savedIsRunning = localStorage.getItem("flow_timer_is_running") === "true";
+    const savedTarget = localStorage.getItem("flow_timer_target");
+    const savedPaused = localStorage.getItem("flow_timer_time_left_paused");
+    if (savedIsRunning && savedTarget) {
+      const targetTime = parseInt(savedTarget, 10);
+      const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1e3));
+      return remaining;
+    } else {
+      return savedPaused ? parseInt(savedPaused, 10) : MODE_TIMES[savedMode];
+    }
+  });
+  const [isRunning, setIsRunning] = (0, import_react8.useState)(() => {
+    const savedIsRunning = localStorage.getItem("flow_timer_is_running") === "true";
+    const savedTarget = localStorage.getItem("flow_timer_target");
+    if (savedIsRunning && savedTarget) {
+      const targetTime = parseInt(savedTarget, 10);
+      const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1e3));
+      return remaining > 0;
+    }
+    return false;
+  });
+  const [queue, setQueue] = (0, import_react8.useState)(() => {
+    const savedQueue = localStorage.getItem("flow_timer_queue");
+    if (savedQueue) {
+      try {
+        return JSON.parse(savedQueue);
+      } catch (e) {
+      }
+    }
+    return ["", "", ""];
+  });
+  const [activeQueueIndex, setActiveQueueIndex] = (0, import_react8.useState)(() => {
+    const savedActiveIdx = localStorage.getItem("flow_timer_active_queue_index");
+    return savedActiveIdx ? parseInt(savedActiveIdx, 10) || 0 : 0;
+  });
   const timerRef = (0, import_react8.useRef)(null);
+  const isMountedRef = (0, import_react8.useRef)(false);
+  const saveTimerState = (running, currentMode, remaining) => {
+    localStorage.setItem("flow_timer_is_running", running ? "true" : "false");
+    localStorage.setItem("flow_timer_mode", currentMode);
+    if (running) {
+      localStorage.setItem("flow_timer_target", (Date.now() + remaining * 1e3).toString());
+    } else {
+      localStorage.setItem("flow_timer_time_left_paused", remaining.toString());
+      localStorage.removeItem("flow_timer_target");
+    }
+  };
+  (0, import_react8.useEffect)(() => {
+    localStorage.setItem("flow_timer_queue", JSON.stringify(queue));
+  }, [queue]);
+  (0, import_react8.useEffect)(() => {
+    localStorage.setItem("flow_timer_active_queue_index", activeQueueIndex.toString());
+  }, [activeQueueIndex]);
   (0, import_react8.useEffect)(() => {
     setQueue((prev) => {
       let changed = false;
@@ -28280,8 +28780,10 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   (0, import_react8.useEffect)(() => {
     if (prevActiveTaskIdRef.current !== currentActiveTaskId) {
       setIsRunning(false);
-      setTimeLeft(MODE_TIMES[mode]);
+      const initialTime = MODE_TIMES[mode];
+      setTimeLeft(initialTime);
       prevActiveTaskIdRef.current = currentActiveTaskId;
+      saveTimerState(false, mode, initialTime);
     }
   }, [currentActiveTaskId, mode]);
   const prevStatusesRef = (0, import_react8.useRef)({});
@@ -28300,7 +28802,9 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           });
         }
         setIsRunning(false);
-        setTimeLeft(MODE_TIMES[mode]);
+        const initialTime = MODE_TIMES[mode];
+        setTimeLeft(initialTime);
+        saveTimerState(false, mode, initialTime);
       }
     }
     const newStatuses = {};
@@ -28319,21 +28823,26 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
     prevIsRunningRef.current = isRunning;
   }, [isRunning, mode, currentActiveTaskId, app, plugin.settings, issues]);
-  const stateRef = (0, import_react8.useRef)({ mode, isRunning });
+  const stateRef = (0, import_react8.useRef)({ mode, isRunning, timeLeft });
   (0, import_react8.useEffect)(() => {
-    stateRef.current = { mode, isRunning };
-  }, [mode, isRunning]);
+    stateRef.current = { mode, isRunning, timeLeft };
+  }, [mode, isRunning, timeLeft]);
   (0, import_react8.useEffect)(() => {
     if (!plugin)
       return;
     const handleAction = (action) => {
+      const { mode: currentMode, timeLeft: currentTimeLeft } = stateRef.current;
       if (action === "start") {
         setIsRunning(true);
+        saveTimerState(true, currentMode, currentTimeLeft);
       } else if (action === "pause") {
         setIsRunning(false);
+        saveTimerState(false, currentMode, currentTimeLeft);
       } else if (action === "reset") {
         setIsRunning(false);
-        setTimeLeft(MODE_TIMES[stateRef.current.mode]);
+        const initialTime = MODE_TIMES[currentMode];
+        setTimeLeft(initialTime);
+        saveTimerState(false, currentMode, initialTime);
       }
     };
     plugin.registerTimerActionListener(handleAction);
@@ -28354,8 +28863,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     plugin.updateStatusBar(text);
   }, [plugin, isRunning, timeLeft, mode, currentActiveTaskId]);
   (0, import_react8.useEffect)(() => {
-    setTimeLeft(MODE_TIMES[mode]);
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return;
+    }
+    const initialTime = MODE_TIMES[mode];
+    setTimeLeft(initialTime);
     setIsRunning(false);
+    saveTimerState(false, mode, initialTime);
   }, [mode]);
   (0, import_react8.useEffect)(() => {
     if (isRunning) {
@@ -28423,20 +28938,37 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
       }
       setMode("short-break");
+      saveTimerState(false, "short-break", MODE_TIMES["short-break"]);
     } else {
       new Notification("Flow Tracker", {
         body: "Break completed! Ready to focus?"
       });
       setMode("focus");
+      saveTimerState(false, "focus", MODE_TIMES["focus"]);
     }
   };
   const toggleTimer = () => {
-    setIsRunning(!isRunning);
+    const nextRunning = !isRunning;
+    setIsRunning(nextRunning);
+    saveTimerState(nextRunning, mode, timeLeft);
   };
   const resetTimer = () => {
     setIsRunning(false);
-    setTimeLeft(MODE_TIMES[mode]);
+    const initialTime = MODE_TIMES[mode];
+    setTimeLeft(initialTime);
+    saveTimerState(false, mode, initialTime);
   };
+  (0, import_react8.useEffect)(() => {
+    const savedIsRunning = localStorage.getItem("flow_timer_is_running") === "true";
+    const savedTarget = localStorage.getItem("flow_timer_target");
+    if (savedIsRunning && savedTarget) {
+      const targetTime = parseInt(savedTarget, 10);
+      const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1e3));
+      if (remaining <= 0) {
+        handleTimerComplete();
+      }
+    }
+  }, []);
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -30586,8 +31118,8 @@ var ChangelogModal = class extends import_obsidian9.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ('### Added\n- **Horizontal Pagination for Daily Reports**: Refactored the Recent Daily Reports list in the Productivity tab into a horizontal, stretch-aligned grid row. Displays 4 cards at a time with sleek Prev/Next pagination buttons to eliminate vertical scroll clutter.\n- **Collapsible Navigation Tab Bar**: Redesigned the main header tabs using the "Active Tab Text Only" pattern. Inactive tabs collapse into compact icons with native hover tooltips, and the active tab expands smoothly to fill a stable-width container, preventing adjacent element layout shifts.\n\n### Changed\n- **Minimalist Icon Cleanup**: Replaced empty dashboard state target emoji with a styled Lucide check SVG icon.\n- **Emoji Removal**: Stripped all casual emojis and emoticons from the Kanban Board, Weekly Review tabs, Pomodoro Timer, Issue Editor, and Daily Note review markdown templates to maintain a professional, developer-focused aesthetic.\n\n### Fixed\n- **Changelog Type Error**: Fixed a TypeScript compilation warning in `src/main.ts` by passing the `FlowPlugin` instance (which implements `Component`) to `ChangelogModal` for markdown rendering.\n\n---'.trim()) {
-        await import_obsidian9.MarkdownRenderer.render(this.app, '### Added\n- **Horizontal Pagination for Daily Reports**: Refactored the Recent Daily Reports list in the Productivity tab into a horizontal, stretch-aligned grid row. Displays 4 cards at a time with sleek Prev/Next pagination buttons to eliminate vertical scroll clutter.\n- **Collapsible Navigation Tab Bar**: Redesigned the main header tabs using the "Active Tab Text Only" pattern. Inactive tabs collapse into compact icons with native hover tooltips, and the active tab expands smoothly to fill a stable-width container, preventing adjacent element layout shifts.\n\n### Changed\n- **Minimalist Icon Cleanup**: Replaced empty dashboard state target emoji with a styled Lucide check SVG icon.\n- **Emoji Removal**: Stripped all casual emojis and emoticons from the Kanban Board, Weekly Review tabs, Pomodoro Timer, Issue Editor, and Daily Note review markdown templates to maintain a professional, developer-focused aesthetic.\n\n### Fixed\n- **Changelog Type Error**: Fixed a TypeScript compilation warning in `src/main.ts` by passing the `FlowPlugin` instance (which implements `Component`) to `ChangelogModal` for markdown rendering.\n\n---', listContainer, "", this.plugin);
+      if ("".trim()) {
+        await import_obsidian9.MarkdownRenderer.render(this.app, "", listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {

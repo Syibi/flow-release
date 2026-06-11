@@ -417,19 +417,25 @@
 
 .filters-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   background: var(--background-secondary);
-  padding: 12px 16px;
+  padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid var(--background-modifier-border);
   align-items: center;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+.filters-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .search-input-wrapper {
   position: relative;
   flex: 1;
-  min-width: 200px;
+  min-width: 160px;
+  flex-shrink: 0;
 }
 
 .search-input {
@@ -437,8 +443,8 @@
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
   border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 13px;
+  padding: 6px 10px;
+  font-size: 12px;
   color: var(--text-normal);
 }
 
@@ -451,13 +457,14 @@
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
   border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 13px;
+  padding: 5px 8px;
+  font-size: 12px;
   color: var(--text-normal);
   cursor: pointer;
   height: auto;
   line-height: normal;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .filter-select:focus {
@@ -474,13 +481,14 @@
 
 .issue-row {
   display: grid;
-  grid-template-columns: 100px 1fr 120px 100px 100px 100px;
-  padding: 12px 16px;
+  grid-template-columns: 80px 1fr 90px 120px 120px 80px 100px;
+  padding: 10px 14px;
   align-items: center;
   border-bottom: 1px solid var(--background-modifier-border);
   font-size: 13px;
   cursor: pointer;
   transition: background 0.2s;
+  gap: 12px;
 }
 
 .issue-row:last-child {
@@ -497,6 +505,40 @@
   border-bottom: 1px solid var(--background-modifier-border);
   cursor: default;
   color: var(--text-muted);
+}
+
+.issue-mobile-meta {
+  display: none;
+}
+
+/* Responsive Task List for small screens / sidebars */
+@media (max-width: 768px) {
+  .issue-row-header {
+    grid-template-columns: 70px 1fr 60px !important;
+  }
+  .issue-row-header .issue-col-due,
+  .issue-row-header .issue-col-project,
+  .issue-row-header .issue-col-epic,
+  .issue-row-header .issue-col-priority {
+    display: none !important;
+  }
+  
+  .issue-row {
+    grid-template-columns: 70px 1fr 60px !important;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  
+  .issue-col-due,
+  .issue-col-project,
+  .issue-col-epic,
+  .issue-col-priority {
+    display: none !important;
+  }
+  
+  .issue-mobile-meta {
+    display: flex !important;
+  }
 }
 
 /* Modal and Sliders */
@@ -888,6 +930,8 @@
   padding: 6px 10px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  height: 34px;
+  box-sizing: border-box;
 }
 
 .focus-queue-slot:hover {
@@ -1028,7 +1072,7 @@
   justify-content: center;
   align-items: center;
   gap: 6px;
-  margin-top: 20px;
+  margin-top: 0;
   padding: 8px 16px;
   background: var(--background-secondary);
   border-top: 1px solid var(--background-modifier-border);

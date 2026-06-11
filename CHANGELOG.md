@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.4.2] - 2026-06-11
+
+### Added
+- **Interactive Tag Pills (Chips)**: Redesigned the tags input field to automatically convert text to separate interactive tag pills upon typing a comma, pressing `Enter` or `Tab`, or clicking outside the input (blur). Supports removing individual tags by clicking their delete (`×`) icon or pressing `Backspace` on an empty input.
+- **Robust Tag Fallbacks**: Added a legacy tags parser to ensure existing comma-separated strings inside frontmatter metadata, local drafts, or raw markdown view mode are automatically parsed and loaded as tag pills.
+
+### Changed
+- **Issue Editor Layout Alignment**:
+  - Moved the ADHD Energy Level dropdown to replace the Tags input field in Row 4.
+  - Aligned the columns of ADHD Energy Level, Estimate (Pomodoros), and Logged Pomodoros to have equal/aligned width (`1fr 1fr 1fr`).
+  - Moved the Tags input below the checkboxes to act as a single, full-width field.
+  - Refined the checkboxes row to display planning checkboxes in a clean horizontal grid layout.
+- **Pomodoro Timer & Sidebar**: Refined timer persistence using localStorage epoch targets across sidebar unmounts/reloads.
+- **Backlog Filters & List UI**: Simplified task list filters to a single dropdown, enabled horizontal scroll navigation for tags/states filters, and added a responsive table-to-card layout for small screens.
+
+---
+
 ## [0.4.1] - 2026-06-10
 
 ### Added
