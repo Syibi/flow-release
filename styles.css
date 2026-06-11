@@ -477,6 +477,16 @@
   border: 1px solid var(--background-modifier-border);
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.issues-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .issue-row {

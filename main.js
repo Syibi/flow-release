@@ -26396,7 +26396,7 @@ function TaskListView({ index, onEditIssue }) {
           sortField === "smart" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] })
       ] }),
-      paginatedIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0", background: "var(--background-secondary)" }, children: "No issues found matching filters." }) : paginatedIssues.map((issue, idx) => {
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "issues-list-scroll", children: paginatedIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0", background: "var(--background-secondary)" }, children: "No issues found matching filters." }) : paginatedIssues.map((issue, idx) => {
         const res = processedIssues.scores.get(issue.id);
         const score = res ? res.score : 0;
         const tooltip = res ? res.breakdown.join("\n") : "";
@@ -26455,7 +26455,7 @@ function TaskListView({ index, onEditIssue }) {
           },
           issue.id
         );
-      }),
+      }) }),
       processedIssues.issues.length > 0 && (() => {
         const totalIssues = processedIssues.issues.length;
         const totalPages = Math.max(1, Math.ceil(totalIssues / PAGE_SIZE));
@@ -28720,6 +28720,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     localStorage.setItem("flow_timer_active_queue_index", activeQueueIndex.toString());
   }, [activeQueueIndex]);
   (0, import_react8.useEffect)(() => {
+    if (issues.length === 0)
+      return;
     setQueue((prev) => {
       let changed = false;
       const next = prev.map((id) => {
@@ -31118,8 +31120,8 @@ var ChangelogModal = class extends import_obsidian9.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ("".trim()) {
-        await import_obsidian9.MarkdownRenderer.render(this.app, "", listContainer, "", this.plugin);
+      if ("### Fixed\n- **Task List View Pagination**: Fixed a layout bug where the pagination controls at the bottom of the table were pushed off-screen and hidden. Refactored the table component to keep the table header and pagination controls sticky at the top/bottom while making only the rows container scrollable.\n- **Pomodoro Timer Load Glitch**: Fixed a race condition/glitch on reload where the timer was reset to 25:00 and paused. Guarded the auto-cleanup and sync effects from executing before the issues list index is successfully loaded.\n\n---".trim()) {
+        await import_obsidian9.MarkdownRenderer.render(this.app, "### Fixed\n- **Task List View Pagination**: Fixed a layout bug where the pagination controls at the bottom of the table were pushed off-screen and hidden. Refactored the table component to keep the table header and pagination controls sticky at the top/bottom while making only the rows container scrollable.\n- **Pomodoro Timer Load Glitch**: Fixed a race condition/glitch on reload where the timer was reset to 25:00 and paused. Guarded the auto-cleanup and sync effects from executing before the issues list index is successfully loaded.\n\n---", listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {

@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [0.4.2] - 2026-06-11
+## [0.4.4] - 2026-06-11
+
+### Fixed
+- **Task List View Pagination**: Fixed a layout bug where the pagination controls at the bottom of the table were pushed off-screen and hidden. Refactored the table component to keep the table header and pagination controls sticky at the top/bottom while making only the rows container scrollable.
+- **Pomodoro Timer Load Glitch**: Fixed a race condition/glitch on reload where the timer was reset to 25:00 and paused. Guarded the auto-cleanup and sync effects from executing before the issues list index is successfully loaded.
+
+---
+
+## [0.4.3] - 2026-06-11
 
 ### Added
 - **Interactive Tag Pills (Chips)**: Redesigned the tags input field to automatically convert text to separate interactive tag pills upon typing a comma, pressing `Enter` or `Tab`, or clicking outside the input (blur). Supports removing individual tags by clicking their delete (`×`) icon or pressing `Backspace` on an empty input.
