@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.5.0] - 2026-06-11
+
+### Added
+- **Daily Report Modal**: New Obsidian modal (`DailyReportModal`) that opens a full daily report for any selected date. Displays session stats (focus pomodoros, total duration, completion %), completed and uncompleted task cards, a Refleksi Harian section, and an activity log with two tabs — Kronologis (timeline) and Report (task sessions with precise `startTime – endTime` and action notes). Footer provides quick access to the raw daily note and dashboard navigation.
+- **Review Tab**: New dedicated **Review** main tab with two sub-tabs:
+  - **Daily Review** — date switcher (`< Prev Day / Today / Next Day >`) for reviewing any date. Includes a reflection form (Yang Berjalan Lancar, Hambatan / Kendala, Rencana Besok) with **1-second auto-save** (no manual save button). Also shows a daily report card with task sessions and clickable task titles that open the IssueEditor.
+  - **Weekly Review** — scope planner for `thisWeek` tasks and a weekly overview summary.
+- **Workday Timeline**: New visual progress bar on the Dashboard showing elapsed time, planned focus time, free buffer, and overload segments across the work day. A floating "Sekarang (HH:MM)" badge with a vertical marker line shows real-time position.
+- **Daily Focus Progress Bar**: Secondary progress bar below the timeline tracking logged vs estimated pomodoros for today's tasks.
+- **Focus Queue**: Pomodoro sidebar now features a 3-slot Focus Queue that auto-fills from today's active tasks, auto-ejects completed tasks, and compacts empty slots. Supports manual slot assignment via dropdown.
+- **Deep Work Overlay**: Full-screen blur overlay activates during focus sessions to minimize distraction. Includes active task display, session goal input, and minimize/restore control.
+- **Session Goal**: Before each focus block, users can set a concrete intention ("Saya akan fokus sampai...") that is displayed during the session and cleared on completion.
+- **Break Overlay**: Full-screen break overlay with breathing animation (inhale/hold/exhale cycle), offline activity prompt, and skip/dismiss controls.
+- **Alarm System**: Looping audio tone and pulsing button when Pomodoro timer completes. "Matikan Alarm" silences and transitions to next mode.
+- **Recommended Task Widget**: Suggests the highest Smart-Score backlog task not yet in the Focus Queue when capacity allows.
+- **Target Tercapai Button**: One-click manual session completion inside the Deep Work overlay — increments logged pomodoro count, logs activity to daily note, and transitions to break mode with a celebratory C5-E5-G5 audio arpeggio.
+- **Inbox Tab**: Quick-capture input for raw tasks and thoughts, processed later into issues via the IssueEditor.
+- **End-of-Day Celebration State**: When the scheduled work day ends, Today's Plan is replaced with a celebration card showing daily stats and a shortcut to write daily reflection.
+
+### Changed
+- **Dashboard Redesign**: Replaced the old multi-column stat widget grid with a focused single-column layout (max 800px). Today's Plan and Timeline are the primary focal points; project health cards removed.
+- **Reflection Labels**: All-caps saturated colored text in the Daily Report reflection section replaced with soft pill badges (muted background, low-opacity border) for cleaner visual hierarchy.
+- **Report Tab**: Renamed "Daily Standup" tab to "Report"; now set as the default active tab in the Review view.
+- **Recent Daily Reports Sort Order**: List on Dashboard now sorted oldest-to-newest (ascending chronological order).
+- **Timer State Persistence**: Pomodoro timer state (mode, running/paused, remaining time) persisted to `localStorage` using epoch targets — survives sidebar unmounts and plugin reloads.
+- **obsidianUtils**: `readReflectionFromDailyNote` and `saveReflectionToDailyNote` now accept an optional `dateStr` parameter for reading/writing to any date's daily note (not just today).
+
+### Fixed
+- **Modal Close Button**: Native Obsidian close button hidden inside `DailyReportModal`; replaced with a custom React button precisely positioned in the modal header with proper sizing, border, and hover effect.
+- **Emoji Cleanup**: Removed `⏱️` from timing badges and `🎉` from task completion text in both the Daily Report Modal and Weekly Review views.
+- **Auto-Clean Stale Tasks**: Completed tasks with a `completedDate` from a previous day are automatically removed from Today's Plan on Dashboard load.
+
+---
+
 ## [0.4.4] - 2026-06-11
 
 ### Fixed
