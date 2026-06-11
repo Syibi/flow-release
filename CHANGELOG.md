@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.5.1] - 2026-06-11
+
+### Fixed
+- **Recent Daily Reports Sort Order**: Fixed the Productivity tab showing oldest daily notes first when paginating. Removed an erroneous `.reverse()` call so that the most recent notes always appear on the first page (newest-first order).
+
+---
+
 ## [0.5.0] - 2026-06-11
 
 ### Added
