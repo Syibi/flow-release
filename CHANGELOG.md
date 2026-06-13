@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.6.0] - 2026-06-14
+
+### Added
+- **Related Documents per Task**: Dari Task Editor, kini bisa membuat Canvas atau Note baru langsung terhubung ke task. Dokumen disimpan di folder `Docs/` milik project/epic terkait dan diberi nama otomatis `ISSUE-XXX - Nama.md/canvas`.
+- **Vault Scan Approach for Related Docs**: Relasi dokumen dideteksi berdasarkan naming convention (`ISSUE-XXX - *`) tanpa perlu menyimpan frontmatter tambahan — lebih simpel, lebih robust, tidak ada race condition.
+- **Real-time Related Docs List**: Daftar dokumen terkait auto-refresh saat ada file dibuat, dihapus, atau di-rename di vault (menggunakan vault event listeners).
+- **Delete Button per Document**: Tombol ✕ di setiap item dokumen untuk menghapus file dari vault dengan dialog konfirmasi.
+- **Archive Tab (Projects & Epics)**: Tab "Archive" di ProjectsView untuk melihat project dan epic yang sudah berstatus `archived`.
+- **Auto-Archive Tasks**: Sistem otomatis memindahkan task berstatus `done` ke folder arsip setelah jumlah hari yang dikonfigurasi di Settings.
+- **Edit Project & Epic**: Tombol edit di modal detail project/epic untuk mengubah nama, status, dan properti lainnya.
+- **Epic Status**: Menambahkan field `status` (`active` | `archived`) pada Epic.
+
+### Changed
+- **Related Documents Icons**: Mengganti emoji (📄🗂) dengan ikon SVG konsisten dari Lucide (`FileText` untuk note, `Network` untuk canvas) agar seragam dengan seluruh UI plugin.
+- **Blank File on Create**: File task, project, epic, note, dan canvas yang baru dibuat kini tidak lagi memiliki heading placeholder (`# Judul`). File dibuat kosong agar user bebas menulis konten sendiri.
+- **triggerChange() Debounce**: UI refresh di-debounce 250ms untuk mengelompokkan event perubahan file yang terjadi cepat berturut-turut (misal saat batch archive) menjadi satu re-render saja — meningkatkan performa signifikan pada vault besar.
+
+### Fixed
+- **Blank UI on Window Reload**: Menambahkan listener `metadataCache.on('resolved')` sehingga UI selalu terisi data setelah Obsidian selesai mengindeks vault, menghilangkan kondisi tampilan kosong saat Ctrl+R.
+- **editingIssue Sync**: State task yang sedang diedit di modal kini disinkronkan otomatis saat index vault diperbarui, mencegah data stale pada editor yang sedang terbuka.
+- **Electron `prompt()` Compatibility**: Mengganti semua pemanggilan `prompt()` dengan UI input inline berbasis React state — kompatibel penuh dengan lingkungan Electron/Obsidian yang memblokir `prompt()`.
+- **Epic Autofill on Edit**: Field epic kini ter-isi otomatis saat membuka task editor untuk task yang sudah memiliki epic terdaftar.
+- **completedDate Preservation**: Field `completedDate` kini dijaga dengan benar saat menyimpan ulang task yang sudah berstatus `done`.
+
+---
+
 ## [0.5.2] - 2026-06-13
 
 ### Changed
