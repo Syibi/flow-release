@@ -1101,7 +1101,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useReducer(reducer, initialArg, init);
         }
-        function useRef2(initialValue) {
+        function useRef3(initialValue) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
@@ -1117,11 +1117,11 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
-        function useCallback2(callback, deps) {
+        function useCallback3(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo4(create, deps) {
+        function useMemo5(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1884,7 +1884,7 @@ var require_react_development = __commonJS({
         exports.memo = memo;
         exports.startTransition = startTransition;
         exports.unstable_act = act;
-        exports.useCallback = useCallback2;
+        exports.useCallback = useCallback3;
         exports.useContext = useContext;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
@@ -1893,9 +1893,9 @@ var require_react_development = __commonJS({
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
         exports.useLayoutEffect = useLayoutEffect;
-        exports.useMemo = useMemo4;
+        exports.useMemo = useMemo5;
         exports.useReducer = useReducer;
-        exports.useRef = useRef2;
+        exports.useRef = useRef3;
         exports.useState = useState13;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
@@ -2392,9 +2392,9 @@ var require_react_dom_development = __commonJS({
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
           __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
         }
-        var React5 = require_react();
+        var React6 = require_react();
         var Scheduler = require_scheduler();
-        var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         var suppressWarning = false;
         function setSuppressWarning(newSuppressWarning) {
           {
@@ -3999,7 +3999,7 @@ var require_react_dom_development = __commonJS({
           {
             if (props.value == null) {
               if (typeof props.children === "object" && props.children !== null) {
-                React5.Children.forEach(props.children, function(child) {
+                React6.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -23568,7 +23568,7 @@ var require_react_jsx_runtime_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React5 = require_react();
+        var React6 = require_react();
         var REACT_ELEMENT_TYPE = Symbol.for("react.element");
         var REACT_PORTAL_TYPE = Symbol.for("react.portal");
         var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -23594,7 +23594,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
           return null;
         }
-        var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function error(format) {
           {
             {
@@ -24479,7 +24479,7 @@ var import_obsidian10 = require("obsidian");
 var import_client2 = __toESM(require_client());
 
 // src/components/FlowApp.tsx
-var React4 = __toESM(require_react());
+var React5 = __toESM(require_react());
 var import_react13 = __toESM(require_react());
 
 // src/utils/obsidianUtils.ts
@@ -24489,6 +24489,62 @@ function getLocalDateString(d = /* @__PURE__ */ new Date()) {
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+function getVaultKey(app, key) {
+  const vaultId = app.appId || app.vault.getName();
+  return `${vaultId}_${key}`;
+}
+function calculateStreak(issues) {
+  const activeDays = /* @__PURE__ */ new Set();
+  issues.forEach((issue) => {
+    if (issue.status === "done" && issue.completedDate) {
+      activeDays.add(issue.completedDate);
+    }
+  });
+  const activeDaysCount = activeDays.size;
+  const todayStr = getLocalDateString();
+  const yesterdayStr = getLocalDateString(new Date(Date.now() - 864e5));
+  let currentStreak = 0;
+  let startStr = "";
+  if (activeDays.has(todayStr)) {
+    startStr = todayStr;
+  } else if (activeDays.has(yesterdayStr)) {
+    startStr = yesterdayStr;
+  }
+  if (startStr) {
+    const cur = new Date(startStr);
+    while (true) {
+      const curStr = getLocalDateString(cur);
+      if (activeDays.has(curStr)) {
+        currentStreak++;
+        cur.setDate(cur.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+  }
+  const sortedActiveDates = Array.from(activeDays).sort();
+  let bestStreak = 0;
+  let tempStreak = 0;
+  let prevTime = 0;
+  sortedActiveDates.forEach((dateStr) => {
+    const curTime = new Date(dateStr).getTime();
+    if (prevTime === 0) {
+      tempStreak = 1;
+    } else {
+      const diff = Math.round((curTime - prevTime) / (1e3 * 60 * 60 * 24));
+      if (diff === 1) {
+        tempStreak++;
+      } else if (diff > 1) {
+        tempStreak = 1;
+      }
+    }
+    if (tempStreak > bestStreak) {
+      bestStreak = tempStreak;
+    }
+    prevTime = curTime;
+  });
+  return { currentStreak, bestStreak, activeDaysCount, activeDays };
 }
 var DEFAULT_SETTINGS = {
   issuesFolder: "Issues",
@@ -24928,10 +24984,18 @@ type: daily-note
       todayPomodoros = pmdMatches.length;
     }
   }
-  const focusTimeMin = todayPomodoros * (settings.pomodoroDuration || 25);
+  const allTodayTasks = issues.filter((i) => i.today || i.status === "done" && i.completedDate === todayStr);
+  const completedToday = allTodayTasks.filter((i) => i.status === "done");
+  let manualPomos = 0;
+  completedToday.forEach((i) => {
+    if ((i.logged || 0) === 0) {
+      manualPomos += 1;
+    }
+  });
+  const adjustedTodayPomodoros = todayPomodoros + manualPomos;
+  const focusTimeMin = adjustedTodayPomodoros * (settings.pomodoroDuration || 25);
   const focusHours = Math.floor(focusTimeMin / 60);
   const focusMins = focusTimeMin % 60;
-  const allTodayTasks = issues.filter((i) => i.today || i.status === "done" && i.completedDate === todayStr);
   const totalEstimate = allTodayTasks.reduce((acc, curr) => acc + (curr.estimate || 0), 0);
   const frontmatterInfo = (0, import_obsidian.getFrontMatterInfo)(content);
   let currentFm = {};
@@ -24948,7 +25012,7 @@ type: daily-note
   const newFm = {
     ...currentFm,
     type: "daily-note",
-    pomodorosRun: todayPomodoros,
+    pomodorosRun: adjustedTodayPomodoros,
     totalEstimate,
     tasksTaken: allTodayTasks.map((i) => i.id),
     taskNames: allTodayTasks.map((i) => i.title)
@@ -24956,7 +25020,7 @@ type: daily-note
   const frontmatterStr = serializeFrontmatter(newFm);
   let reportSection = "## Flow Daily Report\n\n";
   reportSection += "### Focus Summary\n";
-  reportSection += `- **Pomodoros Run**: ${todayPomodoros} session(s)
+  reportSection += `- **Pomodoros Run**: ${adjustedTodayPomodoros} session(s)
 `;
   reportSection += `- **Total Focus Time**: ${focusHours}h ${focusMins}m
 `;
@@ -24964,13 +25028,13 @@ type: daily-note
 
 `;
   reportSection += "### Completed Tasks\n";
-  const completedToday = allTodayTasks.filter((i) => i.status === "done");
   if (completedToday.length === 0) {
     reportSection += "_Belum ada tugas selesai hari ini._\n";
   } else {
     completedToday.forEach((i) => {
+      const loggedVal = Math.max(1, i.logged || 0);
       const estStr = i.estimate ? ` / ${i.estimate} pmd` : "";
-      reportSection += `- **${i.title}** (\`[[${i.id}]]\`) \u2014 ${i.logged}${estStr} pomodoro(s) logged
+      reportSection += `- **${i.title}** (\`[[${i.id}]]\`) \u2014 ${loggedVal}${estStr} pomodoro(s) logged
 `;
     });
   }
@@ -25649,7 +25713,7 @@ function DashboardView({
           left: `${Math.min(90, Math.max(10, elapsedPercent))}%`,
           top: "0",
           transform: "translateX(-50%)",
-          fontSize: "10px",
+          fontSize: "var(--flow-text-xs)",
           fontWeight: "bold",
           color: "var(--text-accent)",
           backgroundColor: "var(--background-secondary)",
@@ -25749,7 +25813,7 @@ function DashboardView({
           )
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px", color: "var(--text-muted)", marginTop: "2px", flexWrap: "wrap", gap: "8px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px", flexWrap: "wrap", gap: "8px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
           "Mulai: ",
           plugin.settings.workStartHour || "09:00"
@@ -25764,153 +25828,269 @@ function DashboardView({
           plugin.settings.workEndHour || "17:00"
         ] })
       ] }),
-      totalDailyPlanEstimate > maxDailyPomos && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "#ef4444", marginTop: "6px", fontWeight: 500 }, children: [
+      totalDailyPlanEstimate > maxDailyPomos && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--flow-text-sm)", color: "#ef4444", marginTop: "6px", fontWeight: 500 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlertCircle, { size: 12, className: "badge-status-blocked" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: workSchedule.remaining <= 0 ? "Waktu kerja terjadwal hari ini sudah berakhir." : `Estimasi fokus (${totalDailyPlanHours.toFixed(1)}j) melebihi sisa waktu kerja (${workSchedule.remaining.toFixed(1)}j tersisa).` })
       ] }),
-      totalDailyPlanTasks > 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "var(--text-muted)", marginTop: "4px" }, children: [
+      totalDailyPlanTasks > 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "4px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, { size: 12 }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tip: Lebih dari 3 tugas hari ini berisiko membuat kewalahan. Batasi tugas Anda." })
       ] })
     ] });
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: "800px", margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", gap: "20px" }, children: totalDailyPlanTasks > 0 ? isWorkDayEnded && !showOverrideTasks ? (
-    /* Today's Daily Plan / Celebration */
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: {
-      borderLeft: "4px solid #10b981",
-      background: "var(--background-secondary)",
-      padding: "28px 24px",
-      borderRadius: "12px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "16px",
-      alignItems: "center",
-      textAlign: "center",
-      width: "100%",
-      boxSizing: "border-box"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { margin: "10px 0 0 0", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Coffee, { size: 48 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: 0, fontWeight: 700, fontSize: "18px", color: "var(--text-normal)" }, children: "Waktu Kerja Terjadwal Hari Ini Selesai!" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, fontSize: "13px", color: "var(--text-muted)", maxWidth: "460px", lineHeight: 1.5 }, children: "Anda telah bekerja keras hari ini. Tugas-tugas aktif yang tersisa telah disembunyikan agar Anda bisa beristirahat tanpa beban pikiran." }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+  const completedCountsByDate = React.useMemo(() => {
+    const counts = {};
+    issues.forEach((i) => {
+      if (i.status === "done" && i.completedDate) {
+        counts[i.completedDate] = (counts[i.completedDate] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [issues]);
+  const heatmapWeeks = React.useMemo(() => {
+    const today = /* @__PURE__ */ new Date();
+    const currentDay = today.getDay();
+    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
+    const currentMonday = new Date(today);
+    currentMonday.setDate(today.getDate() + mondayOffset);
+    currentMonday.setHours(0, 0, 0, 0);
+    const startMonday = new Date(currentMonday);
+    startMonday.setDate(currentMonday.getDate() - 11 * 7);
+    const columns = [];
+    for (let w = 0; w < 12; w++) {
+      const week = [];
+      for (let d = 0; d < 7; d++) {
+        const dateObj = new Date(startMonday);
+        dateObj.setDate(startMonday.getDate() + w * 7 + d);
+        week.push(dateObj);
+      }
+      columns.push(week);
+    }
+    return columns;
+  }, []);
+  const getDoneColorClass = (count) => {
+    if (count === 0)
+      return "flow-cell-empty";
+    if (count === 1)
+      return "flow-cell-level-1";
+    if (count === 2)
+      return "flow-cell-level-2";
+    if (count === 3)
+      return "flow-cell-level-3";
+    return "flow-cell-level-4";
+  };
+  const renderHeatmapMonths = () => {
+    let prevMonth = "";
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: "4px", marginBottom: "2px", width: "fit-content" }, children: heatmapWeeks.map((week, idx) => {
+      const firstDay = week[0];
+      const monthName = firstDay.toLocaleString("default", { month: "short" });
+      const showMonth = monthName !== prevMonth;
+      if (showMonth) {
+        prevMonth = monthName;
+      }
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            width: "11px",
+            fontSize: "var(--flow-text-xs)",
+            color: "var(--text-muted)",
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            overflow: "visible"
+          },
+          children: showMonth ? monthName : ""
+        },
+        idx
+      );
+    }) });
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: "800px", margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", gap: "20px" }, children: [
+    "      ",
+    totalDailyPlanTasks > 0 ? isWorkDayEnded && !showOverrideTasks ? (
+      /* Today's Daily Plan / Celebration */
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: {
+        borderLeft: "4px solid #10b981",
+        background: "var(--background-secondary)",
+        padding: "28px 24px",
+        borderRadius: "12px",
         display: "flex",
-        gap: "20px",
-        background: "var(--background-primary)",
-        padding: "12px 24px",
-        borderRadius: "8px",
-        border: "1px solid var(--background-modifier-border)",
-        marginTop: "8px"
+        flexDirection: "column",
+        gap: "16px",
+        alignItems: "center",
+        textAlign: "center",
+        width: "100%",
+        boxSizing: "border-box"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Pomodoro Berhasil" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "20px", fontWeight: 700, color: "var(--text-normal)" }, children: todayTotalPomos })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { margin: "10px 0 0 0", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Coffee, { size: 48 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-3xl)", color: "var(--text-normal)" }, children: "Waktu Kerja Terjadwal Hari Ini Selesai!" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-muted)", maxWidth: "460px", lineHeight: 1.5 }, children: "Anda telah bekerja keras hari ini. Tugas-tugas aktif yang tersisa telah disembunyikan agar Anda bisa beristirahat tanpa beban pikiran." }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+          display: "flex",
+          gap: "20px",
+          background: "var(--background-primary)",
+          padding: "12px 24px",
+          borderRadius: "8px",
+          border: "1px solid var(--background-modifier-border)",
+          marginTop: "8px"
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Pomodoro Berhasil" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-4xl)", fontWeight: 700, color: "var(--text-normal)" }, children: todayTotalPomos })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "1px", background: "var(--background-modifier-border)" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Tugas Selesai" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-4xl)", fontWeight: 700, color: "#10b981" }, children: todayCompletedCount })
+          ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "1px", background: "var(--background-modifier-border)" } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Tugas Selesai" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "20px", fontWeight: 700, color: "#10b981" }, children: todayCompletedCount })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "12px", marginTop: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "button",
+            {
+              className: "flow-action-btn",
+              style: { padding: "8px 16px", fontSize: "var(--flow-text-base)", cursor: "pointer" },
+              onClick: () => onNavigate("review"),
+              children: "Tulis Refleksi Harian"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "button",
+            {
+              className: "flow-nav-tab",
+              style: {
+                padding: "8px 16px",
+                fontSize: "var(--flow-text-base)",
+                border: "1px solid var(--background-modifier-border)",
+                background: "var(--background-primary)",
+                cursor: "pointer"
+              },
+              onClick: () => setShowOverrideTasks(true),
+              children: "Lihat Sisa Tugas"
+            }
+          )
+        ] })
+      ] })
+    ) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--text-accent)", display: "flex", flexDirection: "column", gap: "16px", width: "100%", boxSizing: "border-box" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card-title", style: { display: "flex", flexDirection: "column", gap: "4px", marginBottom: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Today's Timeline & Daily Progress" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: "normal", textTransform: "none" }, children: "Pemantauan jam kerja harian dan persentase penyelesaian target hari ini." })
+        ] }),
+        renderWorkdayTimeline(),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", borderTop: "1px solid var(--background-modifier-border)", paddingTop: "14px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)", fontWeight: 600 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, { size: 13 }),
+              "Daily Focus Progress"
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: "var(--text-accent)" }, children: [
+              completedDailyPlanHours.toFixed(1),
+              "j / ",
+              estimatedDailyPlanHours.toFixed(1),
+              "j selesai (",
+              Math.round(dailyProgressPercent),
+              "%)"
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+            width: "100%",
+            height: "8px",
+            backgroundColor: "var(--background-secondary-alt)",
+            borderRadius: "4px",
+            overflow: "hidden",
+            border: "1px solid var(--background-modifier-border)",
+            marginTop: "4px"
+          }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+            width: `${dailyProgressPercent}%`,
+            height: "100%",
+            background: "linear-gradient(90deg, var(--interactive-accent) 0%, #a855f7 100%)",
+            borderRadius: "4px",
+            transition: "width 0.3s ease"
+          } }) })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "12px", marginTop: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            className: "flow-action-btn",
-            style: { padding: "8px 16px", fontSize: "12px", cursor: "pointer" },
-            onClick: () => onNavigate("review"),
-            children: "Tulis Refleksi Harian"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            className: "flow-nav-tab",
-            style: {
-              padding: "8px 16px",
-              fontSize: "12px",
-              border: "1px solid var(--background-modifier-border)",
-              background: "var(--background-primary)",
-              cursor: "pointer"
-            },
-            onClick: () => setShowOverrideTasks(true),
-            children: "Lihat Sisa Tugas"
-          }
-        )
-      ] })
-    ] })
-  ) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--text-accent)", display: "flex", flexDirection: "column", gap: "16px", width: "100%", boxSizing: "border-box" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card-title", style: { display: "flex", flexDirection: "column", gap: "4px", marginBottom: 0 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "16px", fontWeight: 700 }, children: "Today's Timeline & Daily Progress" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: "normal", textTransform: "none" }, children: "Pemantauan jam kerja harian dan persentase penyelesaian target hari ini." })
-      ] }),
-      renderWorkdayTimeline(),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", borderTop: "1px solid var(--background-modifier-border)", paddingTop: "14px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", fontWeight: 600 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, { size: 13 }),
-            "Daily Focus Progress"
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)", display: "flex", flexDirection: "column", gap: "16px", width: "100%", boxSizing: "border-box" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card-title", style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", marginBottom: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Today's Plan" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: "normal", textTransform: "none" }, children: [
+              totalDailyPlanTasks,
+              " tugas \u2022 ",
+              totalDailyPlanEstimate,
+              " pomodoro (",
+              totalDailyPlanHours.toFixed(1),
+              "j) \u2022 Sisa Waktu Kerja: ",
+              workSchedule.remaining.toFixed(1),
+              "j / ",
+              workSchedule.total.toFixed(1),
+              "j"
+            ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { color: "var(--text-accent)" }, children: [
-            completedDailyPlanHours.toFixed(1),
-            "j / ",
-            estimatedDailyPlanHours.toFixed(1),
-            "j selesai (",
-            Math.round(dailyProgressPercent),
-            "%)"
-          ] })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+            "button",
+            {
+              className: `flow-nav-tab ${energyFilter === "low" ? "active" : ""}`,
+              onClick: () => setEnergyFilter(energyFilter === "all" ? "low" : "all"),
+              style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--flow-text-sm)", padding: "4px 10px", height: "fit-content", cursor: "pointer" },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, { size: 11 }),
+                "Low Energy Only"
+              ]
+            }
+          )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-          width: "100%",
-          height: "8px",
-          backgroundColor: "var(--background-secondary-alt)",
-          borderRadius: "4px",
-          overflow: "hidden",
-          border: "1px solid var(--background-modifier-border)",
-          marginTop: "4px"
-        }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-          width: `${dailyProgressPercent}%`,
-          height: "100%",
-          background: "linear-gradient(90deg, var(--interactive-accent) 0%, #a855f7 100%)",
-          borderRadius: "4px",
-          transition: "width 0.3s ease"
-        } }) })
-      ] })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)", display: "flex", flexDirection: "column", gap: "16px", width: "100%", boxSizing: "border-box" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "dashboard-card-title", style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", marginBottom: "8px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "16px", fontWeight: 700 }, children: "Today's Plan" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: "normal", textTransform: "none" }, children: [
-            totalDailyPlanTasks,
-            " tugas \u2022 ",
-            totalDailyPlanEstimate,
-            " pomodoro (",
-            totalDailyPlanHours.toFixed(1),
-            "j) \u2022 Sisa Waktu Kerja: ",
-            workSchedule.remaining.toFixed(1),
-            "j / ",
-            workSchedule.total.toFixed(1),
-            "j"
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "button",
-          {
-            className: `flow-nav-tab ${energyFilter === "low" ? "active" : ""}`,
-            onClick: () => setEnergyFilter(energyFilter === "all" ? "low" : "all"),
-            style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", padding: "4px 10px", height: "fit-content", cursor: "pointer" },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, { size: 11 }),
-              "Low Energy Only"
-            ]
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: [
-        dailyPlanIssues.map((issue) => {
-          const score = calculateTaskScore(issue, issues).score;
-          return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: [
+          dailyPlanIssues.map((issue) => {
+            const score = calculateTaskScore(issue, issues).score;
+            return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+              "div",
+              {
+                className: `issue-row ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
+                onClick: () => onEditIssue(issue),
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "36px 1fr 100px",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  background: "var(--background-primary)",
+                  alignItems: "center",
+                  border: activePomodoroTaskId === issue.id ? "1px solid var(--interactive-accent)" : "1px solid var(--background-modifier-border)",
+                  cursor: "pointer"
+                },
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", alignItems: "center" }, onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                    "input",
+                    {
+                      type: "checkbox",
+                      checked: false,
+                      onChange: async (e) => {
+                        await handleToggleDone(e, issue);
+                      },
+                      style: { margin: 0, cursor: "pointer" }
+                    }
+                  ) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: issue.title }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", flexWrap: "wrap" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 500, color: "var(--text-accent)" }, children: issue.id }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2022" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: "2px", color: "var(--interactive-accent)" }, title: "Smart Score", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 10 }),
+                        " ",
+                        score
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2022" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge badge-priority-${issue.priority}`, style: { textTransform: "uppercase" }, children: issue.priority })
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: issue.estimate ? `${issue.logged || 0}/${issue.estimate} pmd` : "0 pmd" })
+                ]
+              },
+              issue.id
+            );
+          }),
+          dailyPlanDoneIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
             "div",
             {
               className: `issue-row ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
@@ -25922,7 +26102,8 @@ function DashboardView({
                 borderRadius: "8px",
                 background: "var(--background-primary)",
                 alignItems: "center",
-                border: activePomodoroTaskId === issue.id ? "1px solid var(--interactive-accent)" : "1px solid var(--background-modifier-border)",
+                opacity: 0.6,
+                border: "1px solid var(--background-modifier-border)",
                 cursor: "pointer"
               },
               children: [
@@ -25930,7 +26111,7 @@ function DashboardView({
                   "input",
                   {
                     type: "checkbox",
-                    checked: false,
+                    checked: true,
                     onChange: async (e) => {
                       await handleToggleDone(e, issue);
                     },
@@ -25938,110 +26119,148 @@ function DashboardView({
                   }
                 ) }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", style: { fontSize: "13px", fontWeight: 600, color: "var(--text-normal)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: issue.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", fontSize: "10px", color: "var(--text-muted)", flexWrap: "wrap" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 500, color: "var(--text-accent)" }, children: issue.id }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", style: { fontSize: "var(--flow-text-base)", textDecoration: "line-through", color: "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: issue.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", flexWrap: "wrap" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 500, textDecoration: "line-through" }, children: issue.id }),
                     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2022" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: "2px", color: "var(--interactive-accent)" }, title: "Smart Score", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 10 }),
-                      " ",
-                      score
-                    ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2022" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `badge badge-priority-${issue.priority}`, style: { textTransform: "uppercase" }, children: issue.priority })
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "badge badge-status-done", style: { textTransform: "uppercase" }, children: "Done" })
                   ] })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: issue.estimate ? `${issue.logged || 0}/${issue.estimate} pmd` : "0 pmd" })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: issue.estimate ? `${issue.logged || 0}/${issue.estimate} pmd` : "0 pmd" })
               ]
             },
             issue.id
-          );
-        }),
-        dailyPlanDoneIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "div",
-          {
-            className: `issue-row ${activePomodoroTaskId === issue.id ? "focused-task-card" : ""}`,
-            onClick: () => onEditIssue(issue),
-            style: {
-              display: "grid",
-              gridTemplateColumns: "36px 1fr 100px",
-              padding: "10px 14px",
-              borderRadius: "8px",
-              background: "var(--background-primary)",
+          ))
+        ] })
+      ] })
+    ] }) : (
+      /* Unified Empty State Banner when there are no daily plan tasks */
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px 24px",
+        background: "var(--background-secondary)",
+        border: "1px solid var(--background-modifier-border)",
+        borderRadius: "12px",
+        gap: "24px",
+        margin: "20px 0",
+        width: "100%",
+        boxSizing: "border-box"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: 0, fontWeight: 800, color: "var(--text-normal)", fontSize: "var(--flow-text-3xl)" }, children: "Panduan Memulai Cepat (Quick-Start Guide)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Belum ada tugas yang direncanakan untuk hari ini. Ikuti langkah mudah berikut untuk memulai alur kerja Anda:" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "16px",
+          width: "100%"
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+            background: "var(--background-primary)",
+            border: "1px solid var(--background-modifier-border)",
+            borderRadius: "8px",
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: "10px"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "rgba(99, 102, 241, 0.1)",
+              color: "var(--text-accent)",
+              display: "flex",
               alignItems: "center",
-              opacity: 0.6,
-              border: "1px solid var(--background-modifier-border)",
-              cursor: "pointer"
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", alignItems: "center" }, onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: true,
-                  onChange: async (e) => {
-                    await handleToggleDone(e, issue);
-                  },
-                  style: { margin: 0, cursor: "pointer" }
-                }
-              ) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "kanban-card-title", style: { fontSize: "13px", textDecoration: "line-through", color: "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: issue.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", fontSize: "10px", color: "var(--text-muted)", flexWrap: "wrap" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 500, textDecoration: "line-through" }, children: issue.id }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2022" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "badge badge-status-done", style: { textTransform: "uppercase" }, children: "Done" })
-                ] })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: issue.estimate ? `${issue.logged || 0}/${issue.estimate} pmd` : "0 pmd" })
-            ]
-          },
-          issue.id
-        ))
-      ] })
-    ] })
-  ] }) : (
-    /* Unified Empty State Banner when there are no daily plan tasks */
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "60px 20px",
-      background: "var(--background-secondary)",
-      border: "1px solid var(--background-modifier-border)",
-      borderRadius: "12px",
-      textAlign: "center",
-      gap: "8px",
-      margin: "20px 0",
-      width: "100%",
-      boxSizing: "border-box"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "var(--text-accent)", marginBottom: "4px", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckCircle2, { size: 32 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", { style: { margin: 0, fontWeight: 700, color: "var(--text-normal)" }, children: "Semua Bersih & Rapi!" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, fontSize: "13px", color: "var(--text-muted)", maxWidth: "400px", lineHeight: 1.5 }, children: "Belum ada tugas yang direncanakan untuk hari ini. Mulai dengan membuat project baru atau rencanakan tugas Anda di Backlog." }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "10px", marginTop: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            className: "flow-action-btn",
-            onClick: () => onNavigate("projects"),
-            style: { cursor: "pointer" },
-            children: "Buat Project Baru"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            className: "flow-nav-tab",
-            style: { border: "1px solid var(--background-modifier-border)", background: "var(--background-primary)", cursor: "pointer" },
-            onClick: () => onNavigate("backlog"),
-            children: "Buka Backlog"
-          }
-        )
-      ] })
-    ] })
-  ) });
+              justifyContent: "center",
+              fontWeight: 700,
+              fontSize: "var(--flow-text-lg)"
+            }, children: "1" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 700, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: "Rencanakan Tugas (Plan a Task)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", lineHeight: "1.4" }, children: "Buka backlog atau project, buat tugas baru, dan tentukan estimasi durasi Pomodoro Anda." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+            background: "var(--background-primary)",
+            border: "1px solid var(--background-modifier-border)",
+            borderRadius: "8px",
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: "10px"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "rgba(168, 85, 247, 0.1)",
+              color: "#a855f7",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 700,
+              fontSize: "var(--flow-text-lg)"
+            }, children: "2" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 700, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: "Masukkan Rencana Harian" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", lineHeight: "1.4" }, children: "Aktifkan opsi 'Hari Ini' pada tugas agar masuk ke dalam antrean fokus dan timeline kerja harian Anda." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+            background: "var(--background-primary)",
+            border: "1px solid var(--background-modifier-border)",
+            borderRadius: "8px",
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: "10px"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "rgba(16, 185, 129, 0.1)",
+              color: "#10b981",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 700,
+              fontSize: "var(--flow-text-lg)"
+            }, children: "3" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 700, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: "Mulai Timer Pomodoro" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", lineHeight: "1.4" }, children: "Pilih tugas dari rencana harian atau sidebar, lalu mulai timer Pomodoro untuk fokus bekerja." })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "button",
+            {
+              className: "flow-action-btn",
+              onClick: () => onNavigate("projects"),
+              style: { cursor: "pointer", padding: "8px 16px", fontSize: "var(--flow-text-base)" },
+              children: "Buat Project Baru"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "button",
+            {
+              className: "flow-nav-tab",
+              style: { border: "1px solid var(--background-modifier-border)", background: "var(--background-primary)", cursor: "pointer", padding: "8px 16px", fontSize: "var(--flow-text-base)" },
+              onClick: () => onNavigate("backlog"),
+              children: "Buka Backlog"
+            }
+          )
+        ] })
+      ] }) })
+    )
+  ] });
 }
 
 // src/components/BoardView.tsx
@@ -26208,13 +26427,13 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-header", children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-card-id", children: issue.id }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: "4px", alignItems: "center" }, children: [
-              issue.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "badge", style: { fontSize: "9px", fontWeight: 600, color: "var(--interactive-accent)", borderColor: "rgba(99, 102, 241, 0.2)" }, title: "Smart Score", children: calculateTaskScore(issue, issues).score }),
+              issue.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "badge", style: { fontSize: "var(--flow-text-xs)", fontWeight: 600, color: "var(--interactive-accent)", borderColor: "rgba(99, 102, 241, 0.2)" }, title: "Smart Score", children: calculateTaskScore(issue, issues).score }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: `badge badge-priority-${issue.priority}`, children: issue.priority })
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "kanban-card-title", children: issue.title }),
           isBlocked && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
-            fontSize: "10px",
+            fontSize: "var(--flow-text-xs)",
             color: "#ef4444",
             fontWeight: 600,
             background: "rgba(239, 68, 68, 0.05)",
@@ -26228,7 +26447,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "kanban-card-footer", children: [
             issue.project ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: {
-              fontSize: "10px",
+              fontSize: "var(--flow-text-xs)",
               color: "var(--interactive-accent)",
               fontWeight: 600,
               background: "var(--background-secondary)",
@@ -26256,7 +26475,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
             background: "var(--background-secondary)",
             color: "var(--text-muted)",
             textTransform: "none",
-            fontSize: "9px",
+            fontSize: "var(--flow-text-xs)",
             fontWeight: 500,
             padding: "1px 4px"
           }, children: [
@@ -26307,7 +26526,7 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
               background: "rgba(239, 68, 68, 0.12)",
               color: "#ef4444",
               padding: "8px 12px",
-              fontSize: "11px",
+              fontSize: "var(--flow-text-sm)",
               fontWeight: 600,
               borderBottom: "1px solid rgba(239, 68, 68, 0.15)",
               textAlign: "center"
@@ -26337,8 +26556,8 @@ function BoardView({ index, app, plugin, onEditIssue, activePomodoroTaskId, wipL
           children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "eisenhower-quadrant-header", children: [
               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "14px", fontWeight: 700 }, children: quad.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: quad.subtitle })
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: quad.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: quad.subtitle })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kanban-column-count", children: quadIssues.length })
             ] }),
@@ -26589,7 +26808,7 @@ function TaskListView({ index, onEditIssue }) {
           sortField === "smart" && (sortOrder === "asc" ? "\u25B2" : "\u25BC")
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "issues-list-scroll", children: paginatedIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "13px", textAlign: "center", padding: "32px 0", background: "var(--background-secondary)" }, children: "No issues found matching filters." }) : paginatedIssues.map((issue, idx) => {
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "issues-list-scroll", children: paginatedIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-base)", textAlign: "center", padding: "32px 0", background: "var(--background-secondary)" }, children: "No issues found matching filters." }) : paginatedIssues.map((issue, idx) => {
         const res = processedIssues.scores.get(issue.id);
         const score = res ? res.score : 0;
         const tooltip = res ? res.breakdown.join("\n") : "";
@@ -26611,8 +26830,8 @@ function TaskListView({ index, onEditIssue }) {
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-col-title", style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "kanban-card-title", children: issue.title }),
-                isTopPriority && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: "10px", color: "#ef4444", fontWeight: 600 }, children: "Needs Immediate Attention" }),
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-mobile-meta", style: { gap: "6px 10px", flexWrap: "wrap", marginTop: "4px", fontSize: "11px", color: "var(--text-muted)" }, children: [
+                isTopPriority && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "#ef4444", fontWeight: 600 }, children: "Needs Immediate Attention" }),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "issue-mobile-meta", style: { gap: "6px 10px", flexWrap: "wrap", marginTop: "4px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
                   issue.due && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
                     "\u{1F4C5} ",
                     issue.due
@@ -26722,7 +26941,7 @@ function ProjectsView({
   const getProjectBadge = (projectId) => {
     if (!projectId) {
       return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: {
-        fontSize: "11px",
+        fontSize: "var(--flow-text-sm)",
         background: "var(--background-modifier-border)",
         color: "var(--text-muted)",
         padding: "3px 10px",
@@ -26758,7 +26977,7 @@ function ProjectsView({
     const themeIndex = Math.abs(hash) % themes.length;
     const theme = themes[themeIndex];
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: {
-      fontSize: "11px",
+      fontSize: "var(--flow-text-sm)",
       background: theme.bg,
       color: theme.fg,
       padding: "3px 10px",
@@ -26868,8 +27087,8 @@ function ProjectsView({
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px", marginBottom: "8px" }, onClick: () => onSelectProject(null), children: "\u2190 Back to Overview" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: activeProject.title }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "var(--flow-text-sm)", marginBottom: "8px" }, onClick: () => onSelectProject(null), children: "\u2190 Back to Overview" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: activeProject.title }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: activeProject.id })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
@@ -26912,7 +27131,7 @@ function ProjectsView({
               "button",
               {
                 className: "flow-action-btn",
-                style: { padding: "2px 8px", fontSize: "11px" },
+                style: { padding: "2px 8px", fontSize: "var(--flow-text-sm)" },
                 onClick: () => setShowCreateEpicInProject(!showCreateEpicInProject),
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Plus, { size: 10 }),
@@ -26922,7 +27141,7 @@ function ProjectsView({
             )
           ] }),
           showCreateEpicInProject && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("form", { onSubmit: (e) => handleCreateEpicSubmit(e, activeProject.id), style: { display: "flex", flexDirection: "column", gap: "8px", marginBottom: "16px", background: "var(--background-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--interactive-accent)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { fontSize: "12px", fontWeight: 600, color: "var(--interactive-accent)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--interactive-accent)" }, children: [
               "New Epic for ",
               activeProject.title
             ] }),
@@ -26932,7 +27151,7 @@ function ProjectsView({
                 type: "text",
                 className: "form-input",
                 placeholder: "Epic ID (e.g. AUTH)",
-                style: { fontSize: "12px", padding: "4px 8px" },
+                style: { fontSize: "var(--flow-text-base)", padding: "4px 8px" },
                 value: newEpicId,
                 onChange: (e) => setNewEpicId(e.target.value),
                 required: true
@@ -26944,15 +27163,15 @@ function ProjectsView({
                 type: "text",
                 className: "form-input",
                 placeholder: "Epic Title",
-                style: { fontSize: "12px", padding: "4px 8px" },
+                style: { fontSize: "var(--flow-text-base)", padding: "4px 8px" },
                 value: newEpicTitle,
                 onChange: (e) => setNewEpicTitle(e.target.value),
                 required: true
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", gap: "6px", justifyContent: "flex-end", marginTop: "4px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "button", className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px" }, onClick: () => setShowCreateEpicInProject(false), children: "Cancel" }),
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "4px 8px", fontSize: "11px" }, children: "Save" })
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "button", className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "var(--flow-text-sm)" }, onClick: () => setShowCreateEpicInProject(false), children: "Cancel" }),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "4px 8px", fontSize: "var(--flow-text-sm)" }, children: "Save" })
             ] })
           ] }),
           projectEpics.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state", style: { padding: "24px 12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flow-empty-state-subtitle", children: "No epics linked to this project." }) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: projectEpics.map((e) => {
@@ -26963,8 +27182,8 @@ function ProjectsView({
                 className: "project-detail-epic-item",
                 onClick: () => onSelectEpic(e.id),
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { fontWeight: 600, fontSize: "13px", color: "var(--text-normal)" }, children: e.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { fontWeight: 600, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: e.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
                     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { children: [
                       eStat.total,
                       " Issues"
@@ -26992,7 +27211,7 @@ function ProjectsView({
             const inProgressCount = currentProjectIssues.filter((i) => i.status === "in-progress" || i.status === "in-review").length;
             const blockedCount = currentProjectIssues.filter((i) => i.status === "blocked").length;
             const doneCount = currentProjectIssues.filter((i) => i.status === "done").length;
-            return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px", fontSize: "11px", color: "var(--text-muted)" }, children: [
+            return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-todo", style: { padding: "3px 8px" }, children: [
                 "Todo: ",
                 /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: todoCount })
@@ -27035,13 +27254,13 @@ function ProjectsView({
     return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "11px", marginBottom: "8px" }, onClick: () => {
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "flow-nav-tab", style: { padding: "4px 8px", fontSize: "var(--flow-text-sm)", marginBottom: "8px" }, onClick: () => {
             if (activeEpic.project) {
               onSelectProject(activeEpic.project);
             }
             onSelectEpic(null);
           }, children: "\u2190 Back" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: activeEpic.title }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: activeEpic.title }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", children: activeEpic.id })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
@@ -27057,7 +27276,7 @@ function ProjectsView({
       activeEpic.project && (() => {
         const parentProj = projects.find((p) => p.id === activeEpic.project);
         const projectTitle = parentProj ? parentProj.title : activeEpic.project;
-        return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { marginTop: "4px", fontSize: "13px", color: "var(--text-muted)" }, children: [
+        return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { marginTop: "4px", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: [
           "Project: ",
           /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { style: { color: "var(--interactive-accent)", cursor: "pointer", fontWeight: 600 }, onClick: () => onSelectProject(activeEpic.project), children: [
             projectTitle,
@@ -27096,7 +27315,7 @@ function ProjectsView({
           const inProgressCount = currentEpicIssues.filter((i) => i.status === "in-progress" || i.status === "in-review").length;
           const blockedCount = currentEpicIssues.filter((i) => i.status === "blocked").length;
           const doneCount = currentEpicIssues.filter((i) => i.status === "done").length;
-          return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px", fontSize: "11px", color: "var(--text-muted)" }, children: [
+          return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge badge-status-todo", style: { padding: "3px 8px" }, children: [
               "Todo: ",
               /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: todoCount })
@@ -27229,12 +27448,12 @@ function ProjectsView({
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "col-12", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { style: { margin: 0, fontSize: "15px", fontWeight: 600, color: "var(--text-normal)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-xl)", fontWeight: 600, color: "var(--text-normal)" }, children: [
           "Projects (",
           projects.length,
           ")"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "flow-action-btn", style: { padding: "4px 10px", fontSize: "12px" }, onClick: () => {
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "flow-action-btn", style: { padding: "4px 10px", fontSize: "var(--flow-text-base)" }, onClick: () => {
           setShowCreateProject(true);
           setShowCreateEpic(false);
         }, children: [
@@ -27253,15 +27472,15 @@ function ProjectsView({
               /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-header", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-title-group", children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "flow-card-title", children: p.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", style: { fontSize: "10px" }, children: p.id })
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", style: { fontSize: "var(--flow-text-xs)" }, children: p.id })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", gap: "6px", fontSize: "10px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge", style: { padding: "2px 6px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", gap: "6px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge", style: { padding: "2px 6px" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: stats.total }),
                   " Issues"
                 ] }) })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", fontWeight: 600 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)", fontWeight: 600 }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Progress" }),
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
                     stats.progress,
@@ -27302,12 +27521,12 @@ function ProjectsView({
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "col-12", style: { display: "flex", flexDirection: "column", gap: "16px", marginTop: "24px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { style: { margin: 0, fontSize: "15px", fontWeight: 600, color: "var(--text-normal)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-xl)", fontWeight: 600, color: "var(--text-normal)" }, children: [
           "Epics (",
           epics.length,
           ")"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "flow-action-btn", style: { padding: "4px 10px", fontSize: "12px" }, onClick: () => {
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "flow-action-btn", style: { padding: "4px 10px", fontSize: "var(--flow-text-base)" }, onClick: () => {
           setShowCreateEpic(true);
           setShowCreateProject(false);
         }, children: [
@@ -27326,16 +27545,16 @@ function ProjectsView({
               /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-header", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flow-card-title-group", style: { alignItems: "flex-start" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "flow-card-title", children: e.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", style: { fontSize: "10px" }, children: e.id }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "kanban-card-id", style: { fontSize: "var(--flow-text-xs)" }, children: e.id }),
                   getProjectBadge(e.project)
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", gap: "6px", fontSize: "10px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge", style: { padding: "2px 6px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { display: "flex", gap: "6px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "badge", style: { padding: "2px 6px" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: stats.total }),
                   " Issues"
                 ] }) })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", marginTop: "auto" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "11px", fontWeight: 600 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)", fontWeight: 600 }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Progress" }),
                   /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
                     stats.progress,
@@ -27482,7 +27701,8 @@ function IssueEditor({ issue, index, app, settings, onClose, onSave }) {
   const [newSubtaskText, setNewSubtaskText] = (0, import_react6.useState)("");
   const [notesInput, setNotesInput] = (0, import_react6.useState)("");
   const getDraftKey = () => {
-    return isCreateMode ? "flow_draft_new" : `flow_draft_edit_${issue?.id}`;
+    const baseKey = isCreateMode ? "flow_draft_new" : `flow_draft_edit_${issue?.id}`;
+    return getVaultKey(app, baseKey);
   };
   const resetForm = () => {
     localStorage.removeItem(getDraftKey());
@@ -28010,7 +28230,7 @@ ${body}`);
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "flow-modal-header", children: [
       /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h3", { className: "flow-modal-title", style: { margin: 0 }, children: isCreateMode ? "Create New Issue" : isInboxTask ? `Inbox Item: ${issue?.title}` : `Edit Issue: ${issue?.id}` }),
-        isInboxTask && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: { fontSize: "10px", color: "var(--interactive-accent)", fontWeight: 600 }, children: "INBOX CAPTURE" })
+        isInboxTask && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--interactive-accent)", fontWeight: 600 }, children: "INBOX CAPTURE" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", gap: "10px", alignItems: "center" }, children: [
         !isCreateMode && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "editor-mode-toggle", children: [
@@ -28040,7 +28260,7 @@ ${body}`);
         color: "var(--interactive-accent)",
         padding: "10px 14px",
         borderRadius: "6px",
-        fontSize: "12px",
+        fontSize: "var(--flow-text-base)",
         fontWeight: 500,
         lineHeight: 1.5,
         marginBottom: "4px"
@@ -28256,7 +28476,7 @@ ${body}`);
                     borderRadius: "4px",
                     cursor: "pointer",
                     fontWeight: "bold",
-                    fontSize: "16px",
+                    fontSize: "var(--flow-text-2xl)",
                     color: "var(--text-normal)"
                   },
                   onClick: () => setLogged((prev) => Math.max(0, prev - 1)),
@@ -28292,7 +28512,7 @@ ${body}`);
                     borderRadius: "4px",
                     cursor: "pointer",
                     fontWeight: "bold",
-                    fontSize: "16px",
+                    fontSize: "var(--flow-text-2xl)",
                     color: "var(--text-normal)"
                   },
                   onClick: () => setLogged((prev) => prev + 1),
@@ -28303,7 +28523,7 @@ ${body}`);
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "16px", paddingTop: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "var(--flow-text-base)", margin: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "input",
               {
@@ -28315,7 +28535,7 @@ ${body}`);
             ),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Today's Plan" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "var(--flow-text-base)", margin: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "input",
               {
@@ -28327,7 +28547,7 @@ ${body}`);
             ),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Is Urgent" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "var(--flow-text-base)", margin: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "input",
               {
@@ -28339,7 +28559,7 @@ ${body}`);
             ),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Weekly Plan" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", margin: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "var(--flow-text-base)", margin: 0 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "input",
               {
@@ -28385,7 +28605,7 @@ ${body}`);
                       border: "1px solid var(--background-modifier-border)",
                       color: "var(--text-normal)",
                       borderRadius: "4px",
-                      fontSize: "12px",
+                      fontSize: "var(--flow-text-base)",
                       fontWeight: 500,
                       lineHeight: 1.2
                     },
@@ -28402,7 +28622,7 @@ ${body}`);
                             cursor: "pointer",
                             fontWeight: "bold",
                             color: "var(--text-muted)",
-                            fontSize: "12px",
+                            fontSize: "var(--flow-text-base)",
                             display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -28444,7 +28664,7 @@ ${body}`);
                       flex: 1,
                       minWidth: "120px",
                       color: "var(--text-normal)",
-                      fontSize: "13px",
+                      fontSize: "var(--flow-text-base)",
                       margin: 0,
                       height: "22px"
                     }
@@ -28457,7 +28677,7 @@ ${body}`);
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "form-group", style: { marginBottom: "8px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "form-label", style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Subtasks & Checklist" }),
-            parseSubtasks(body).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: "normal" }, children: [
+            parseSubtasks(body).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: "normal" }, children: [
               parseSubtasks(body).filter((s) => s.completed).length,
               " of ",
               parseSubtasks(body).length,
@@ -28548,7 +28768,7 @@ ${body}`);
                           background: "transparent",
                           padding: "2px 4px",
                           margin: 0,
-                          fontSize: "13px",
+                          fontSize: "var(--flow-text-base)",
                           color: sub.completed ? "var(--text-muted)" : "var(--text-normal)",
                           textDecoration: sub.completed ? "line-through" : "none",
                           outline: "none"
@@ -28597,7 +28817,7 @@ ${body}`);
                   {
                     type: "text",
                     className: "form-input",
-                    style: { flex: 1, fontSize: "13px", padding: "6px 10px" },
+                    style: { flex: 1, fontSize: "var(--flow-text-base)", padding: "6px 10px" },
                     placeholder: "Add new subtask... (press Enter to save)",
                     value: newSubtaskText,
                     onChange: (e) => setNewSubtaskText(e.target.value),
@@ -28624,7 +28844,7 @@ ${body}`);
                       justifyContent: "center",
                       padding: "6px 12px",
                       height: "34px",
-                      fontSize: "13px",
+                      fontSize: "var(--flow-text-base)",
                       background: "var(--interactive-accent)",
                       color: "var(--text-on-accent)",
                       border: "none",
@@ -28654,7 +28874,7 @@ ${body}`);
             "textarea",
             {
               className: "form-input",
-              style: { resize: "none", minHeight: "100px", fontSize: "13px" },
+              style: { resize: "none", minHeight: "100px", fontSize: "var(--flow-text-base)" },
               value: notesInput,
               onChange: (e) => {
                 const val = e.target.value;
@@ -28718,176 +28938,199 @@ function SettingsView({ plugin, onSettingsChanged }) {
     setStatusMessage("Settings saved successfully!");
     setTimeout(() => setStatusMessage(null), 3e3);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { maxWidth: "600px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "20px" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid rgba(127, 127, 127, 0.12)", paddingBottom: "12px", marginBottom: "8px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Settings, { size: 20, style: { color: "var(--interactive-accent)" } }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h2", { style: { margin: 0, fontSize: "20px", fontWeight: 700 }, children: "Flow Plugin Settings" })
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { maxWidth: "600px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "14px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid rgba(127, 127, 127, 0.12)", paddingBottom: "8px", marginBottom: "2px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Settings, { size: 18, style: { color: "var(--interactive-accent)" } }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Flow Plugin Settings" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { color: "var(--text-muted)", fontSize: "13px", margin: 0 }, children: "Configure where Flow reads and writes your Markdown files. Paths are relative to your Obsidian vault root." }),
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-base)", margin: 0 }, children: "Configure folders relative to your Obsidian vault root and adjust scheduler constraints." }),
     statusMessage && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: {
       background: "rgba(16, 185, 129, 0.15)",
       color: "#10b981",
-      padding: "10px 14px",
+      padding: "8px 12px",
       borderRadius: "6px",
-      fontSize: "13px",
+      fontSize: "var(--flow-text-base)",
       fontWeight: 600
     }, children: statusMessage }),
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("form", { onSubmit: handleSave, style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Inbox Folder" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.inboxFolder,
-            onChange: (e) => handleFolderChange("inboxFolder", e.target.value),
-            placeholder: "e.g. 2. WORK/INBOX",
-            required: true
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Where quick capture/inbox notes are placed." })
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("form", { onSubmit: handleSave, style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "dashboard-card", style: { padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "6px", color: "var(--text-normal)" }, children: "Folder Locations" }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Inbox Folder" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.inboxFolder,
+                onChange: (e) => handleFolderChange("inboxFolder", e.target.value),
+                placeholder: "e.g. 2. WORK/INBOX",
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Quick capture notes folder." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Issues/Tasks Folder" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.issuesFolder,
+                onChange: (e) => handleFolderChange("issuesFolder", e.target.value),
+                placeholder: "e.g. Issues",
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Promoted tasks folder." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Projects Folder" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.projectsFolder,
+                onChange: (e) => handleFolderChange("projectsFolder", e.target.value),
+                placeholder: "e.g. Projects",
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Project notes scan location." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Epics Folder" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.epicsFolder,
+                onChange: (e) => handleFolderChange("epicsFolder", e.target.value),
+                placeholder: "e.g. Epics",
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Epic files folder path." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Documents Folder (Docs)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.docsFolder,
+                onChange: (e) => handleFolderChange("docsFolder", e.target.value),
+                placeholder: "e.g. Docs",
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Reference documents folder." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Daily Notes Folder" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.dailyNotesFolder,
+                onChange: (e) => handleFolderChange("dailyNotesFolder", e.target.value),
+                placeholder: "e.g. Daily Notes",
+                required: true
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Daily journal notes folder." })
+          ] })
+        ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Issues/Tasks Folder" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.issuesFolder,
-            onChange: (e) => handleFolderChange("issuesFolder", e.target.value),
-            placeholder: "e.g. Issues",
-            required: true
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Where your promoted/active issues are stored." })
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "dashboard-card", style: { padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "6px", color: "var(--text-normal)" }, children: "Focus & Work Schedule" }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Work Start Time" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.workStartHour || "09:00",
+                onChange: (e) => handleFolderChange("workStartHour", e.target.value),
+                placeholder: "e.g. 09:00",
+                required: true,
+                pattern: "[0-2][0-9]:[0-5][0-9]"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Start of work day (HH:MM)." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Work End Time" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "text",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.workEndHour || "17:00",
+                onChange: (e) => handleFolderChange("workEndHour", e.target.value),
+                placeholder: "e.g. 17:00",
+                required: true,
+                pattern: "[0-2][0-9]:[0-5][0-9]"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "End of work day (HH:MM)." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Pomodoro Duration (Mins)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              "input",
+              {
+                type: "number",
+                className: "form-input",
+                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+                value: settings.pomodoroDuration || 25,
+                onChange: (e) => handleFolderChange("pomodoroDuration", parseInt(e.target.value, 10) || 25),
+                placeholder: "e.g. 25",
+                required: true,
+                min: 1
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Focus session length." })
+          ] })
+        ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Projects Folder" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.projectsFolder,
-            onChange: (e) => handleFolderChange("projectsFolder", e.target.value),
-            placeholder: "e.g. Projects",
-            required: true
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Folder where project notes are scanned." })
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "dashboard-card", style: { padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "6px", color: "var(--text-normal)" }, children: "Workflow Limits" }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", marginBottom: "12px", textAlign: "left" }, children: 'Maximum number of tasks allowed in the "In Progress" column simultaneously (recommended: 3).' }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "form-group", style: { margin: 0, display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { flex: "0 0 40px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "WIP Limit" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "input",
+            {
+              type: "number",
+              className: "form-input",
+              style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
+              value: settings.wipLimit || 3,
+              onChange: (e) => handleFolderChange("wipLimit", parseInt(e.target.value, 10) || 3),
+              placeholder: "e.g. 3",
+              required: true,
+              min: 1
+            }
+          )
+        ] }) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Epics Folder" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.epicsFolder,
-            onChange: (e) => handleFolderChange("epicsFolder", e.target.value),
-            placeholder: "e.g. Epics",
-            required: true
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Folder where epic files are stored." })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Documents Folder (Docs)" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.docsFolder,
-            onChange: (e) => handleFolderChange("docsFolder", e.target.value),
-            placeholder: "e.g. Docs",
-            required: true
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Folder containing references and reference docs." })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Daily Notes Folder" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.dailyNotesFolder,
-            onChange: (e) => handleFolderChange("dailyNotesFolder", e.target.value),
-            placeholder: "e.g. Daily Notes",
-            required: true
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Folder containing daily journal logs." })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "WIP Limit (Work In Progress)" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "number",
-            className: "form-input",
-            value: settings.wipLimit || 3,
-            onChange: (e) => handleFolderChange("wipLimit", parseInt(e.target.value, 10) || 3),
-            placeholder: "e.g. 3",
-            required: true,
-            min: 1
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: 'Maximum number of tasks in the "In Progress" column to prevent distraction (recommended: 3).' })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Pomodoro Duration (Minutes)" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "number",
-            className: "form-input",
-            value: settings.pomodoroDuration || 25,
-            onChange: (e) => handleFolderChange("pomodoroDuration", parseInt(e.target.value, 10) || 25),
-            placeholder: "e.g. 25",
-            required: true,
-            min: 1
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Duration of focus state (default: 25 minutes)." })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Work Start Time (HH:MM)" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.workStartHour || "09:00",
-            onChange: (e) => handleFolderChange("workStartHour", e.target.value),
-            placeholder: "e.g. 09:00",
-            required: true,
-            pattern: "[0-2][0-9]:[0-5][0-9]"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "Start time of your work day (e.g. 09:00)." })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "form-group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("label", { className: "form-label", children: "Work End Time (HH:MM)" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-input",
-            value: settings.workEndHour || "17:00",
-            onChange: (e) => handleFolderChange("workEndHour", e.target.value),
-            placeholder: "e.g. 17:00",
-            required: true,
-            pattern: "[0-2][0-9]:[0-5][0-9]"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: "End time of your work day (e.g. 17:00). Used to calculate remaining focus budget." })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginTop: "10px" }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", className: "flow-action-btn", children: "Save Configuration" }) })
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginTop: "4px" }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "8px 16px", fontSize: "var(--flow-text-base)" }, children: "Save Configuration" }) })
     ] })
   ] });
 }
@@ -28914,6 +29157,15 @@ var BREAK_PROMPTS = [
   "Putar pergelangan tangan dan kaki Anda perlahan"
 ];
 function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelectIssue }) {
+  const getStorage = (key) => {
+    return localStorage.getItem(getVaultKey(app, key));
+  };
+  const setStorage = (key, value) => {
+    localStorage.setItem(getVaultKey(app, key), value);
+  };
+  const removeStorage = (key) => {
+    localStorage.removeItem(getVaultKey(app, key));
+  };
   const getModeTime = (tMode) => {
     if (tMode === "focus") {
       return (plugin.settings.pomodoroDuration || 25) * 60;
@@ -28923,13 +29175,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     return 15 * 60;
   };
   const [mode, setMode] = (0, import_react8.useState)(() => {
-    return localStorage.getItem("flow_timer_mode") || "focus";
+    return getStorage("flow_timer_mode") || "focus";
   });
   const [timeLeft, setTimeLeft] = (0, import_react8.useState)(() => {
-    const savedMode = localStorage.getItem("flow_timer_mode") || "focus";
-    const savedIsRunning = localStorage.getItem("flow_timer_is_running") === "true";
-    const savedTarget = localStorage.getItem("flow_timer_target");
-    const savedPaused = localStorage.getItem("flow_timer_time_left_paused");
+    const savedMode = getStorage("flow_timer_mode") || "focus";
+    const savedIsRunning = getStorage("flow_timer_is_running") === "true";
+    const savedTarget = getStorage("flow_timer_target");
+    const savedPaused = getStorage("flow_timer_time_left_paused");
     if (savedIsRunning && savedTarget) {
       const targetTime = parseInt(savedTarget, 10);
       const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1e3));
@@ -28939,8 +29191,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
   });
   const [isRunning, setIsRunning] = (0, import_react8.useState)(() => {
-    const savedIsRunning = localStorage.getItem("flow_timer_is_running") === "true";
-    const savedTarget = localStorage.getItem("flow_timer_target");
+    const savedIsRunning = getStorage("flow_timer_is_running") === "true";
+    const savedTarget = getStorage("flow_timer_target");
     if (savedIsRunning && savedTarget) {
       const targetTime = parseInt(savedTarget, 10);
       const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1e3));
@@ -28949,7 +29201,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     return false;
   });
   const [queue, setQueue] = (0, import_react8.useState)(() => {
-    const savedQueue = localStorage.getItem("flow_timer_queue");
+    const savedQueue = getStorage("flow_timer_queue");
     if (savedQueue) {
       try {
         return JSON.parse(savedQueue);
@@ -28959,7 +29211,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     return ["", "", ""];
   });
   const [activeQueueIndex, setActiveQueueIndex] = (0, import_react8.useState)(() => {
-    const savedActiveIdx = localStorage.getItem("flow_timer_active_queue_index");
+    const savedActiveIdx = getStorage("flow_timer_active_queue_index");
     return savedActiveIdx ? parseInt(savedActiveIdx, 10) || 0 : 0;
   });
   const timerRef = (0, import_react8.useRef)(null);
@@ -28968,9 +29220,9 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   const [isAlarmActive, setIsAlarmActive] = (0, import_react8.useState)(false);
   const alarmIntervalRef = (0, import_react8.useRef)(null);
   const [isMinimized, setIsMinimized] = (0, import_react8.useState)(false);
-  const [sessionGoal, setSessionGoal] = (0, import_react8.useState)(() => localStorage.getItem("flow_active_session_goal") || "");
+  const [sessionGoal, setSessionGoal] = (0, import_react8.useState)(() => getStorage("flow_active_session_goal") || "");
   (0, import_react8.useEffect)(() => {
-    localStorage.setItem("flow_active_session_goal", sessionGoal);
+    setStorage("flow_active_session_goal", sessionGoal);
   }, [sessionGoal]);
   (0, import_react8.useEffect)(() => {
     if (!isRunning || mode !== "focus") {
@@ -28996,20 +29248,20 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     };
   }, []);
   const saveTimerState = (running, currentMode, remaining) => {
-    localStorage.setItem("flow_timer_is_running", running ? "true" : "false");
-    localStorage.setItem("flow_timer_mode", currentMode);
+    setStorage("flow_timer_is_running", running ? "true" : "false");
+    setStorage("flow_timer_mode", currentMode);
     if (running) {
-      localStorage.setItem("flow_timer_target", (Date.now() + remaining * 1e3).toString());
+      setStorage("flow_timer_target", (Date.now() + remaining * 1e3).toString());
     } else {
-      localStorage.setItem("flow_timer_time_left_paused", remaining.toString());
-      localStorage.removeItem("flow_timer_target");
+      setStorage("flow_timer_time_left_paused", remaining.toString());
+      removeStorage("flow_timer_target");
     }
   };
   (0, import_react8.useEffect)(() => {
-    localStorage.setItem("flow_timer_queue", JSON.stringify(queue));
+    setStorage("flow_timer_queue", JSON.stringify(queue));
   }, [queue]);
   (0, import_react8.useEffect)(() => {
-    localStorage.setItem("flow_timer_active_queue_index", activeQueueIndex.toString());
+    setStorage("flow_timer_active_queue_index", activeQueueIndex.toString());
   }, [activeQueueIndex]);
   (0, import_react8.useEffect)(() => {
     if (issues.length === 0)
@@ -29306,8 +29558,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     saveTimerState(false, mode, initialTime);
   };
   (0, import_react8.useEffect)(() => {
-    const savedIsRunning = localStorage.getItem("flow_timer_is_running") === "true";
-    const savedTarget = localStorage.getItem("flow_timer_target");
+    const savedIsRunning = getStorage("flow_timer_is_running") === "true";
+    const savedTarget = getStorage("flow_timer_target");
     if (savedIsRunning && savedTarget) {
       const targetTime = parseInt(savedTarget, 10);
       const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1e3));
@@ -29382,7 +29634,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             alignItems: "center",
             justifyContent: "center",
             gap: "4px",
-            fontSize: "11px",
+            fontSize: "var(--flow-text-sm)",
             fontWeight: 600,
             padding: "6px",
             borderRadius: "6px",
@@ -29407,7 +29659,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             alignItems: "center",
             justifyContent: "center",
             gap: "4px",
-            fontSize: "11px",
+            fontSize: "var(--flow-text-sm)",
             fontWeight: 600,
             padding: "6px",
             borderRadius: "6px",
@@ -29432,7 +29684,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             alignItems: "center",
             justifyContent: "center",
             gap: "4px",
-            fontSize: "11px",
+            fontSize: "var(--flow-text-sm)",
             fontWeight: 600,
             padding: "6px",
             borderRadius: "6px",
@@ -29506,8 +29758,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         alignItems: "center",
         justifyContent: "center"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: formatTime(timeLeft) }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "9px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px", textAlign: "center" }, children: breath ? breath.text : mode.replace("-", " ") })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-6xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: formatTime(timeLeft) }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px", textAlign: "center" }, children: breath ? breath.text : mode.replace("-", " ") })
       ] })
     ] }),
     isBreakMode && breakPrompt && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
@@ -29517,15 +29769,15 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       padding: "12px 16px",
       margin: "0 0 16px 0",
       textAlign: "center",
-      fontSize: "12px",
+      fontSize: "var(--flow-text-base)",
       lineHeight: "1.5",
       color: "var(--text-normal)"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "4px", textTransform: "uppercase", fontSize: "9px", letterSpacing: "0.5px" }, children: "Aktivitas Istirahat Offline:" }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "4px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Aktivitas Istirahat Offline:" }),
       breakPrompt
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("label", { className: "form-label", style: { fontSize: "11px", display: "flex", alignItems: "center", gap: "4px", color: "var(--text-muted)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", display: "flex", alignItems: "center", gap: "4px", color: "var(--text-muted)" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Timer, { size: 11 }),
         "Focus Queue (Maks 3 Tugas)"
       ] }),
@@ -29538,7 +29790,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               className: `focus-queue-slot empty-slot ${isSlotActive ? "active" : ""}`,
               onClick: () => setActiveQueueIndex(idx),
               children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", width: "100%", position: "relative" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Plus, { size: 12 }),
                   "Slot ",
                   idx + 1,
@@ -29618,7 +29870,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                     border: "none",
                     color: "var(--text-muted)",
                     cursor: "pointer",
-                    fontSize: "11px",
+                    fontSize: "var(--flow-text-sm)",
                     padding: "2px 6px",
                     display: "flex",
                     alignItems: "center",
@@ -29645,11 +29897,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         border: "1px solid var(--background-modifier-border)"
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Difficulty" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Difficulty" }),
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: `flow-difficulty-badge ${selectedTask.difficulty || "normal"}`, children: selectedTask.difficulty || "normal" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: [
             "Pomodoros (",
             selectedTask.logged || 0,
             "/",
@@ -29676,6 +29928,10 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         "button",
         {
           onClick: async () => {
+            setIsRunning(false);
+            const initialTime = getModeTime(mode);
+            setTimeLeft(initialTime);
+            saveTimerState(false, mode, initialTime);
             const file = app.vault.getAbstractFileByPath(selectedTask.filePath);
             if (file && file instanceof import_obsidian6.TFile) {
               await updateIssueProperty(app, file, (fm) => {
@@ -29691,7 +29947,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             alignItems: "center",
             justifyContent: "center",
             gap: "6px",
-            fontSize: "11px",
+            fontSize: "var(--flow-text-sm)",
             fontWeight: 600,
             width: "100%",
             padding: "8px",
@@ -29718,7 +29974,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             alignItems: "center",
             justifyContent: "center",
             gap: "6px",
-            fontSize: "12px",
+            fontSize: "var(--flow-text-base)",
             fontWeight: 600,
             padding: "8px",
             borderRadius: "6px",
@@ -29740,7 +29996,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             alignItems: "center",
             justifyContent: "center",
             gap: "6px",
-            fontSize: "12px",
+            fontSize: "var(--flow-text-base)",
             fontWeight: 600,
             padding: "8px",
             borderRadius: "6px",
@@ -29786,8 +30042,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       flexDirection: "column",
       gap: "4px"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "10px", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Recommended Task" }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { fontSize: "11px", fontWeight: 600, color: "var(--text-normal)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Recommended Task" }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-normal)" }, children: [
         recommendedTask.id,
         " - ",
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontWeight: "normal", color: "var(--text-muted)" }, children: recommendedTask.title })
@@ -29809,7 +30065,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             border: "1px solid var(--background-modifier-border)",
             borderRadius: "4px",
             padding: "3px 8px",
-            fontSize: "10px",
+            fontSize: "var(--flow-text-xs)",
             cursor: "pointer",
             color: "var(--text-normal)",
             alignSelf: "flex-start",
@@ -29853,17 +30109,17 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       color: "var(--text-normal)"
     }, children: [
       isAlarmActive ? mode === "focus" ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "20px", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-success, #10b981)", justifyContent: "center" }, children: "Waktu Istirahat Selesai" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }, children: "Tubuh dan otak Anda telah beristirahat. Mari kita kembali fokus!" })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-success, #10b981)", justifyContent: "center" }, children: "Waktu Istirahat Selesai" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Tubuh dan otak Anda telah beristirahat. Mari kita kembali fokus!" })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "20px", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: "Sesi Fokus Selesai" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }, children: "Kerja bagus! Sekarang saatnya melepaskan penat sejenak." })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: "Sesi Fokus Selesai" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Kerja bagus! Sekarang saatnya melepaskan penat sejenak." })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "20px", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-accent)", justifyContent: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-accent)", justifyContent: "center" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 20 }),
           "Sesi Istirahat Aktif"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }, children: "Rilekskan pikiran Anda dan menjauhlah dari layar kaca." })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Rilekskan pikiran Anda dan menjauhlah dari layar kaca." })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { position: "relative", width: "170px", height: "170px", margin: "8px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
@@ -29923,8 +30179,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           alignItems: "center",
           justifyContent: "center"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "32px", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: isAlarmActive ? "00:00" : formatTime(timeLeft) }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "9px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "4px", textAlign: "center" }, children: isAlarmActive ? mode === "focus" ? "Fokus Berikutnya" : "Mulai Istirahat" : breath ? breath.text : mode.replace("-", " ") })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-7xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: isAlarmActive ? "00:00" : formatTime(timeLeft) }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "4px", textAlign: "center" }, children: isAlarmActive ? mode === "focus" ? "Fokus Berikutnya" : "Mulai Istirahat" : breath ? breath.text : mode.replace("-", " ") })
         ] })
       ] }),
       isAlarmActive && mode === "focus" ? (
@@ -29938,8 +30194,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           boxSizing: "border-box",
           boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "9px", letterSpacing: "0.5px" }, children: "Tugas Terjadwal Selanjutnya:" }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontSize: "13px", lineHeight: "1.6", fontWeight: 600, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "Pilih tugas dari antrean fokus untuk memulai." })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Tugas Terjadwal Selanjutnya:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontSize: "var(--flow-text-base)", lineHeight: "1.6", fontWeight: 600, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "Pilih tugas dari antrean fokus untuk memulai." })
         ] })
       ) : (
         // During break or Focus finished -> Show offline break suggestion
@@ -29952,8 +30208,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           boxSizing: "border-box",
           boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "9px", letterSpacing: "0.5px" }, children: "Rekomendasi Aktivitas Istirahat Offline:" }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontSize: "13px", lineHeight: "1.6", color: "var(--text-normal)" }, children: breakPrompt })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Rekomendasi Aktivitas Istirahat Offline:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontSize: "var(--flow-text-base)", lineHeight: "1.6", color: "var(--text-normal)" }, children: breakPrompt })
         ] })
       ),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
@@ -29974,7 +30230,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "6px",
-                fontSize: "13px",
+                fontSize: "var(--flow-text-base)",
                 fontWeight: 600,
                 padding: "10px",
                 borderRadius: "8px",
@@ -30001,7 +30257,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "6px",
-                fontSize: "13px",
+                fontSize: "var(--flow-text-base)",
                 fontWeight: 600,
                 padding: "10px",
                 borderRadius: "8px",
@@ -30026,7 +30282,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "6px",
-                fontSize: "13px",
+                fontSize: "var(--flow-text-base)",
                 fontWeight: 600,
                 padding: "10px",
                 borderRadius: "8px",
@@ -30063,7 +30319,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               borderRadius: "8px",
               padding: "10px",
               cursor: "pointer",
-              fontSize: "13px",
+              fontSize: "var(--flow-text-base)",
               fontWeight: 600
             },
             children: [
@@ -30107,18 +30363,18 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       color: "var(--text-normal)"
     }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "20px", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Brain, { size: 20 }),
           "Deep Work Session"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }, children: "Sesi fokus aktif. Singkirkan gangguan dan selesaikan target Anda." })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Sesi fokus aktif. Singkirkan gangguan dan selesaikan target Anda." })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", textAlign: "center", width: "100%" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "11px", fontWeight: 600, color: "var(--text-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Tugas Aktif" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "15px", fontWeight: 700, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "General Focus Session" })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Tugas Aktif" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "General Focus Session" })
       ] }),
       !sessionGoal ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", width: "100%", boxSizing: "border-box" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Apa target konkret sesi ini?" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Apa target konkret sesi ini?" }),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "6px", width: "100%" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
             "input",
@@ -30126,7 +30382,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               type: "text",
               placeholder: "Contoh: Selesaikan API endpoint auth...",
               id: "focus-goal-input",
-              style: { flex: 1, padding: "8px 12px", borderRadius: "6px", border: "1px solid var(--background-modifier-border)", background: "var(--background-secondary)", color: "var(--text-normal)", fontSize: "13px" },
+              style: { flex: 1, padding: "8px 12px", borderRadius: "6px", border: "1px solid var(--background-modifier-border)", background: "var(--background-secondary)", color: "var(--text-normal)", fontSize: "var(--flow-text-base)" },
               onKeyDown: (e) => {
                 if (e.key === "Enter") {
                   const val = e.target.value.trim();
@@ -30145,7 +30401,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 if (val)
                   setSessionGoal(val);
               },
-              style: { padding: "8px 12px", background: "var(--interactive-accent)", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "12px", fontWeight: 600 },
+              style: { padding: "8px 12px", background: "var(--interactive-accent)", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "var(--flow-text-base)", fontWeight: 600 },
               children: "Set"
             }
           )
@@ -30162,8 +30418,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         gap: "4px",
         position: "relative"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "9px", fontWeight: 700, color: "var(--interactive-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Target Sesi Ini" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "13px", fontWeight: 600, color: "var(--text-normal)", paddingRight: "20px", lineHeight: "1.4" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--interactive-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Target Sesi Ini" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)", paddingRight: "20px", lineHeight: "1.4" }, children: [
           "Saya akan fokus sampai ",
           sessionGoal
         ] }),
@@ -30171,7 +30427,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           "button",
           {
             onClick: () => setSessionGoal(""),
-            style: { position: "absolute", top: "8px", right: "8px", background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: "11px" },
+            style: { position: "absolute", top: "8px", right: "8px", background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: "var(--flow-text-sm)" },
             title: "Ubah target",
             children: "\u270F\uFE0F"
           }
@@ -30202,8 +30458,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           )
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)" }, children: formatTime(timeLeft) }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "9px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px" }, children: "Fokus" })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-7xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)" }, children: formatTime(timeLeft) }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px" }, children: "Fokus" })
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
@@ -30217,7 +30473,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              fontSize: "13px",
+              fontSize: "var(--flow-text-base)",
               fontWeight: 600,
               padding: "10px",
               borderRadius: "8px",
@@ -30284,7 +30540,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              fontSize: "13px",
+              fontSize: "var(--flow-text-base)",
               fontWeight: 600,
               padding: "10px",
               borderRadius: "8px",
@@ -30313,7 +30569,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             borderRadius: "8px",
             padding: "8px",
             cursor: "pointer",
-            fontSize: "12px",
+            fontSize: "var(--flow-text-base)",
             fontWeight: 600,
             marginTop: "4px"
           },
@@ -30334,7 +30590,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           border: "none",
           borderRadius: "20px",
           padding: "10px 18px",
-          fontSize: "11px",
+          fontSize: "var(--flow-text-sm)",
           fontWeight: 600,
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
           cursor: "pointer",
@@ -30355,6 +30611,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
 }
 
 // src/components/WeeklyReviewView.tsx
+var React3 = __toESM(require_react());
 var import_react9 = __toESM(require_react());
 var import_obsidian7 = require("obsidian");
 var import_jsx_runtime8 = __toESM(require_jsx_runtime());
@@ -30369,6 +30626,10 @@ function getISOWeekString(date = /* @__PURE__ */ new Date()) {
   }
   const weekNum = 1 + Math.ceil((firstThursday - target.valueOf()) / 6048e5);
   return `${target.getFullYear()}-W${weekNum.toString().padStart(2, "0")}`;
+}
+function getPreviousISOWeekString(date = /* @__PURE__ */ new Date()) {
+  const target = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1e3);
+  return getISOWeekString(target);
 }
 function getTaskTimeRange(sessions) {
   if (sessions.length === 0)
@@ -30704,6 +30965,33 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
   const plannedTasks = issues.filter((i) => i.thisWeek && !i.isInbox);
   const completedPlannedTasks = plannedTasks.filter((i) => i.status === "done");
   const remainingPlannedTasks = plannedTasks.filter((i) => i.status !== "done");
+  const getWeeklyStats = React3.useCallback((targetWeekStr) => {
+    let pomodoros = 0;
+    let completedCount = 0;
+    index.dailyNotes.forEach((dn) => {
+      const dnDate = new Date(dn.date);
+      if (!isNaN(dnDate.getTime())) {
+        const dnWeek = getISOWeekString(dnDate);
+        if (dnWeek === targetWeekStr) {
+          pomodoros += dn.pomodorosRun || 0;
+        }
+      }
+    });
+    index.issues.forEach((i) => {
+      if (i.status === "done" && i.completedDate) {
+        const compDate = new Date(i.completedDate);
+        if (!isNaN(compDate.getTime())) {
+          const compWeek = getISOWeekString(compDate);
+          if (compWeek === targetWeekStr) {
+            completedCount++;
+          }
+        }
+      }
+    });
+    return { pomodoros, completedCount };
+  }, [index.dailyNotes, index.issues]);
+  const thisWeekStats = getWeeklyStats(weekStr);
+  const lastWeekStats = getWeeklyStats(getPreviousISOWeekString(/* @__PURE__ */ new Date()));
   const completedThisWeek = issues.filter((i) => {
     if (i.status !== "done")
       return false;
@@ -30821,15 +31109,15 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "950px", margin: "0 auto" }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(127, 127, 127, 0.12)", paddingBottom: "12px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { children: mainTab === "daily" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: "Daily Performance Review" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "12px", color: "var(--text-muted)" }, children: "Reflect on today's focus, achievements, and plan for tomorrow." })
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Daily Performance Review" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Reflect on today's focus, achievements, and plan for tomorrow." })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           "Weekly Focus Cycle (",
           weekStr,
           ")"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "12px", color: "var(--text-muted)" }, children: "Personal sprint operating system for planning, execution, and reflection." })
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Personal sprint operating system for planning, execution, and reflection." })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "4px", background: "var(--background-secondary)", padding: "4px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
@@ -30837,7 +31125,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           {
             className: `flow-nav-tab ${mainTab === "daily" ? "active" : ""}`,
             onClick: () => setMainTab("daily"),
-            style: { fontSize: "12px", padding: "6px 12px" },
+            style: { fontSize: "var(--flow-text-base)", padding: "6px 12px" },
             children: "Daily Review"
           }
         ),
@@ -30846,7 +31134,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           {
             className: `flow-nav-tab ${mainTab === "weekly" ? "active" : ""}`,
             onClick: () => setMainTab("weekly"),
-            style: { fontSize: "12px", padding: "6px 12px" },
+            style: { fontSize: "var(--flow-text-base)", padding: "6px 12px" },
             children: "Weekly Review"
           }
         )
@@ -30857,7 +31145,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
       color: "#10b981",
       padding: "12px 16px",
       borderRadius: "8px",
-      fontSize: "13px",
+      fontSize: "var(--flow-text-base)",
       fontWeight: 600
     }, children: reviewMessage }),
     mainTab === "daily" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
@@ -30871,9 +31159,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
         padding: "10px 16px"
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "13px", fontWeight: 600, color: "var(--text-normal)" }, children: "Review Date:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)" }, children: "Review Date:" }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
-            fontSize: "12px",
+            fontSize: "var(--flow-text-base)",
             fontFamily: "var(--font-monospace)",
             backgroundColor: "var(--background-primary)",
             padding: "2px 8px",
@@ -30882,14 +31170,35 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             fontWeight: 600,
             color: "var(--text-accent)"
           }, children: selectedDate }),
-          selectedDate === todayStr && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
-            fontSize: "10px",
-            backgroundColor: "rgba(16, 185, 129, 0.15)",
-            color: "var(--text-success, #10b981)",
-            padding: "2px 6px",
-            borderRadius: "4px",
-            fontWeight: 700
-          }, children: "Today" })
+          (() => {
+            const yesterday = /* @__PURE__ */ new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+            if (selectedDate === todayStr) {
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
+                fontSize: "var(--flow-text-xs)",
+                backgroundColor: "rgba(16, 185, 129, 0.15)",
+                color: "var(--text-success, #10b981)",
+                border: "1px solid rgba(16, 185, 129, 0.3)",
+                padding: "2px 8px",
+                borderRadius: "4px",
+                fontWeight: 700,
+                letterSpacing: "0.5px"
+              }, children: "HARI INI (TODAY)" });
+            } else if (selectedDate === yesterdayStr) {
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
+                fontSize: "var(--flow-text-xs)",
+                backgroundColor: "rgba(99, 102, 241, 0.15)",
+                color: "var(--text-accent, #6366f1)",
+                border: "1px solid rgba(99, 102, 241, 0.3)",
+                padding: "2px 8px",
+                borderRadius: "4px",
+                fontWeight: 700,
+                letterSpacing: "0.5px"
+              }, children: "KEMARIN (YESTERDAY)" });
+            }
+            return null;
+          })()
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "6px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
@@ -30897,7 +31206,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             {
               onClick: handlePrevDay,
               className: "flow-action-btn",
-              style: { padding: "4px 10px", fontSize: "11px" },
+              style: { padding: "4px 10px", fontSize: "var(--flow-text-sm)" },
               children: "< Prev Day"
             }
           ),
@@ -30906,7 +31215,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             {
               onClick: () => setSelectedDate(todayStr),
               className: "flow-action-btn",
-              style: { padding: "4px 10px", fontSize: "11px" },
+              style: { padding: "4px 10px", fontSize: "var(--flow-text-sm)" },
               children: "Today"
             }
           ),
@@ -30915,7 +31224,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             {
               onClick: handleNextDay,
               className: "flow-action-btn",
-              style: { padding: "4px 10px", fontSize: "11px" },
+              style: { padding: "4px 10px", fontSize: "var(--flow-text-sm)" },
               children: "Next Day >"
             }
           )
@@ -30925,16 +31234,16 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #a855f7" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card-title", children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Daily Reflection Note" }),
-            saveReflectionStatus && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "11px", color: "#10b981", fontWeight: 600 }, children: saveReflectionStatus })
+            saveReflectionStatus && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "#10b981", fontWeight: 600 }, children: saveReflectionStatus })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "11px" }, children: "What went well?" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What went well?" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "textarea",
                 {
                   className: "form-input",
-                  style: { height: "70px", fontSize: "11px", resize: "vertical", padding: "6px 10px" },
+                  style: { height: "70px", fontSize: "var(--flow-text-sm)", resize: "vertical", padding: "6px 10px" },
                   placeholder: "Apa yang berjalan lancar?",
                   value: wentWell,
                   onChange: (e) => {
@@ -30945,12 +31254,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
               )
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "11px" }, children: "What blocked me?" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What blocked me?" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "textarea",
                 {
                   className: "form-input",
-                  style: { height: "70px", fontSize: "11px", resize: "vertical", padding: "6px 10px" },
+                  style: { height: "70px", fontSize: "var(--flow-text-sm)", resize: "vertical", padding: "6px 10px" },
                   placeholder: "Apa yang menghambat progress?",
                   value: blocked,
                   onChange: (e) => {
@@ -30961,12 +31270,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
               )
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "11px" }, children: "What should I do tomorrow?" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What should I do tomorrow?" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "textarea",
                 {
                   className: "form-input",
-                  style: { height: "70px", fontSize: "11px", resize: "vertical", padding: "6px 10px" },
+                  style: { height: "70px", fontSize: "var(--flow-text-sm)", resize: "vertical", padding: "6px 10px" },
                   placeholder: "Apa target utama untuk besok?",
                   value: tomorrow,
                   onChange: (e) => {
@@ -30980,7 +31289,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Daily Report" }) }),
-          !parsedReport ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "24px 0", color: "var(--text-muted)", fontSize: "12px", textAlign: "center", fontStyle: "italic" }, children: "Daily note untuk tanggal ini belum dibuat atau tidak memiliki aktivitas." }) : (() => {
+          !parsedReport ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "24px 0", color: "var(--text-muted)", fontSize: "var(--flow-text-base)", textAlign: "center", fontStyle: "italic" }, children: "Daily note untuk tanggal ini belum dibuat atau tidak memiliki aktivitas." }) : (() => {
             const totalTasks = parsedReport.completedTasks.length + parsedReport.uncompletedTasks.length;
             const progressPercent = totalTasks > 0 ? Math.round(parsedReport.completedTasks.length / totalTasks * 100) : 0;
             const sortedActivities = [...parsedReport.activities].sort((a, b) => {
@@ -30998,8 +31307,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "12px", background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "10px", color: "var(--text-muted)", fontWeight: 500 }, children: "Fokus" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "14px", fontWeight: 700 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: "Fokus" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: [
                     parsedReport.pomodorosRun,
                     " Pomodoro (",
                     parsedReport.totalFocusTime,
@@ -31008,8 +31317,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                 ] }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { width: "1px", background: "var(--background-modifier-border)" } }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "10px", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian Tugas" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "14px", fontWeight: 700 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian Tugas" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: [
                     progressPercent,
                     "% (",
                     parsedReport.completedTasks.length,
@@ -31019,7 +31328,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                   ] })
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "12px", color: "var(--text-muted)", fontStyle: "italic" }, children: "Belum ada aktivitas tugas yang tercatat." }) : standupData.tasks.map((task) => {
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: "Belum ada aktivitas tugas yang tercatat." }) : standupData.tasks.map((task) => {
                 const isDone = task.statusChanges.some((s) => s.toLowerCase() === "done" || s.toLowerCase() === "selesai");
                 const notes = task.sessions.map((s) => s.note.trim()).filter((n) => n.length > 0);
                 const taskObj = issues.find((i) => i.id.toLowerCase() === task.id.toLowerCase());
@@ -31045,7 +31354,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                           padding: "1px 4px",
                           borderRadius: "3px",
                           border: "1px solid var(--background-modifier-border)",
-                          fontSize: "9px"
+                          fontSize: "var(--flow-text-xs)"
                         }, children: timeDisplay });
                       })(),
                       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
@@ -31068,10 +31377,10 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                           children: [
                             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { style: {
                               color: taskObj ? "var(--text-accent)" : "var(--text-normal)",
-                              fontSize: "12px",
+                              fontSize: "var(--flow-text-base)",
                               textDecoration: taskObj ? "underline" : "none"
                             }, children: task.title }),
-                            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "10px" }, children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-xs)" }, children: [
                               "(",
                               task.id,
                               ")"
@@ -31083,7 +31392,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                     task.statusChanges.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: {
                       backgroundColor: isDone ? "rgba(16, 185, 129, 0.15)" : "rgba(59, 130, 246, 0.15)",
                       color: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)",
-                      fontSize: "8px",
+                      fontSize: "var(--flow-text-xs)",
                       fontWeight: 700,
                       padding: "1px 4px",
                       borderRadius: "3px",
@@ -31100,7 +31409,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                     paddingLeft: "10px",
                     borderLeft: "2px solid var(--background-modifier-border)",
                     marginLeft: "4px"
-                  }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { fontSize: "11px", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
+                  }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
                     "\u2022 ",
                     note
                   ] }, idx)) })
@@ -31118,7 +31427,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           {
             className: `flow-nav-tab ${weeklySubTab === "overview" ? "active" : ""}`,
             onClick: () => setWeeklySubTab("overview"),
-            style: { fontSize: "11px", padding: "4px 10px" },
+            style: { fontSize: "var(--flow-text-sm)", padding: "4px 10px" },
             children: "Active Cycle (Overview)"
           }
         ),
@@ -31127,7 +31436,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           {
             className: `flow-nav-tab ${weeklySubTab === "planning" ? "active" : ""}`,
             onClick: () => setWeeklySubTab("planning"),
-            style: { fontSize: "11px", padding: "4px 10px" },
+            style: { fontSize: "var(--flow-text-sm)", padding: "4px 10px" },
             children: "Scope Planner"
           }
         ),
@@ -31136,19 +31445,91 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
           {
             className: `flow-nav-tab ${weeklySubTab === "closeout" ? "active" : ""}`,
             onClick: () => setWeeklySubTab("closeout"),
-            style: { fontSize: "11px", padding: "4px 10px" },
+            style: { fontSize: "var(--flow-text-sm)", padding: "4px 10px" },
             children: "Weekly Closeout"
           }
         )
       ] }),
       weeklySubTab === "overview" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
         weeklyPlanning.target ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "var(--background-secondary-alt)", borderLeft: "4px solid var(--interactive-accent)", padding: "16px", borderRadius: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--text-muted)", fontWeight: 600 }, children: "Weekly Focus Goal" }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h4", { style: { margin: "4px 0 0 0", fontWeight: 700, fontSize: "15px" }, children: weeklyPlanning.target })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "var(--background-secondary-alt)", borderLeft: "4px solid var(--text-muted)", padding: "16px", borderRadius: "8px", fontStyle: "italic", fontSize: "13px", color: "var(--text-muted)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--text-muted)", fontWeight: 600 }, children: "Weekly Focus Goal" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h4", { style: { margin: "4px 0 0 0", fontWeight: 700, fontSize: "var(--flow-text-xl)" }, children: weeklyPlanning.target })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "var(--background-secondary-alt)", borderLeft: "4px solid var(--text-muted)", padding: "16px", borderRadius: "8px", fontStyle: "italic", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: [
           "Belum ada target yang diset untuk minggu ini. Pergi ke tab ",
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Scope Planner" }),
           " untuk menentukan target mingguan Anda!"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", borderLeft: "3px solid var(--interactive-accent)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "relative", width: "56px", height: "56px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("svg", { width: "56", height: "56", viewBox: "0 0 56 56", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("circle", { cx: "28", cy: "28", r: "23", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "5.5" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                  "circle",
+                  {
+                    cx: "28",
+                    cy: "28",
+                    r: "23",
+                    fill: "none",
+                    stroke: "var(--text-success, #10b981)",
+                    strokeWidth: "5.5",
+                    strokeDasharray: 2 * Math.PI * 23,
+                    strokeDashoffset: plannedTasks.length > 0 ? 2 * Math.PI * 23 - completedPlannedTasks.length / plannedTasks.length * (2 * Math.PI * 23) : 2 * Math.PI * 23,
+                    strokeLinecap: "round",
+                    transform: "rotate(-90 28 28)",
+                    style: { transition: "stroke-dashoffset 0.35s ease" }
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "absolute", fontSize: "var(--flow-text-sm)", fontWeight: "bold", color: "var(--text-normal)" }, children: [
+                plannedTasks.length > 0 ? Math.round(completedPlannedTasks.length / plannedTasks.length * 100) : 0,
+                "%"
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", flexGrow: 1 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Progress Tugas Rencana" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { fontSize: "var(--flow-text-lg)", color: "var(--text-normal)" }, children: [
+                completedPlannedTasks.length,
+                " / ",
+                plannedTasks.length,
+                " Selesai"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: "5px", background: "var(--background-secondary-alt)", borderRadius: "2.5px", overflow: "hidden", marginTop: "4px", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+                height: "100%",
+                background: "var(--text-success, #10b981)",
+                width: `${plannedTasks.length > 0 ? completedPlannedTasks.length / plannedTasks.length * 100 : 0}%`,
+                borderRadius: "2.5px",
+                transition: "width 0.3s ease"
+              } }) })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "8px", padding: "16px 20px", borderLeft: "3px solid #8b5cf6" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Perbandingan Mingguan (Minggu Ini vs Lalu)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)", marginTop: "2px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Total Fokus (Pomodoro):" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
+                thisWeekStats.pomodoros,
+                " ",
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontWeight: "normal" }, children: [
+                  "vs ",
+                  lastWeekStats.pomodoros
+                ] }),
+                thisWeekStats.pomodoros >= lastWeekStats.pomodoros ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#10b981", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2191" }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#ef4444", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2193" })
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Jumlah Tugas Selesai:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
+                thisWeekStats.completedCount,
+                " ",
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontWeight: "normal" }, children: [
+                  "vs ",
+                  lastWeekStats.completedCount
+                ] }),
+                thisWeekStats.completedCount >= lastWeekStats.completedCount ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#10b981", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2191" }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#ef4444", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2193" })
+              ] })
+            ] })
+          ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px", alignItems: "start" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
@@ -31158,51 +31539,69 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                 plannedTasks.length,
                 " tasks)"
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "12px", fontWeight: 600 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600 }, children: [
                 "Capacity: ",
                 plannedTasks.length,
                 " / ",
                 weeklyPlanning.capacity
               ] })
             ] }),
-            plannedTasks.length > weeklyPlanning.capacity && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "11px", borderLeft: "4px solid #ef4444", marginBottom: "12px" }, children: [
+            plannedTasks.length > weeklyPlanning.capacity && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)", borderLeft: "4px solid #ef4444", marginBottom: "12px" }, children: [
               "Planned issues exceed weekly capacity (",
               weeklyPlanning.capacity,
               "). Consider pruning."
             ] }),
-            plannedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { padding: "24px 0", color: "var(--text-muted)", fontSize: "12px", textAlign: "center" }, children: [
+            plannedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { padding: "24px 0", color: "var(--text-muted)", fontSize: "var(--flow-text-base)", textAlign: "center" }, children: [
               "Belum ada tugas yang dimasukkan ke rencana minggu ini. Rencanakan tugas Anda di tab ",
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Scope Planner" }),
               "."
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
-              "div",
-              {
-                className: "issue-row",
-                onClick: () => onEditIssue(issue),
-                style: {
-                  gridTemplateColumns: "80px 1fr 90px 90px",
-                  padding: "8px 12px",
-                  borderRadius: "6px",
-                  background: "var(--background-primary)",
-                  opacity: issue.status === "done" ? 0.6 : 1
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => {
+              const estPomos = issue.estimate || 0;
+              const loggedPomos = Math.max(issue.logged || 0, issue.status === "done" ? 1 : 0);
+              const progress = estPomos > 0 ? Math.min(100, Math.round(loggedPomos / estPomos * 100)) : issue.status === "done" ? 100 : 0;
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                "div",
+                {
+                  className: "issue-row",
+                  onClick: () => onEditIssue(issue),
+                  style: {
+                    gridTemplateColumns: "80px 1fr 120px 90px",
+                    padding: "8px 12px",
+                    borderRadius: "6px",
+                    background: "var(--background-primary)",
+                    opacity: issue.status === "done" ? 0.6 : 1,
+                    alignItems: "center"
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-id", style: { textDecoration: issue.status === "done" ? "line-through" : "none" }, children: issue.id }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-title", style: { textDecoration: issue.status === "done" ? "line-through" : "none", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", width: "90px" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: [
+                        loggedPomos,
+                        " / ",
+                        estPomos || "-",
+                        " pmd"
+                      ] }),
+                      estPomos > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: "3px", background: "var(--background-secondary-alt)", borderRadius: "1.5px", overflow: "hidden", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+                        height: "100%",
+                        background: issue.status === "done" ? "var(--text-success, #10b981)" : "var(--interactive-accent)",
+                        width: `${progress}%`
+                      } }) })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: `badge ${issue.status === "done" ? "badge-status-done" : `badge-status-${issue.status}`}`, style: { justifySelf: "end" }, children: issue.status })
+                  ]
                 },
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-id", style: { textDecoration: issue.status === "done" ? "line-through" : "none" }, children: issue.id }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-title", style: { textDecoration: issue.status === "done" ? "line-through" : "none", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: issue.estimate ? `${issue.logged || 0} / ${issue.estimate} pmd` : "--" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: `badge ${issue.status === "done" ? "badge-status-done" : `badge-status-${issue.status}`}`, style: { justifySelf: "end" }, children: issue.status })
-                ]
-              },
-              issue.id
-            )) })
+                issue.id
+              );
+            }) })
           ] }) }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #8b5cf6" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Focus Insights" }) }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Time by Project" }),
-                sortedProjectFocus.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: 0, fontSize: "11px", color: "var(--text-muted)" }, children: "Belum ada catatan waktu fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedProjectFocus.map((pf) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifySelf: "stretch", justifyContent: "space-between", fontSize: "11px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Time by Project" }),
+                sortedProjectFocus.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Belum ada catatan waktu fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedProjectFocus.map((pf) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifySelf: "stretch", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
                     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "140px" }, children: pf.projName }),
                     /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { whiteSpace: "nowrap" }, children: [
                       pf.hours.toFixed(1),
@@ -31217,12 +31616,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                 ] }, pf.projId)) })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "10px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Top Focused Tasks" }),
-                topFocusedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: 0, fontSize: "11px", color: "var(--text-muted)" }, children: "Belum ada sesi fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: topFocusedTasks.map((task, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Top Focused Tasks" }),
+                topFocusedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Belum ada sesi fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: topFocusedTasks.map((task, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                   "div",
                   {
                     onClick: () => onEditIssue(task),
-                    style: { display: "flex", justifyContent: "space-between", padding: "4px 6px", fontSize: "11px", background: "var(--background-primary)", borderRadius: "4px", cursor: "pointer" },
+                    style: { display: "flex", justifyContent: "space-between", padding: "4px 6px", fontSize: "var(--flow-text-sm)", background: "var(--background-primary)", borderRadius: "4px", cursor: "pointer" },
                     children: [
                       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "160px" }, children: [
                         "#",
@@ -31245,15 +31644,15 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
       ] }),
       weeklySubTab === "planning" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 2fr", gap: "24px", alignItems: "start" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)", display: "flex", flexDirection: "column", gap: "14px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 600 }, children: "Set Cycle Parameters" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Set Cycle Parameters" }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "11px" }, children: "Weekly Target (Cycle Goal)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Weekly Target (Cycle Goal)" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "input",
               {
                 type: "text",
                 className: "form-input",
-                style: { fontSize: "12px", padding: "6px 10px" },
+                style: { fontSize: "var(--flow-text-base)", padding: "6px 10px" },
                 placeholder: "e.g. Complete core OAuth modules and OAuth login screen",
                 value: targetInput,
                 onChange: (e) => setTargetInput(e.target.value)
@@ -31261,13 +31660,13 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             )
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "11px" }, children: "Weekly Capacity (Planned Issues Limit)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Weekly Capacity (Planned Issues Limit)" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "input",
               {
                 type: "number",
                 className: "form-input",
-                style: { fontSize: "12px", padding: "6px 10px" },
+                style: { fontSize: "var(--flow-text-base)", padding: "6px 10px" },
                 value: capacityInput,
                 onChange: (e) => setCapacityInput(Number(e.target.value))
               }
@@ -31277,16 +31676,68 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             "button",
             {
               className: "flow-action-btn",
-              style: { alignSelf: "flex-start", padding: "6px 12px", fontSize: "12px" },
+              style: { alignSelf: "flex-start", padding: "6px 12px", fontSize: "var(--flow-text-base)" },
               onClick: handleSavePlanning,
               children: "Save Parameters"
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0 0 12px 0", fontSize: "14px", fontWeight: 600 }, children: "Add Issues to Cycle Plan" }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: "11px", color: "var(--text-muted)", margin: "0 0 16px 0" }, children: "Assign open tasks from the backlog to this week's active cycle." }),
-          sortedBacklog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)", fontSize: "12px" }, children: "Tidak ada tugas backlog yang terbuka." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", maxHeight: "350px", overflowY: "auto" }, children: sortedBacklog.map(({ issue, score }) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0", fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Add Issues to Cycle Plan" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", margin: "0" }, children: "Assign open tasks from the backlog to this week's active cycle." }),
+          sortedBacklog.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+            background: "linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%)",
+            border: "1px solid rgba(99, 102, 241, 0.2)",
+            borderRadius: "8px",
+            padding: "12px 14px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--text-accent, #6366f1)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Saran Cerdas (Smart Suggestions)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedBacklog.slice(0, 3).map(({ issue, score }) => {
+              const breakdown = calculateTaskScore(issue, issues).breakdown.join(", ");
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                "div",
+                {
+                  style: {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    background: "var(--background-primary)",
+                    padding: "8px 10px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--background-modifier-border)"
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)" }, children: [
+                        issue.id,
+                        " - ",
+                        issue.title
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "280px" }, title: breakdown, children: [
+                        "Reason: ",
+                        breakdown
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                      "button",
+                      {
+                        className: "flow-action-btn",
+                        style: { padding: "4px 10px", fontSize: "var(--flow-text-sm)", height: "fit-content" },
+                        onClick: (e) => handleToggleThisWeek(e, issue),
+                        children: "+ Add"
+                      }
+                    )
+                  ]
+                },
+                issue.id
+              );
+            }) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h4", { style: { margin: "8px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "All Backlog Tasks" }),
+          sortedBacklog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--flow-text-base)" }, children: "Tidak ada tugas backlog yang terbuka." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", maxHeight: "250px", overflowY: "auto" }, children: sortedBacklog.map(({ issue, score }) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
             "div",
             {
               style: {
@@ -31296,12 +31747,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                 background: "var(--background-primary)",
                 padding: "8px 12px",
                 borderRadius: "6px",
-                fontSize: "12px"
+                fontSize: "var(--flow-text-base)"
               },
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-id", children: issue.id }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-title", style: { textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "10px", color: "var(--text-muted)" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                   "Score: ",
                   score
                 ] }),
@@ -31309,7 +31760,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                   "button",
                   {
                     className: "flow-action-btn",
-                    style: { justifySelf: "end", padding: "4px 10px", fontSize: "11px", boxShadow: "none" },
+                    style: { justifySelf: "end", padding: "4px 10px", fontSize: "var(--flow-text-sm)", boxShadow: "none" },
                     onClick: (e) => handleToggleThisWeek(e, issue),
                     children: "+ Add to Plan"
                   }
@@ -31319,12 +31770,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             issue.id
           )) }),
           plannedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", marginTop: "20px", paddingTop: "16px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h4", { style: { margin: "0 0 12px 0", fontSize: "12px", color: "var(--text-muted)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h4", { style: { margin: "0 0 12px 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: [
               "Currently Planned Issues (",
               plannedTasks.length,
               ")"
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--background-secondary-alt)", padding: "6px 12px", borderRadius: "6px", fontSize: "11px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--background-secondary-alt)", padding: "6px 12px", borderRadius: "6px", fontSize: "var(--flow-text-sm)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: issue.id }),
                 " - ",
@@ -31334,7 +31785,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                 "button",
                 {
                   className: "flow-nav-tab",
-                  style: { padding: "2px 8px", fontSize: "10px", border: "1px solid var(--background-modifier-border)", color: "#ef4444" },
+                  style: { padding: "2px 8px", fontSize: "var(--flow-text-xs)", border: "1px solid var(--background-modifier-border)", color: "#ef4444" },
                   onClick: (e) => handleToggleThisWeek(e, issue),
                   children: "\u2715 Remove"
                 }
@@ -31345,9 +31796,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
       ] }),
       weeklySubTab === "closeout" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "24px", alignItems: "start" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { padding: "20px", display: "flex", flexDirection: "column", gap: "16px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 600 }, children: "Daftar Periksa Review Mingguan" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Daftar Periksa Review Mingguan" }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", cursor: "pointer", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
@@ -31359,7 +31810,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
               ),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Saya telah meninjau kembali tugas terblokir (Blocked)" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", cursor: "pointer", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
@@ -31371,7 +31822,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
               ),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Saya telah menjadwal ulang tugas terlambat (Overdue)" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", cursor: "pointer", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
@@ -31395,7 +31846,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
                 width: "100%",
                 justifyContent: "center",
                 padding: "12px",
-                fontSize: "13px",
+                fontSize: "var(--flow-text-base)",
                 background: isReviewedToday ? "var(--background-modifier-border)" : "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
                 color: isReviewedToday ? "var(--text-muted) !important" : "white !important",
                 cursor: isReviewedToday ? "not-allowed" : "pointer"
@@ -31407,7 +31858,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #ef4444" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Active Cycle Risks" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px", fontSize: "11px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px", fontSize: "var(--flow-text-sm)" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "#ef4444" }, children: [
                   "Overdue Tasks (",
@@ -31435,14 +31886,14 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue }) {
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0 0 10px 0", fontSize: "13px", fontWeight: 600 }, children: "Start New Cycle" }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: "11px", color: "var(--text-muted)", margin: "0 0 12px 0" }, children: "Selesaikan siklus minggu ini dan bersihkan tugas Selesai untuk memulai minggu berikutnya." }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0 0 10px 0", fontSize: "var(--flow-text-base)", fontWeight: 600 }, children: "Start New Cycle" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", margin: "0 0 12px 0" }, children: "Selesaikan siklus minggu ini dan bersihkan tugas Selesai untuk memulai minggu berikutnya." }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "button",
               {
                 onClick: handleStartNewWeek,
                 className: "flow-action-btn",
-                style: { background: "var(--text-error, #ef4444)", color: "white", border: "none", padding: "8px 14px", fontSize: "12px" },
+                style: { background: "var(--text-error, #ef4444)", color: "white", border: "none", padding: "8px 14px", fontSize: "var(--flow-text-base)" },
                 children: "Start New Cycle"
               }
             )
@@ -31473,11 +31924,11 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
   };
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "800px", margin: "0 auto", padding: "10px 0" }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h2", { style: { margin: 0, fontSize: "20px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Inbox, { size: 20, style: { color: "var(--interactive-accent)" } }),
         "Inbox Tasks"
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { margin: 0, fontSize: "12px", color: "var(--text-muted)" }, children: "Quickly capture raw tasks and thoughts, then process them later into projects, epics, or the backlog." })
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Quickly capture raw tasks and thoughts, then process them later into projects, epics, or the backlog." })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: handleCapture, style: { display: "flex", gap: "10px", background: "var(--background-secondary)", padding: "16px", borderRadius: "10px", border: "1px solid var(--background-modifier-border)" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -31486,7 +31937,7 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
           type: "text",
           className: "form-input",
           placeholder: "What's on your mind? Capture it here...",
-          style: { fontSize: "13px", padding: "10px 14px", flex: 1 },
+          style: { fontSize: "var(--flow-text-base)", padding: "10px 14px", flex: 1 },
           value: title,
           onChange: (e) => setTitle(e.target.value),
           autoFocus: true
@@ -31498,7 +31949,7 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
       ] })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "13px", fontWeight: 600, color: "var(--text-muted)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)" }, children: [
         "Unprocessed Items (",
         inboxIssues.length,
         ")"
@@ -31522,8 +31973,8 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
           className: "inbox-item-card",
           children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontWeight: 600, fontSize: "13px", color: "var(--text-normal)" }, children: issue.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontWeight: 600, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: issue.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
                 "Captured: ",
                 issue.filePath.split("/").pop()?.replace(".md", "")
               ] })
@@ -31534,7 +31985,7 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
                 onClick: () => onEditIssue(issue),
                 style: {
                   padding: "6px 12px",
-                  fontSize: "12px",
+                  fontSize: "var(--flow-text-base)",
                   background: "var(--background-primary)",
                   border: "1px solid var(--background-modifier-border)",
                   color: "var(--text-normal)",
@@ -31559,7 +32010,7 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
 }
 
 // src/components/ProductivityView.tsx
-var React3 = __toESM(require_react());
+var React4 = __toESM(require_react());
 var import_react12 = __toESM(require_react());
 var import_obsidian9 = require("obsidian");
 
@@ -31582,12 +32033,12 @@ function formatActivityMessage(message, issueMap) {
         color: "var(--text-success, #10b981)",
         padding: "2px 6px",
         borderRadius: "4px",
-        fontSize: "10px",
+        fontSize: "var(--flow-text-xs)",
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Selesai" }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "11px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -31609,12 +32060,12 @@ function formatActivityMessage(message, issueMap) {
         color: "var(--text-accent, #3b82f6)",
         padding: "2px 6px",
         borderRadius: "4px",
-        fontSize: "10px",
+        fontSize: "var(--flow-text-xs)",
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Mulai" }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "11px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -31631,12 +32082,12 @@ function formatActivityMessage(message, issueMap) {
         color: "#f59e0b",
         padding: "2px 6px",
         borderRadius: "4px",
-        fontSize: "10px",
+        fontSize: "var(--flow-text-xs)",
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Jeda" }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "11px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -31653,12 +32104,12 @@ function formatActivityMessage(message, issueMap) {
         color: "var(--text-accent, #3b82f6)",
         padding: "2px 6px",
         borderRadius: "4px",
-        fontSize: "10px",
+        fontSize: "var(--flow-text-xs)",
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Lanjut" }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "11px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -31672,7 +32123,7 @@ function formatActivityMessage(message, issueMap) {
         color: "#ef4444",
         padding: "2px 6px",
         borderRadius: "4px",
-        fontSize: "10px",
+        fontSize: "var(--flow-text-xs)",
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Pomodoro" }),
@@ -31688,7 +32139,7 @@ function formatActivityMessage(message, issueMap) {
       return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
         parts[0],
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "11px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
           " (",
           id,
           ")"
@@ -32046,8 +32497,8 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           flexShrink: 0
         }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Calendar, { size: 18 }) }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "1px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { style: { margin: 0, fontSize: "15px", fontWeight: 700, color: "var(--text-normal)" }, children: "Laporan Harian" }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: formatIndonesianDate(report.date) })
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: "Laporan Harian" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: formatIndonesianDate(report.date) })
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -32066,7 +32517,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             background: "var(--background-primary)",
             color: "var(--text-muted)",
             cursor: "pointer",
-            fontSize: "16px",
+            fontSize: "var(--flow-text-2xl)",
             lineHeight: 1,
             flexShrink: 0,
             transition: "background 0.15s, color 0.15s"
@@ -32109,11 +32560,11 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { color: "var(--interactive-accent)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Brain, { size: 24 }) }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: [
               "Fokus ",
               temporalLabel
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "18px", fontWeight: 700 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 700 }, children: [
               report.pomodorosRun,
               " Pomodoro"
             ] })
@@ -32130,8 +32581,8 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { color: "var(--text-accent)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Clock, { size: 24 }) }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Total Durasi" }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "18px", fontWeight: 700 }, children: report.totalFocusTime })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Total Durasi" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 700 }, children: report.totalFocusTime })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
@@ -32143,12 +32594,38 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           alignItems: "center",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { color: "var(--text-success, #10b981)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TrendingUp, { size: 24 }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian" }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "18px", fontWeight: 700 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { position: "relative", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "36", height: "36", viewBox: "0 0 36 36", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("circle", { cx: "18", cy: "18", r: "15", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "3.5" }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                "circle",
+                {
+                  cx: "18",
+                  cy: "18",
+                  r: "15",
+                  fill: "none",
+                  stroke: "var(--text-success, #10b981)",
+                  strokeWidth: "3.5",
+                  strokeDasharray: 2 * Math.PI * 15,
+                  strokeDashoffset: 2 * Math.PI * 15 - progressPercent / 100 * (2 * Math.PI * 15),
+                  strokeLinecap: "round",
+                  transform: "rotate(-90 18 18)",
+                  style: { transition: "stroke-dashoffset 0.35s ease" }
+                }
+              )
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { position: "absolute", fontSize: "var(--flow-text-xs)", fontWeight: "bold", color: "var(--text-normal)" }, children: [
               progressPercent,
-              "% Tugas"
+              "%"
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: [
+              report.completedTasks.length,
+              " / ",
+              totalTasks,
+              " Tugas"
             ] })
           ] })
         ] })
@@ -32167,21 +32644,21 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           flexDirection: "column",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-success, #10b981)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-success, #10b981)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CheckCircle2, { size: 14 }),
             "Selesai (",
             report.completedTasks.length,
             ")"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.completedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "12px", color: "var(--text-muted)", fontStyle: "italic" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.completedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: [
             "Belum ada tugas selesai ",
             temporalSuffix,
             "."
-          ] }) : report.completedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px" }, children: [
+          ] }) : report.completedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "var(--flow-text-base)" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-success, #10b981)", marginTop: "2px" }, children: "\u2713" }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontWeight: 600, color: "var(--text-normal)" }, children: task.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "10px", color: "var(--text-muted)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                 task.id,
                 " \u2022 ",
                 task.detail
@@ -32198,21 +32675,21 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           flexDirection: "column",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-accent)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-accent)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CheckSquare, { size: 14 }),
             "Belum Selesai (",
             report.uncompletedTasks.length,
             ")"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.uncompletedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "12px", color: "var(--text-muted)", fontStyle: "italic" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.uncompletedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: [
             "Semua tugas rencana ",
             temporalSuffix,
             " selesai."
-          ] }) : report.uncompletedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px" }, children: [
+          ] }) : report.uncompletedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "var(--flow-text-base)" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "\u2022" }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontWeight: 600, color: "var(--text-normal)" }, children: task.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "10px", color: "var(--text-muted)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                 task.id,
                 " \u2022 ",
                 task.detail
@@ -32232,9 +32709,9 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", paddingBottom: "8px", borderBottom: "1px solid var(--background-modifier-border)" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Coffee, { size: 13, style: { color: "var(--text-muted)" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "12px", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.3px" }, children: "Refleksi Harian" })
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.3px" }, children: "Refleksi Harian" })
         ] }),
-        !report.reflection.wentWell && !report.reflection.blocked && !report.reflection.tomorrow ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "12px", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "8px 0" }, children: [
+        !report.reflection.wentWell && !report.reflection.blocked && !report.reflection.tomorrow ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "8px 0" }, children: [
           "Belum ada refleksi harian yang ditulis untuk ",
           temporalSuffix,
           "."
@@ -32243,7 +32720,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
               display: "inline-flex",
               alignSelf: "flex-start",
-              fontSize: "10px",
+              fontSize: "var(--flow-text-xs)",
               fontWeight: 600,
               color: "rgba(16, 185, 129, 0.9)",
               background: "rgba(16, 185, 129, 0.08)",
@@ -32252,13 +32729,13 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               padding: "2px 7px",
               letterSpacing: "0.3px"
             }, children: "Berjalan Lancar" }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "13px", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.wentWell })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.wentWell })
           ] }),
           report.reflection.blocked && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
               display: "inline-flex",
               alignSelf: "flex-start",
-              fontSize: "10px",
+              fontSize: "var(--flow-text-xs)",
               fontWeight: 600,
               color: "rgba(239, 68, 68, 0.9)",
               background: "rgba(239, 68, 68, 0.08)",
@@ -32267,13 +32744,13 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               padding: "2px 7px",
               letterSpacing: "0.3px"
             }, children: "Hambatan" }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "13px", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.blocked })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.blocked })
           ] }),
           report.reflection.tomorrow && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
               display: "inline-flex",
               alignSelf: "flex-start",
-              fontSize: "10px",
+              fontSize: "var(--flow-text-xs)",
               fontWeight: 600,
               color: "rgba(99, 102, 241, 0.9)",
               background: "rgba(99, 102, 241, 0.08)",
@@ -32282,7 +32759,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               padding: "2px 7px",
               letterSpacing: "0.3px"
             }, children: "Rencana Besok" }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "13px", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.tomorrow })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.tomorrow })
           ] })
         ] })
       ] }),
@@ -32292,7 +32769,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         gap: "12px"
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-normal)", display: "flex", alignItems: "center", gap: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-normal)", display: "flex", alignItems: "center", gap: "8px" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Clock, { size: 14 }),
             "Aktivitas ",
             temporalLabel
@@ -32310,7 +32787,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               {
                 onClick: () => setActiveTab("timeline"),
                 style: {
-                  fontSize: "10px",
+                  fontSize: "var(--flow-text-xs)",
                   fontWeight: 600,
                   padding: "4px 10px",
                   borderRadius: "4px",
@@ -32328,7 +32805,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               {
                 onClick: () => setActiveTab("report"),
                 style: {
-                  fontSize: "10px",
+                  fontSize: "var(--flow-text-xs)",
                   fontWeight: 600,
                   padding: "4px 10px",
                   borderRadius: "4px",
@@ -32351,7 +32828,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           borderLeft: "2px solid var(--background-modifier-border)",
           margin: "4px 0 4px 8px",
           gap: "12px"
-        }, children: sortedActivities.map((act, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "12px", position: "relative", fontSize: "12px" }, children: [
+        }, children: sortedActivities.map((act, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "12px", position: "relative", fontSize: "var(--flow-text-base)" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
             position: "absolute",
             left: "-21px",
@@ -32367,7 +32844,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         ] }, i)) }) : (() => {
           const standupData = compileStandupSummary2(sortedActivities, issueMap);
           return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-            standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "12px", color: "var(--text-muted)", fontStyle: "italic", padding: "10px 0" }, children: [
+            standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic", padding: "10px 0" }, children: [
               "Tidak ada aktivitas tugas yang tercatat untuk report ",
               temporalSuffix,
               "."
@@ -32396,7 +32873,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                         padding: "2px 6px",
                         borderRadius: "4px",
                         border: "1px solid var(--background-modifier-border)",
-                        fontSize: "10px"
+                        fontSize: "var(--flow-text-xs)"
                       }, children: timeDisplay });
                     })(),
                     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
@@ -32405,8 +32882,8 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                       borderRadius: "50%",
                       backgroundColor: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)"
                     } }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)", fontSize: "13px" }, children: task.title }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "11px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)", fontSize: "var(--flow-text-base)" }, children: task.title }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
                       "(",
                       task.id,
                       ")"
@@ -32415,7 +32892,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", gap: "6px", alignItems: "center" }, children: task.statusChanges.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: {
                     backgroundColor: isDone ? "rgba(16, 185, 129, 0.15)" : "rgba(59, 130, 246, 0.15)",
                     color: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)",
-                    fontSize: "9px",
+                    fontSize: "var(--flow-text-xs)",
                     fontWeight: 700,
                     padding: "2px 6px",
                     borderRadius: "4px",
@@ -32432,15 +32909,15 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                   paddingLeft: "14px",
                   borderLeft: "2px solid var(--background-modifier-border)",
                   marginLeft: "8px"
-                }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { fontSize: "12px", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
+                }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
                   "\u2022 ",
                   note
                 ] }, idx)) })
               ] }, task.id);
             }),
             standupData.general.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", marginTop: "8px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "10px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Lainnya / Umum" }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px" }, children: standupData.general.map((act, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "12px", color: "var(--text-muted)", lineHeight: "1.4" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Lainnya / Umum" }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px" }, children: standupData.general.map((act, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", lineHeight: "1.4" }, children: [
                 "\u2022 ",
                 act
               ] }, idx)) })
@@ -32465,7 +32942,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             display: "flex",
             alignItems: "center",
             gap: "6px",
-            fontSize: "12px",
+            fontSize: "var(--flow-text-base)",
             fontWeight: 600,
             background: "transparent",
             border: "1px solid var(--background-modifier-border)",
@@ -32494,7 +32971,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              fontSize: "12px",
+              fontSize: "var(--flow-text-base)",
               fontWeight: 600,
               background: "var(--background-primary)",
               border: "1px solid var(--background-modifier-border)",
@@ -32514,7 +32991,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           {
             onClick: onClose,
             style: {
-              fontSize: "12px",
+              fontSize: "var(--flow-text-base)",
               fontWeight: 600,
               background: "var(--interactive-accent)",
               color: "white",
@@ -32589,61 +33066,12 @@ var DailyReportModal = class extends import_obsidian8.Modal {
 var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 function ProductivityView({ index, app, plugin, onRefresh }) {
   const { dailyNotes } = index;
-  const [currentPage, setCurrentPage] = React3.useState(0);
+  const [currentPage, setCurrentPage] = React4.useState(0);
   const stats = (0, import_react12.useMemo)(() => {
-    const activeDays = /* @__PURE__ */ new Set();
+    const { currentStreak, bestStreak, activeDaysCount, activeDays } = calculateStreak(index.issues);
     let totalPomos = 0;
-    let activeDaysCount = 0;
     dailyNotes.forEach((dn) => {
-      const pomos = dn.pomodorosRun || 0;
-      const tasksCount = dn.tasksTaken?.length || 0;
-      if (pomos > 0 || tasksCount > 0) {
-        activeDays.add(dn.date);
-        activeDaysCount++;
-      }
-      totalPomos += pomos;
-    });
-    const todayStr = getLocalDateString();
-    const yesterdayStr = getLocalDateString(new Date(Date.now() - 864e5));
-    let currentStreak = 0;
-    let startStr = "";
-    if (activeDays.has(todayStr)) {
-      startStr = todayStr;
-    } else if (activeDays.has(yesterdayStr)) {
-      startStr = yesterdayStr;
-    }
-    if (startStr) {
-      const cur = new Date(startStr);
-      while (true) {
-        const curStr = getLocalDateString(cur);
-        if (activeDays.has(curStr)) {
-          currentStreak++;
-          cur.setDate(cur.getDate() - 1);
-        } else {
-          break;
-        }
-      }
-    }
-    const sortedActiveDates = Array.from(activeDays).sort();
-    let bestStreak = 0;
-    let tempStreak = 0;
-    let prevTime = 0;
-    sortedActiveDates.forEach((dateStr) => {
-      const curTime = new Date(dateStr).getTime();
-      if (prevTime === 0) {
-        tempStreak = 1;
-      } else {
-        const diff = Math.round((curTime - prevTime) / (1e3 * 60 * 60 * 24));
-        if (diff === 1) {
-          tempStreak++;
-        } else if (diff > 1) {
-          tempStreak = 1;
-        }
-      }
-      if (tempStreak > bestStreak) {
-        bestStreak = tempStreak;
-      }
-      prevTime = curTime;
+      totalPomos += dn.pomodorosRun || 0;
     });
     const pomodoroDuration = plugin.settings.pomodoroDuration || 25;
     const totalHours = Math.floor(totalPomos * pomodoroDuration / 60);
@@ -32713,7 +33141,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
         {
           style: {
             width: "12px",
-            fontSize: "9px",
+            fontSize: "var(--flow-text-xs)",
             color: "var(--text-muted)",
             textAlign: "left",
             whiteSpace: "nowrap",
@@ -32738,6 +33166,36 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
       return "flow-cell-level-3";
     return "flow-cell-level-4";
   };
+  const getDoneHeatmapColorClass = (count) => {
+    if (count === 0)
+      return "flow-cell-empty";
+    if (count === 1)
+      return "flow-cell-level-1";
+    if (count === 2)
+      return "flow-cell-level-2";
+    if (count === 3)
+      return "flow-cell-level-3";
+    return "flow-cell-level-4";
+  };
+  const getCompletedCountForDate = (dateStr) => {
+    return index.issues.filter((issue) => issue.status === "done" && issue.completedDate === dateStr).length;
+  };
+  const last14DaysPomos = (0, import_react12.useMemo)(() => {
+    const data = [];
+    const today = /* @__PURE__ */ new Date();
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(today.getTime() - i * 24 * 60 * 60 * 1e3);
+      const dateStr = getLocalDateString(d);
+      const note = dailyNotes.find((n) => n.date === dateStr);
+      const pomos = note ? note.pomodorosRun || 0 : 0;
+      data.push({
+        dateStr,
+        label: d.toLocaleString("default", { day: "numeric", month: "short" }),
+        pomos
+      });
+    }
+    return data;
+  }, [dailyNotes]);
   const getPomosForDate = (dateStr) => {
     const note = dailyNotes.find((n) => n.date === dateStr);
     return note ? note.pomodorosRun || 0 : 0;
@@ -32765,9 +33223,27 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
   const recentNotes = (0, import_react12.useMemo)(() => {
     return [...dailyNotes].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 16);
   }, [dailyNotes]);
-  const cardsPerPage = 4;
+  const [cardsPerPage, setCardsPerPage] = React4.useState(4);
+  const containerRef = React4.useRef(null);
+  React4.useEffect(() => {
+    if (!containerRef.current)
+      return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        let columns = Math.floor((width + 12) / (180 + 12));
+        if (columns < 4)
+          columns = 4;
+        if (columns > 7)
+          columns = 7;
+        setCardsPerPage(columns);
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
   const totalPages = Math.ceil(recentNotes.length / cardsPerPage);
-  React3.useEffect(() => {
+  React4.useEffect(() => {
     if (currentPage >= totalPages && totalPages > 0) {
       setCurrentPage(totalPages - 1);
     }
@@ -32775,46 +33251,39 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
   const pagedNotes = (0, import_react12.useMemo)(() => {
     const startIndex = currentPage * cardsPerPage;
     return recentNotes.slice(startIndex, startIndex + cardsPerPage);
-  }, [recentNotes, currentPage]);
+  }, [recentNotes, currentPage, cardsPerPage]);
   return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "22px", fontWeight: 700 }, children: "Productivity & Consistency" }),
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { margin: "4px 0 0 0", fontSize: "13px", color: "var(--text-muted)" }, children: "Visualize your focus metrics, streak consistency, and review historical daily note summaries." })
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Productivity & Consistency" }),
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { margin: "4px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Visualize your focus metrics, streak consistency, and review historical daily note summaries." })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget-list", style: { gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", children: "Current Streak" }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
-          stats.currentStreak,
-          " ",
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "12px", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: [
-          "Consistency: ",
-          stats.consistencyRate,
-          "% (",
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Total Focus Days" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.activeDaysCount,
-          " focus days)"
-        ] })
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: "Out of 84 days tracked" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #f59e0b" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", children: "Best Streak" }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
-          stats.bestStreak,
-          " ",
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "12px", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Consistency" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
+          stats.consistencyRate,
+          "%"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: "All-time consistency high" })
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: "Overall habit formation" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #10b981" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", children: "Total Focus Time" }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { fontSize: "20px", fontWeight: 700 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.totalHours,
           "h ",
           stats.totalMins,
           "m"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: [
           stats.totalPomos,
           " Pomodoros (",
           stats.averagePomos,
@@ -32822,12 +33291,12 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #8b5cf6" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", children: "Task Planning Accuracy" }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Task Planning Accuracy" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.completionRate,
           "%"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: [
           stats.completedTasksCount,
           "/",
           stats.totalTasksTaken,
@@ -32836,78 +33305,175 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
       ] })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "dashboard-card-title", style: { margin: 0 }, children: "Consistency Calendar (Last 12 Weeks)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", overflowX: "auto", paddingBottom: "4px" }, children: [
-        renderMonthHeader(),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "start", alignSelf: "start" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", fontSize: "9px", color: "var(--text-muted)", marginRight: "8px", width: "24px", textAlign: "right", paddingTop: "1px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Mon" }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Wed" }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Fri" }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } })
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Consistency Calendar (Done Tasks Heatmap)" }),
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: "24px", flexWrap: "wrap" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", overflowX: "auto", paddingBottom: "4px", flex: "1 1 auto" }, children: [
+          renderMonthHeader(),
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "start", alignSelf: "start" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", marginRight: "8px", width: "24px", textAlign: "right", paddingTop: "1px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Mon" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Wed" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Fri" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", gap: "4px" }, children: heatmapWeeks.map((week, wIdx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+              "div",
+              {
+                className: "flow-heatmap-column",
+                style: { display: "flex", flexDirection: "column", gap: "4px" },
+                children: week.map((dateObj, dIdx) => {
+                  const dateStr = getLocalDateString(dateObj);
+                  const completedCount = getCompletedCountForDate(dateStr);
+                  const isCurrentDay = dateStr === getLocalDateString();
+                  const isFuture = dateObj.getTime() > (/* @__PURE__ */ new Date()).setHours(23, 59, 59, 999);
+                  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+                    "div",
+                    {
+                      className: `flow-heatmap-cell ${getDoneHeatmapColorClass(completedCount)}`,
+                      onClick: () => !isFuture && handleOpenNote(dateStr),
+                      title: isFuture ? "Hari esok" : `${dateStr}: ${completedCount} tugas selesai`,
+                      style: {
+                        width: "12px",
+                        height: "12px",
+                        borderRadius: "2px",
+                        cursor: isFuture ? "default" : "pointer",
+                        boxSizing: "border-box",
+                        border: isCurrentDay ? "1.5px solid var(--interactive-accent)" : "none",
+                        transition: "transform 0.1s ease",
+                        visibility: isFuture ? "hidden" : "visible"
+                      },
+                      onMouseEnter: (e) => {
+                        if (!isFuture)
+                          e.currentTarget.style.transform = "scale(1.2)";
+                      },
+                      onMouseLeave: (e) => {
+                        if (!isFuture)
+                          e.currentTarget.style.transform = "scale(1)";
+                      }
+                    },
+                    dIdx
+                  );
+                })
+              },
+              wIdx
+            )) })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", gap: "4px" }, children: heatmapWeeks.map((week, wIdx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
-            "div",
-            {
-              className: "flow-heatmap-column",
-              style: { display: "flex", flexDirection: "column", gap: "4px" },
-              children: week.map((dateObj, dIdx) => {
-                const dateStr = getLocalDateString(dateObj);
-                const pomos = getPomosForDate(dateStr);
-                const hasTasks = hasTasksForDate(dateStr);
-                const isCurrentDay = dateStr === getLocalDateString();
-                const isFuture = dateObj.getTime() > (/* @__PURE__ */ new Date()).setHours(23, 59, 59, 999);
-                return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
-                  "div",
-                  {
-                    className: `flow-heatmap-cell ${getHeatmapColorClass(pomos, hasTasks)}`,
-                    onClick: () => !isFuture && handleOpenNote(dateStr),
-                    title: isFuture ? "Future day" : `${dateStr}: ${pomos} Pomodoro(s)`,
-                    style: {
-                      width: "12px",
-                      height: "12px",
-                      borderRadius: "2px",
-                      cursor: isFuture ? "default" : "pointer",
-                      boxSizing: "border-box",
-                      border: isCurrentDay ? "1.5px solid var(--interactive-accent)" : "none",
-                      transition: "transform 0.1s ease",
-                      visibility: isFuture ? "hidden" : "visible"
-                    },
-                    onMouseEnter: (e) => {
-                      if (!isFuture)
-                        e.currentTarget.style.transform = "scale(1.2)";
-                    },
-                    onMouseLeave: (e) => {
-                      if (!isFuture)
-                        e.currentTarget.style.transform = "scale(1)";
-                    }
-                  },
-                  dIdx
-                );
-              })
-            },
-            wIdx
-          )) })
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", alignSelf: "start", marginTop: "12px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: "Less" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-empty", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-1", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-2", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-3", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-4", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: "More" })
+          ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "var(--text-muted)", alignSelf: "end", marginTop: "12px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: "Less" }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-empty", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-1", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-2", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-3", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-4", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: "More" })
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: "16px", flexWrap: "wrap", flex: "1 1 auto", justifyContent: "flex-end" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: {
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "8px",
+            background: "var(--background-secondary-alt)",
+            padding: "16px 24px",
+            borderRadius: "12px",
+            border: "1px solid var(--background-modifier-border)",
+            color: "var(--text-normal)",
+            flex: "0 0 auto",
+            minWidth: "120px",
+            boxShadow: "inset 0 1px 2px rgba(0,0,0,0.05)"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", letterSpacing: "0.5px" }, children: "Current Streak" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-5xl)", fontWeight: 800, lineHeight: 1, color: "var(--interactive-accent)" }, children: stats.currentStreak }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)" }, children: "days" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
+              "Best: ",
+              stats.bestStreak
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: {
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            background: "var(--background-secondary-alt)",
+            padding: "16px",
+            borderRadius: "12px",
+            border: "1px solid var(--background-modifier-border)",
+            boxShadow: "inset 0 1px 2px rgba(0,0,0,0.05)",
+            flex: "0 0 320px",
+            maxWidth: "100%",
+            boxSizing: "border-box"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 700, textTransform: "uppercase", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: "Pomodoro Trend (14 Days)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
+                "Avg: ",
+                (stats.totalPomos / (stats.activeDaysCount || 1)).toFixed(1),
+                " / active day"
+              ] })
+            ] }),
+            (() => {
+              const width = 288;
+              const height = 120;
+              const paddingLeft = 20;
+              const paddingRight = 10;
+              const paddingTop = 15;
+              const paddingBottom = 20;
+              const chartWidth = width - paddingLeft - paddingRight;
+              const chartHeight = height - paddingTop - paddingBottom;
+              const maxPomos = Math.max(...last14DaysPomos.map((d) => d.pomos), 4);
+              const points = last14DaysPomos.map((d, i) => {
+                const x = paddingLeft + i / 13 * chartWidth;
+                const y = height - paddingBottom - d.pomos / maxPomos * chartHeight;
+                return { x, y, ...d };
+              });
+              const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+              const areaD = `${pathD} L ${points[points.length - 1].x} ${height - paddingBottom} L ${points[0].x} ${height - paddingBottom} Z`;
+              return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("svg", { width: "100%", height, viewBox: `0 0 ${width} ${height}`, style: { overflow: "visible" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("linearGradient", { id: "pomodoro-trend-gradient", x1: "0", y1: "0", x2: "0", y2: "1", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)", stopOpacity: "0.25" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("stop", { offset: "100%", stopColor: "var(--interactive-accent)", stopOpacity: "0" })
+                ] }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("line", { x1: paddingLeft, y1: height - paddingBottom, x2: width - paddingRight, y2: height - paddingBottom, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3" }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("line", { x1: paddingLeft, y1: height - paddingBottom - chartHeight / 2, x2: width - paddingRight, y2: height - paddingBottom - chartHeight / 2, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3", opacity: 0.5 }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("line", { x1: paddingLeft, y1: paddingTop, x2: width - paddingRight, y2: paddingTop, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3", opacity: 0.3 }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft - 4, y: height - paddingBottom + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: "0" }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft - 4, y: height - paddingBottom - chartHeight / 2 + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: Math.round(maxPomos / 2) }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft - 4, y: paddingTop + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: maxPomos }),
+                points.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("path", { d: areaD, fill: "url(#pomodoro-trend-gradient)" }),
+                points.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("path", { d: pathD, fill: "none", stroke: "var(--interactive-accent)", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }),
+                points.map((p, idx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+                  "circle",
+                  {
+                    cx: p.x,
+                    cy: p.y,
+                    r: 2,
+                    fill: "var(--background-primary)",
+                    stroke: "var(--interactive-accent)",
+                    strokeWidth: 1,
+                    children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("title", { children: `${p.dateStr}: ${p.pomos} pmd` })
+                  },
+                  idx
+                )),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft, y: height - 4, fontSize: "8", fill: "var(--text-muted)", textAnchor: "start", children: last14DaysPomos[0].label }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: width - paddingRight, y: height - 4, fontSize: "8", fill: "var(--text-muted)", textAnchor: "end", children: last14DaysPomos[13].label })
+              ] });
+            })()
+          ] })
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "dashboard-card", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "dashboard-card", ref: containerRef, children: [
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "dashboard-card-title", style: { margin: 0 }, children: "Recent Daily Reports" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Recent Daily Reports" }),
         recentNotes.length > 0 && totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "11px", color: "var(--text-muted)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
             "Page ",
             currentPage + 1,
             " of ",
@@ -32921,7 +33487,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                 disabled: currentPage === 0,
                 style: {
                   padding: "3px 8px",
-                  fontSize: "11px",
+                  fontSize: "var(--flow-text-sm)",
                   background: currentPage === 0 ? "transparent" : "var(--background-secondary)",
                   border: "1px solid var(--background-modifier-border)",
                   opacity: currentPage === 0 ? 0.4 : 1,
@@ -32938,7 +33504,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                 disabled: currentPage === totalPages - 1,
                 style: {
                   padding: "3px 8px",
-                  fontSize: "11px",
+                  fontSize: "var(--flow-text-sm)",
                   background: currentPage === totalPages - 1 ? "transparent" : "var(--background-secondary)",
                   border: "1px solid var(--background-modifier-border)",
                   opacity: currentPage === totalPages - 1 ? 0.4 : 1,
@@ -32951,7 +33517,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
           ] })
         ] })
       ] }),
-      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", alignItems: "stretch" }, children: pagedNotes.map((note) => {
+      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", alignItems: "stretch" }, children: pagedNotes.map((note) => {
         const pomos = note.pomodorosRun || 0;
         const estimate = note.totalEstimate || 0;
         const hasReportData = pomos > 0 || note.tasksTaken && note.tasksTaken.length > 0;
@@ -32980,12 +33546,12 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
             },
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontWeight: 700, fontSize: "12px", color: "var(--text-normal)" }, children: note.date }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontWeight: 700, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: note.date }),
                 /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                   "button",
                   {
                     className: "flow-nav-tab",
-                    style: { padding: "2px 6px", fontSize: "10px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
+                    style: { padding: "2px 6px", fontSize: "var(--flow-text-xs)", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)" },
                     onClick: () => handleOpenNote(note.date),
                     children: "Open"
                   }
@@ -32994,7 +33560,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
               hasReportData ? /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px", flexGrow: 1, justifyContent: "space-between" }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { children: [
                         "Focus: ",
                         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("strong", { children: pomos }),
@@ -33020,7 +33586,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     ) })
                   ] }),
                   mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { children: [
                       "Tasks: ",
                       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("strong", { children: completedCount }),
                       "/",
@@ -33049,7 +33615,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                       className: `badge ${t.isDone ? "badge-status-done" : "badge-status-in-progress"}`,
                       style: {
                         padding: "1px 5px",
-                        fontSize: "9px",
+                        fontSize: "var(--flow-text-xs)",
                         textTransform: "none",
                         letterSpacing: "normal",
                         textDecoration: t.isDone ? "line-through" : "none",
@@ -33068,7 +33634,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     "span",
                     {
                       className: "badge",
-                      style: { padding: "1px 5px", fontSize: "9px", background: "var(--background-secondary)", color: "var(--text-muted)" },
+                      style: { padding: "1px 5px", fontSize: "var(--flow-text-xs)", background: "var(--background-secondary)", color: "var(--text-muted)" },
                       title: `${mappedTasks.length - 3} more tasks`,
                       children: [
                         "+",
@@ -33077,7 +33643,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     }
                   )
                 ] })
-              ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "10px 0" }, children: "No focus activity or tasks were recorded in metadata." })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "10px 0" }, children: "No focus activity or tasks were recorded in metadata." })
             ]
           },
           note.date
@@ -33105,7 +33671,7 @@ function FlowApp({ plugin, app }) {
   const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react13.useState)("");
   const [selectedProjectId, setSelectedProjectId] = (0, import_react13.useState)(null);
   const [selectedEpicId, setSelectedEpicId] = (0, import_react13.useState)(null);
-  const reloadIndex = React4.useCallback(() => {
+  const reloadIndex = React5.useCallback(() => {
     const freshIndex = scanVault(app, plugin.settings);
     setIndex(freshIndex);
     if (freshIndex.issues.length > 0) {
@@ -33361,7 +33927,7 @@ function FlowApp({ plugin, app }) {
         )
       ] }),
       isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("aside", { className: "flow-sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sidebar-section", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("h3", { style: { margin: 0, fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
           "Focus & Pomodoro"
         ] }),
@@ -33584,6 +34150,7 @@ var FlowSettingTab = class extends import_obsidian11.PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "Flow Project Tracker Settings" });
+    containerEl.createEl("h3", { text: "Folder Locations" });
     new import_obsidian11.Setting(containerEl).setName("Inbox Folder").setDesc("Folder where new inbox tasks are placed.").addText((text) => text.setPlaceholder("2. WORK/INBOX").setValue(this.plugin.settings.inboxFolder).onChange(async (value) => {
       this.plugin.settings.inboxFolder = value;
       await this.plugin.saveSettings();
@@ -33608,9 +34175,13 @@ var FlowSettingTab = class extends import_obsidian11.PluginSettingTab {
       this.plugin.settings.dailyNotesFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian11.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
-      const num = parseInt(value, 10);
-      this.plugin.settings.wipLimit = isNaN(num) ? 3 : num;
+    containerEl.createEl("h3", { text: "Focus & Work Schedule" });
+    new import_obsidian11.Setting(containerEl).setName("Work Start Time").setDesc("Start time of your daily work hours in HH:MM format (default: 09:00).").addText((text) => text.setPlaceholder("09:00").setValue(this.plugin.settings.workStartHour || "09:00").onChange(async (value) => {
+      this.plugin.settings.workStartHour = value || "09:00";
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian11.Setting(containerEl).setName("Work End Time").setDesc("End time of your daily work hours in HH:MM format (default: 17:00).").addText((text) => text.setPlaceholder("17:00").setValue(this.plugin.settings.workEndHour || "17:00").onChange(async (value) => {
+      this.plugin.settings.workEndHour = value || "17:00";
       await this.plugin.saveSettings();
     }));
     new import_obsidian11.Setting(containerEl).setName("Pomodoro Duration").setDesc("Duration of a single Pomodoro session in minutes (default: 25).").addText((text) => text.setPlaceholder("25").setValue((this.plugin.settings.pomodoroDuration || 25).toString()).onChange(async (value) => {
@@ -33618,12 +34189,10 @@ var FlowSettingTab = class extends import_obsidian11.PluginSettingTab {
       this.plugin.settings.pomodoroDuration = isNaN(num) ? 25 : num;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian11.Setting(containerEl).setName("Work Start Time").setDesc("Start time of your daily work hours in HH:MM format (default: 09:00).").addText((text) => text.setPlaceholder("09:00").setValue(this.plugin.settings.workStartHour || "09:00").onChange(async (value) => {
-      this.plugin.settings.workStartHour = value || "09:00";
-      await this.plugin.saveSettings();
-    }));
-    new import_obsidian11.Setting(containerEl).setName("Work End Time").setDesc("End time of your daily work hours in HH:MM format (default: 17:00).").addText((text) => text.setPlaceholder("17:00").setValue(this.plugin.settings.workEndHour || "17:00").onChange(async (value) => {
-      this.plugin.settings.workEndHour = value || "17:00";
+    containerEl.createEl("h3", { text: "Workflow Limits" });
+    new import_obsidian11.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
+      const num = parseInt(value, 10);
+      this.plugin.settings.wipLimit = isNaN(num) ? 3 : num;
       await this.plugin.saveSettings();
     }));
   }
@@ -33660,8 +34229,8 @@ var ChangelogModal = class extends import_obsidian11.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ("### Fixed\n- **Recent Daily Reports Sort Order**: Fixed the Productivity tab showing oldest daily notes first when paginating. Removed an erroneous `.reverse()` call so that the most recent notes always appear on the first page (newest-first order).\n\n---".trim()) {
-        await import_obsidian11.MarkdownRenderer.render(this.app, "### Fixed\n- **Recent Daily Reports Sort Order**: Fixed the Productivity tab showing oldest daily notes first when paginating. Removed an erroneous `.reverse()` call so that the most recent notes always appear on the first page (newest-first order).\n\n---", listContainer, "", this.plugin);
+      if ('### Changed\n- **Typography & Design System**: Cleaned up the root typography scale (CSS variables) to follow modern UI density standards. Standardized all main tab headers (`<h2>`) across all views to use a consistent `--flow-text-4xl` size. Adjusted the Pomodoro timer font size ratios for better visual hierarchy. Replaced deprecated `--flow-text-md` variables with `--flow-text-base` across `styles.css`.\n- **Productivity & Dashboard Layout**: Removed the redundant "Done Task Heatmap" from the Dashboard. Redesigned the "Current Streak" widget into a subtle stat-card on the Productivity tab. Implemented `ResizeObserver` on the Recent Daily Reports grid to make it fully responsive (dynamically wrapping 4 to 7 cards depending on parent width).\n- **Task List/Backlog Readability**: Increased row padding and explicitly set the base font size to resolve cramped and illegible data rows.\n\n### Fixed\n- **Streak Calculation**: Corrected the logic so active days and streaks now increment correctly (by 1 day) whenever at least one task is completed, regardless of whether a Pomodoro timer was used.\n\n---'.trim()) {
+        await import_obsidian11.MarkdownRenderer.render(this.app, '### Changed\n- **Typography & Design System**: Cleaned up the root typography scale (CSS variables) to follow modern UI density standards. Standardized all main tab headers (`<h2>`) across all views to use a consistent `--flow-text-4xl` size. Adjusted the Pomodoro timer font size ratios for better visual hierarchy. Replaced deprecated `--flow-text-md` variables with `--flow-text-base` across `styles.css`.\n- **Productivity & Dashboard Layout**: Removed the redundant "Done Task Heatmap" from the Dashboard. Redesigned the "Current Streak" widget into a subtle stat-card on the Productivity tab. Implemented `ResizeObserver` on the Recent Daily Reports grid to make it fully responsive (dynamically wrapping 4 to 7 cards depending on parent width).\n- **Task List/Backlog Readability**: Increased row padding and explicitly set the base font size to resolve cramped and illegible data rows.\n\n### Fixed\n- **Streak Calculation**: Corrected the logic so active days and streaks now increment correctly (by 1 day) whenever at least one task is completed, regardless of whether a Pomodoro timer was used.\n\n---', listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {

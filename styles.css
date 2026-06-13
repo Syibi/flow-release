@@ -1,6 +1,22 @@
 /* Import Inter font for premium look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+
+/* Typography Scale (Tailwind naming, scaled down for dense UI) */
+:root {
+  --flow-text-xs: 10px;
+  --flow-text-sm: 11px;
+  --flow-text-base: 12px;
+  --flow-text-lg: 14px;
+  --flow-text-xl: 16px;
+  --flow-text-2xl: 18px;
+  --flow-text-3xl: 20px;
+  --flow-text-4xl: 24px;
+  --flow-text-5xl: 30px;
+  --flow-text-6xl: 36px;
+  --flow-text-7xl: 48px;
+}
+
 /* Main flow tracker view styles */
 .flow-tracker-container {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -42,7 +58,7 @@
 }
 
 .flow-title {
-  font-size: 20px;
+  font-size: var(--flow-text-4xl);
   font-weight: 700;
   letter-spacing: -0.025em;
   background: linear-gradient(135deg, var(--text-normal) 40%, var(--text-muted) 100%);
@@ -68,7 +84,7 @@
   gap: 0px;
   padding: 6px 8px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: var(--flow-text-base);
   font-weight: 500;
   color: var(--text-muted);
   cursor: pointer;
@@ -103,7 +119,7 @@
   border-radius: 6px;
   padding: 8px 14px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: var(--flow-text-base);
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 5px rgba(99, 102, 241, 0.2);
@@ -149,7 +165,7 @@
 .col-3 { grid-column: span 3; }
 
 .dashboard-card-title {
-  font-size: 15px;
+  font-size: var(--flow-text-xl);
   font-weight: 600;
   color: var(--text-normal);
   margin-bottom: 16px;
@@ -176,13 +192,13 @@
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   font-weight: 500;
   color: var(--text-muted);
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: var(--flow-text-6xl);
   font-weight: 700;
   color: var(--text-normal);
 }
@@ -215,7 +231,7 @@
 .kanban-column-header {
   padding: 12px 16px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: var(--flow-text-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -225,7 +241,7 @@
 .kanban-column-count {
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  font-size: 11px;
+  font-size: var(--flow-text-sm);
   padding: 2px 6px;
   border-radius: 10px;
   color: var(--text-muted);
@@ -276,13 +292,13 @@
 }
 
 .kanban-card-id {
-  font-size: 11px;
+  font-size: var(--flow-text-sm);
   font-weight: 600;
   color: var(--text-muted);
 }
 
 .kanban-card-title {
-  font-size: 13px;
+  font-size: var(--flow-text-base);
   font-weight: 600;
   color: var(--text-normal);
   line-height: 1.4;
@@ -292,7 +308,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 11px;
+  font-size: var(--flow-text-sm);
 }
 
 /* Badges styling */
@@ -300,7 +316,7 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 500;
-  font-size: 10px;
+  font-size: var(--flow-text-xs);
   text-transform: uppercase;
   letter-spacing: 0.025em;
   display: inline-flex;
@@ -444,7 +460,7 @@
   border: 1px solid var(--background-modifier-border);
   border-radius: 6px;
   padding: 6px 10px;
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   color: var(--text-normal);
 }
 
@@ -458,7 +474,7 @@
   border: 1px solid var(--background-modifier-border);
   border-radius: 6px;
   padding: 5px 8px;
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   color: var(--text-normal);
   cursor: pointer;
   height: auto;
@@ -492,13 +508,13 @@
 .issue-row {
   display: grid;
   grid-template-columns: 80px 1fr 90px 120px 120px 80px 100px;
-  padding: 10px 14px;
+  padding: 12px 16px;
   align-items: center;
   border-bottom: 1px solid var(--background-modifier-border);
-  font-size: 13px;
+  font-size: var(--flow-text-base);
   cursor: pointer;
   transition: background 0.2s;
-  gap: 12px;
+  gap: 16px;
 }
 
 .issue-row:last-child {
@@ -588,7 +604,7 @@
 }
 
 .flow-modal-title {
-  font-size: 16px;
+  font-size: var(--flow-text-2xl);
   font-weight: 700;
 }
 
@@ -635,7 +651,7 @@
 }
 
 .form-label {
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   font-weight: 600;
   color: var(--text-muted);
 }
@@ -645,7 +661,7 @@
   border: 1px solid var(--background-modifier-border);
   border-radius: 6px;
   padding: 10px 12px;
-  font-size: 14px;
+  font-size: var(--flow-text-lg);
   color: var(--text-normal);
   width: 100%;
 }
@@ -676,7 +692,7 @@
   background: transparent;
   padding: 4px 10px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: var(--flow-text-sm);
   font-weight: 600;
   color: var(--text-muted);
   cursor: pointer;
@@ -691,7 +707,7 @@
 .raw-markdown-editor {
   flex: 1;
   font-family: var(--font-monospace);
-  font-size: 13px;
+  font-size: var(--flow-text-base);
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
   border-radius: 6px;
@@ -756,13 +772,13 @@
   margin: 16px 0;
 }
 .flow-empty-state-title {
-  font-size: 14px;
+  font-size: var(--flow-text-lg);
   font-weight: 600;
   color: var(--text-normal);
   margin-bottom: 4px;
 }
 .flow-empty-state-subtitle {
-  font-size: 12px;
+  font-size: var(--flow-text-base);
 }
 
 /* Floating add button for mobile or compact */
@@ -873,7 +889,7 @@
 .eisenhower-quadrant-header {
   padding: 12px 16px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: var(--flow-text-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -914,7 +930,7 @@
 .eisenhower-toggle-btn {
   padding: 6px 16px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: var(--flow-text-base);
   font-weight: 500;
   cursor: pointer;
   border: none;
@@ -976,7 +992,7 @@
 .focus-queue-select {
   flex: 1;
   padding: 4px 20px 4px 4px;
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   border: none;
   background: transparent;
   color: var(--text-normal);
@@ -1000,7 +1016,7 @@
   content: '▾';
   position: absolute;
   right: 6px;
-  font-size: 10px;
+  font-size: var(--flow-text-xs);
   color: var(--text-muted);
   pointer-events: none;
 }
@@ -1032,7 +1048,7 @@
 .flow-difficulty-badge {
   display: inline-flex;
   align-items: center;
-  font-size: 10px;
+  font-size: var(--flow-text-xs);
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 4px;
@@ -1095,7 +1111,7 @@
   border: 1px solid var(--background-modifier-border);
   background: var(--background-primary);
   color: var(--text-normal);
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -1121,7 +1137,7 @@
 }
 
 .flow-pagination-info {
-  font-size: 12px;
+  font-size: var(--flow-text-base);
   color: var(--text-muted);
   margin-right: auto;
   font-weight: 500;
@@ -1190,7 +1206,7 @@
 
 .flow-card-title {
   font-weight: 700;
-  font-size: 14px;
+  font-size: var(--flow-text-lg);
   color: var(--text-normal);
   display: flex;
   align-items: center;
@@ -1210,7 +1226,7 @@
 }
 
 .flow-card-linked-epics-title {
-  font-size: 10px;
+  font-size: var(--flow-text-xs);
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -1227,7 +1243,7 @@
 }
 
 .flow-epic-mini-pill {
-  font-size: 10px;
+  font-size: var(--flow-text-xs);
   font-weight: 600;
   color: var(--text-muted);
   background: var(--background-primary);

@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.5.2] - 2026-06-13
+
+### Changed
+- **Typography & Design System**: Cleaned up the root typography scale (CSS variables) to follow modern UI density standards. Standardized all main tab headers (`<h2>`) across all views to use a consistent `--flow-text-4xl` size. Adjusted the Pomodoro timer font size ratios for better visual hierarchy. Replaced deprecated `--flow-text-md` variables with `--flow-text-base` across `styles.css`.
+- **Productivity & Dashboard Layout**: Removed the redundant "Done Task Heatmap" from the Dashboard. Redesigned the "Current Streak" widget into a subtle stat-card on the Productivity tab. Implemented `ResizeObserver` on the Recent Daily Reports grid to make it fully responsive (dynamically wrapping 4 to 7 cards depending on parent width).
+- **Task List/Backlog Readability**: Increased row padding and explicitly set the base font size to resolve cramped and illegible data rows.
+
+### Fixed
+- **Streak Calculation**: Corrected the logic so active days and streaks now increment correctly (by 1 day) whenever at least one task is completed, regardless of whether a Pomodoro timer was used.
+
+---
 ## [0.5.1] - 2026-06-11
 
 ### Fixed
