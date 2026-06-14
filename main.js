@@ -34957,18 +34957,32 @@ function scanVault(app, settings) {
     let isIssue = frontmatter.type === "issue";
     let isProject = frontmatter.type === "project";
     let isEpic = frontmatter.type === "epic";
+    let isDoc = frontmatter.type === "doc";
+    let isDailyNote = frontmatter.type === "daily-note";
     if (!frontmatter.type) {
-      if (isPathInFolder(file.path, settings.inboxFolder))
-        isInbox = true;
-      else if (isPathInFolder(file.path, settings.issuesFolder))
+      const normalizedPath = file.path.toLowerCase().replace(/\\/g, "/");
+      const hasDocsSegment = normalizedPath.includes("/docs/") || normalizedPath.startsWith("docs/");
+      const hasEpicsSegment = normalizedPath.includes("/epics/") || normalizedPath.startsWith("epics/");
+      const hasTasksSegment = normalizedPath.includes("/tasks/") || normalizedPath.startsWith("tasks/");
+      if (hasDocsSegment)
+        isDoc = true;
+      else if (hasTasksSegment)
         isIssue = true;
+      else if (hasEpicsSegment)
+        isEpic = true;
+      else if (isPathInFolder(file.path, settings.dailyNotesFolder))
+        isDailyNote = true;
+      else if (isPathInFolder(file.path, settings.docsFolder))
+        isDoc = true;
       else if (isPathInFolder(file.path, settings.epicsFolder))
         isEpic = true;
       else if (isPathInFolder(file.path, settings.projectsFolder))
         isProject = true;
+      else if (isPathInFolder(file.path, settings.inboxFolder))
+        isInbox = true;
+      else if (isPathInFolder(file.path, settings.issuesFolder))
+        isIssue = true;
     }
-    const isDoc = frontmatter.type === "doc" || !frontmatter.type && isPathInFolder(file.path, settings.docsFolder);
-    const isDailyNote = isPathInFolder(file.path, settings.dailyNotesFolder) || frontmatter.type === "daily-note";
     if (isInbox || isIssue) {
       const issueId = frontmatter.id || (isInbox ? `INBOX-${file.basename}` : file.basename);
       const status = frontmatter.status || "todo";
@@ -35065,18 +35079,32 @@ function parseSingleFile(app, settings, file, currentIndex) {
   let isIssue = frontmatter.type === "issue";
   let isProject = frontmatter.type === "project";
   let isEpic = frontmatter.type === "epic";
+  let isDoc = frontmatter.type === "doc";
+  let isDailyNote = frontmatter.type === "daily-note";
   if (!frontmatter.type) {
-    if (isPathInFolder(file.path, settings.inboxFolder))
-      isInbox = true;
-    else if (isPathInFolder(file.path, settings.issuesFolder))
+    const normalizedPath = file.path.toLowerCase().replace(/\\/g, "/");
+    const hasDocsSegment = normalizedPath.includes("/docs/") || normalizedPath.startsWith("docs/");
+    const hasEpicsSegment = normalizedPath.includes("/epics/") || normalizedPath.startsWith("epics/");
+    const hasTasksSegment = normalizedPath.includes("/tasks/") || normalizedPath.startsWith("tasks/");
+    if (hasDocsSegment)
+      isDoc = true;
+    else if (hasTasksSegment)
       isIssue = true;
+    else if (hasEpicsSegment)
+      isEpic = true;
+    else if (isPathInFolder(file.path, settings.dailyNotesFolder))
+      isDailyNote = true;
+    else if (isPathInFolder(file.path, settings.docsFolder))
+      isDoc = true;
     else if (isPathInFolder(file.path, settings.epicsFolder))
       isEpic = true;
     else if (isPathInFolder(file.path, settings.projectsFolder))
       isProject = true;
+    else if (isPathInFolder(file.path, settings.inboxFolder))
+      isInbox = true;
+    else if (isPathInFolder(file.path, settings.issuesFolder))
+      isIssue = true;
   }
-  const isDoc = frontmatter.type === "doc" || !frontmatter.type && isPathInFolder(file.path, settings.docsFolder);
-  const isDailyNote = isPathInFolder(file.path, settings.dailyNotesFolder) || frontmatter.type === "daily-note";
   const tagsSet = new Set(currentIndex.tags);
   if (isInbox || isIssue) {
     const issueId = frontmatter.id || (isInbox ? `INBOX-${file.basename}` : file.basename);
@@ -35365,8 +35393,8 @@ var ChangelogModal = class extends import_obsidian13.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ('### Added\n- **ADHD-Friendly Micro-Prompts**: Placeholder refleksi harian dinamis dan deterministik berbasis tanggal untuk mencegah *blank-page anxiety*.\n- **Widget Status Bar dengan Judul Tugas**: Menampilkan judul tugas aktif yang sedang dikerjakan secara langsung di status bar timer.\n- **Visual Time Proximity Badges**: Indikator warna hangat/urgensi dinamis untuk tanggal jatuh tempo tugas di Kanban Board dan Backlog.\n- **Celebration Confetti Animations**: Ledakan animasi partikel konfeti (canvas murni) saat sesi fokus selesai atau tugas dipindahkan ke "Done".\n- **ADHD Capacity Buffer**: Rekomendasi "Kapasitas Aman" (buffer 30%) untuk menghindari *over-planning* saat perencanaan mingguan.\n- **Pencatatan Pomodoro Hari Itu Saja (Isolasi)**: Menghitung total pomodoro harian langsung dari log aktivitas catatan harian untuk mencegah progress bar terisi otomatis akibat properti salinan/stale.\n- **Stepper Wizard Weekly Review**: Alur perencanaan mingguan dirancang ulang menggunakan timeline 3 langkah (Closeout, Capacity, Planning) yang terstruktur.\n- **Kartu Riwayat Performa Mingguan (Weekly History)**: Riwayat produktivitas dipisah ke kartu tersendiri dengan rentang tanggal lengkap untuk 4 minggu ke belakang.\n- **Banner Pengingat Review Dinamis**: Banner otomatis hilang saat review mingguan selesai dicatat, dan memiliki opsi tutup (dismiss) per minggu.\n- **Closeout Checklist Interaktif**: Tugas Overdue dan Blocked dapat langsung diklik untuk diedit, serta ditambahkan tautan cepat ke Inbox dan Backlog.\n- **Penyatuan Siklus Baru**: Tombol pembuat siklus baru digabungkan ke tombol penyelesaian review demi alur kerja yang lebih ringkas.\n\n### Changed\n- **Dashboard Stats Simplification**: Menyederhanakan metrics progress bar dashboard (hanya menampilkan persentase) dan sub-header rencana harian untuk tampilan yang lebih bersih dan minimalis.\n\n---'.trim()) {
-        await import_obsidian13.MarkdownRenderer.render(this.app, '### Added\n- **ADHD-Friendly Micro-Prompts**: Placeholder refleksi harian dinamis dan deterministik berbasis tanggal untuk mencegah *blank-page anxiety*.\n- **Widget Status Bar dengan Judul Tugas**: Menampilkan judul tugas aktif yang sedang dikerjakan secara langsung di status bar timer.\n- **Visual Time Proximity Badges**: Indikator warna hangat/urgensi dinamis untuk tanggal jatuh tempo tugas di Kanban Board dan Backlog.\n- **Celebration Confetti Animations**: Ledakan animasi partikel konfeti (canvas murni) saat sesi fokus selesai atau tugas dipindahkan ke "Done".\n- **ADHD Capacity Buffer**: Rekomendasi "Kapasitas Aman" (buffer 30%) untuk menghindari *over-planning* saat perencanaan mingguan.\n- **Pencatatan Pomodoro Hari Itu Saja (Isolasi)**: Menghitung total pomodoro harian langsung dari log aktivitas catatan harian untuk mencegah progress bar terisi otomatis akibat properti salinan/stale.\n- **Stepper Wizard Weekly Review**: Alur perencanaan mingguan dirancang ulang menggunakan timeline 3 langkah (Closeout, Capacity, Planning) yang terstruktur.\n- **Kartu Riwayat Performa Mingguan (Weekly History)**: Riwayat produktivitas dipisah ke kartu tersendiri dengan rentang tanggal lengkap untuk 4 minggu ke belakang.\n- **Banner Pengingat Review Dinamis**: Banner otomatis hilang saat review mingguan selesai dicatat, dan memiliki opsi tutup (dismiss) per minggu.\n- **Closeout Checklist Interaktif**: Tugas Overdue dan Blocked dapat langsung diklik untuk diedit, serta ditambahkan tautan cepat ke Inbox dan Backlog.\n- **Penyatuan Siklus Baru**: Tombol pembuat siklus baru digabungkan ke tombol penyelesaian review demi alur kerja yang lebih ringkas.\n\n### Changed\n- **Dashboard Stats Simplification**: Menyederhanakan metrics progress bar dashboard (hanya menampilkan persentase) dan sub-header rencana harian untuk tampilan yang lebih bersih dan minimalis.\n\n---', listContainer, "", this.plugin);
+      if ("### Added\n- **Klasifikasi File di Subfolder Terstruktur**: Memperbaiki bug di mana catatan/dokumen umum (tanpa `frontmatter.type`) yang diletakkan di dalam subfolder `Docs/` pada project, epic, atau folder issues terdeteksi salah sebagai task/issue dan bocor masuk ke dalam daftar tugas (Backlog/Task List). Klasifikasi kini memprioritaskan pencocokan segment jalur folder seperti `/docs/`, `/tasks/`, dan `/epics/`.".trim()) {
+        await import_obsidian13.MarkdownRenderer.render(this.app, "### Added\n- **Klasifikasi File di Subfolder Terstruktur**: Memperbaiki bug di mana catatan/dokumen umum (tanpa `frontmatter.type`) yang diletakkan di dalam subfolder `Docs/` pada project, epic, atau folder issues terdeteksi salah sebagai task/issue dan bocor masuk ke dalam daftar tugas (Backlog/Task List). Klasifikasi kini memprioritaskan pencocokan segment jalur folder seperti `/docs/`, `/tasks/`, dan `/epics/`.", listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {

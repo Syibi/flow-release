@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.6.2] - 2026-06-14
+
+### Added
+- **Klasifikasi File di Subfolder Terstruktur**: Memperbaiki bug di mana catatan/dokumen umum (tanpa `frontmatter.type`) yang diletakkan di dalam subfolder `Docs/` pada project, epic, atau folder issues terdeteksi salah sebagai task/issue dan bocor masuk ke dalam daftar tugas (Backlog/Task List). Klasifikasi kini memprioritaskan pencocokan segment jalur folder seperti `/docs/`, `/tasks/`, dan `/epics/`.
 
 ## [0.6.1] - 2026-06-14
 
