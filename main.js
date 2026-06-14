@@ -1093,7 +1093,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState14(initialState) {
+        function useState13(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1896,7 +1896,7 @@ var require_react_development = __commonJS({
         exports.useMemo = useMemo5;
         exports.useReducer = useReducer;
         exports.useRef = useRef3;
-        exports.useState = useState14;
+        exports.useState = useState13;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -24444,11 +24444,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx16 = jsxWithValidationDynamic;
-        var jsxs14 = jsxWithValidationStatic;
+        var jsx15 = jsxWithValidationDynamic;
+        var jsxs13 = jsxWithValidationStatic;
         exports.Fragment = REACT_FRAGMENT_TYPE;
-        exports.jsx = jsx16;
-        exports.jsxs = jsxs14;
+        exports.jsx = jsx15;
+        exports.jsxs = jsxs13;
       })();
     }
   }
@@ -24480,7 +24480,7 @@ var import_client2 = __toESM(require_client());
 
 // src/components/FlowApp.tsx
 var React6 = __toESM(require_react());
-var import_react14 = __toESM(require_react());
+var import_react13 = __toESM(require_react());
 
 // src/utils/fileSystem.ts
 var import_obsidian = require("obsidian");
@@ -25500,18 +25500,6 @@ var Rocket = createLucideIcon("Rocket", [
 var RotateCcw = createLucideIcon("RotateCcw", [
   ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
   ["path", { d: "M3 3v5h5", key: "1xhq8a" }]
-]);
-
-// node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/icons/settings.js
-var Settings = createLucideIcon("Settings", [
-  [
-    "path",
-    {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ]);
 
 // node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/icons/skip-forward.js
@@ -29456,225 +29444,10 @@ ${body}`);
   ] }) });
 }
 
-// src/components/SettingsView.tsx
-var import_react8 = __toESM(require_react());
-var import_jsx_runtime7 = __toESM(require_jsx_runtime());
-function SettingsView({ plugin, onSettingsChanged }) {
-  const [settings, setSettings] = (0, import_react8.useState)({ ...plugin.settings });
-  const [statusMessage, setStatusMessage] = (0, import_react8.useState)(null);
-  const handleFolderChange = (key, value) => {
-    const updated = { ...settings, [key]: value };
-    setSettings(updated);
-  };
-  const handleSave = async (e) => {
-    e.preventDefault();
-    plugin.settings = settings;
-    await plugin.saveSettings();
-    onSettingsChanged();
-    setStatusMessage("Settings saved successfully!");
-    setTimeout(() => setStatusMessage(null), 3e3);
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { maxWidth: "600px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "14px" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid rgba(127, 127, 127, 0.12)", paddingBottom: "8px", marginBottom: "2px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Settings, { size: 18, style: { color: "var(--interactive-accent)" } }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Flow Plugin Settings" })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-base)", margin: 0 }, children: "Configure folders relative to your Obsidian vault root and adjust scheduler constraints." }),
-    statusMessage && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
-      background: "rgba(16, 185, 129, 0.15)",
-      color: "#10b981",
-      padding: "8px 12px",
-      borderRadius: "6px",
-      fontSize: "var(--flow-text-base)",
-      fontWeight: 600
-    }, children: statusMessage }),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("form", { onSubmit: handleSave, style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "dashboard-card", style: { padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "6px", color: "var(--text-normal)" }, children: "Folder Locations" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Inbox Folder" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.inboxFolder,
-                onChange: (e) => handleFolderChange("inboxFolder", e.target.value),
-                placeholder: "e.g. 2. WORK/INBOX",
-                required: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Quick capture notes folder." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Issues/Tasks Folder" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.issuesFolder,
-                onChange: (e) => handleFolderChange("issuesFolder", e.target.value),
-                placeholder: "e.g. Issues",
-                required: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Promoted tasks folder." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Projects Folder" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.projectsFolder,
-                onChange: (e) => handleFolderChange("projectsFolder", e.target.value),
-                placeholder: "e.g. Projects",
-                required: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Project notes scan location." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Epics Folder" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.epicsFolder,
-                onChange: (e) => handleFolderChange("epicsFolder", e.target.value),
-                placeholder: "e.g. Epics",
-                required: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Epic files folder path." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Documents Folder (Docs)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.docsFolder,
-                onChange: (e) => handleFolderChange("docsFolder", e.target.value),
-                placeholder: "e.g. Docs",
-                required: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Reference documents folder." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Daily Notes Folder" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.dailyNotesFolder,
-                onChange: (e) => handleFolderChange("dailyNotesFolder", e.target.value),
-                placeholder: "e.g. Daily Notes",
-                required: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Daily journal notes folder." })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "dashboard-card", style: { padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "6px", color: "var(--text-normal)" }, children: "Focus & Work Schedule" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Work Start Time" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.workStartHour || "09:00",
-                onChange: (e) => handleFolderChange("workStartHour", e.target.value),
-                placeholder: "e.g. 09:00",
-                required: true,
-                pattern: "[0-2][0-9]:[0-5][0-9]"
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Start of work day (HH:MM)." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Work End Time" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "text",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.workEndHour || "17:00",
-                onChange: (e) => handleFolderChange("workEndHour", e.target.value),
-                placeholder: "e.g. 17:00",
-                required: true,
-                pattern: "[0-2][0-9]:[0-5][0-9]"
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "End of work day (HH:MM)." })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "form-group", style: { margin: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "Pomodoro Duration (Mins)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "input",
-              {
-                type: "number",
-                className: "form-input",
-                style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-                value: settings.pomodoroDuration || 25,
-                onChange: (e) => handleFolderChange("pomodoroDuration", parseInt(e.target.value, 10) || 25),
-                placeholder: "e.g. 25",
-                required: true,
-                min: 1
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: "Focus session length." })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "dashboard-card", style: { padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "6px", color: "var(--text-normal)" }, children: "Workflow Limits" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", marginBottom: "12px", textAlign: "left" }, children: 'Maximum number of tasks allowed in the "In Progress" column simultaneously (recommended: 3).' }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "form-group", style: { margin: 0, display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { flex: "0 0 40px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", marginBottom: "2px", fontWeight: 600 }, children: "WIP Limit" }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-            "input",
-            {
-              type: "number",
-              className: "form-input",
-              style: { padding: "6px 8px", fontSize: "var(--flow-text-base)" },
-              value: settings.wipLimit || 3,
-              onChange: (e) => handleFolderChange("wipLimit", parseInt(e.target.value, 10) || 3),
-              placeholder: "e.g. 3",
-              required: true,
-              min: 1
-            }
-          )
-        ] }) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { display: "flex", justifyContent: "flex-end", marginTop: "4px" }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { type: "submit", className: "flow-action-btn", style: { padding: "8px 16px", fontSize: "var(--flow-text-base)" }, children: "Save Configuration" }) })
-    ] })
-  ] });
-}
-
 // src/components/PomodoroTimer.tsx
-var import_react9 = __toESM(require_react());
+var import_react8 = __toESM(require_react());
 var import_obsidian8 = require("obsidian");
-var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+var import_jsx_runtime7 = __toESM(require_jsx_runtime());
 var MODE_TIMES = {
   "focus": 25 * 60,
   "short-break": 5 * 60,
@@ -29710,10 +29483,10 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       return 5 * 60;
     return 15 * 60;
   };
-  const [mode, setMode] = (0, import_react9.useState)(() => {
+  const [mode, setMode] = (0, import_react8.useState)(() => {
     return getStorage("flow_timer_mode") || "focus";
   });
-  const [timeLeft, setTimeLeft] = (0, import_react9.useState)(() => {
+  const [timeLeft, setTimeLeft] = (0, import_react8.useState)(() => {
     const savedMode = getStorage("flow_timer_mode") || "focus";
     const savedIsRunning = getStorage("flow_timer_is_running") === "true";
     const savedTarget = getStorage("flow_timer_target");
@@ -29726,7 +29499,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       return savedPaused ? parseInt(savedPaused, 10) : getModeTime(savedMode);
     }
   });
-  const [isRunning, setIsRunning] = (0, import_react9.useState)(() => {
+  const [isRunning, setIsRunning] = (0, import_react8.useState)(() => {
     const savedIsRunning = getStorage("flow_timer_is_running") === "true";
     const savedTarget = getStorage("flow_timer_target");
     if (savedIsRunning && savedTarget) {
@@ -29736,7 +29509,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
     return false;
   });
-  const [queue, setQueue] = (0, import_react9.useState)(() => {
+  const [queue, setQueue] = (0, import_react8.useState)(() => {
     const savedQueue = getStorage("flow_timer_queue");
     if (savedQueue) {
       try {
@@ -29746,21 +29519,21 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
     return ["", "", ""];
   });
-  const [activeQueueIndex, setActiveQueueIndex] = (0, import_react9.useState)(() => {
+  const [activeQueueIndex, setActiveQueueIndex] = (0, import_react8.useState)(() => {
     const savedActiveIdx = getStorage("flow_timer_active_queue_index");
     return savedActiveIdx ? parseInt(savedActiveIdx, 10) || 0 : 0;
   });
-  const timerRef = (0, import_react9.useRef)(null);
-  const isMountedRef = (0, import_react9.useRef)(false);
-  const [breakPrompt, setBreakPrompt] = (0, import_react9.useState)("");
-  const [isAlarmActive, setIsAlarmActive] = (0, import_react9.useState)(false);
-  const alarmIntervalRef = (0, import_react9.useRef)(null);
-  const [isMinimized, setIsMinimized] = (0, import_react9.useState)(false);
-  const [sessionGoal, setSessionGoal] = (0, import_react9.useState)(() => getStorage("flow_active_session_goal") || "");
-  (0, import_react9.useEffect)(() => {
+  const timerRef = (0, import_react8.useRef)(null);
+  const isMountedRef = (0, import_react8.useRef)(false);
+  const [breakPrompt, setBreakPrompt] = (0, import_react8.useState)("");
+  const [isAlarmActive, setIsAlarmActive] = (0, import_react8.useState)(false);
+  const alarmIntervalRef = (0, import_react8.useRef)(null);
+  const [isMinimized, setIsMinimized] = (0, import_react8.useState)(false);
+  const [sessionGoal, setSessionGoal] = (0, import_react8.useState)(() => getStorage("flow_active_session_goal") || "");
+  (0, import_react8.useEffect)(() => {
     setStorage("flow_active_session_goal", sessionGoal);
   }, [sessionGoal]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (!isRunning || mode !== "focus") {
       setIsMinimized(false);
     }
@@ -29776,7 +29549,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       alarmIntervalRef.current = null;
     }
   };
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     return () => {
       if (alarmIntervalRef.current) {
         clearInterval(alarmIntervalRef.current);
@@ -29793,13 +29566,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       removeStorage("flow_timer_target");
     }
   };
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     setStorage("flow_timer_queue", JSON.stringify(queue));
   }, [queue]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     setStorage("flow_timer_active_queue_index", activeQueueIndex.toString());
   }, [activeQueueIndex]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (issues.length === 0)
       return;
     setQueue((prev) => {
@@ -29827,7 +29600,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       return changed ? next : prev;
     });
   }, [issues]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     let needsCompaction = false;
     let foundEmpty = false;
     for (const id of queue) {
@@ -29856,12 +29629,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
   }, [queue, activeQueueIndex]);
   const currentActiveTaskId = queue[activeQueueIndex] || "";
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (onSelectIssue) {
       onSelectIssue(currentActiveTaskId);
     }
   }, [currentActiveTaskId, onSelectIssue]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (activeIssueId) {
       setQueue((prev) => {
         const next = [...prev];
@@ -29886,8 +29659,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       }, 0);
     }
   }, [activeIssueId]);
-  const prevActiveTaskIdRef = (0, import_react9.useRef)(currentActiveTaskId);
-  (0, import_react9.useEffect)(() => {
+  const prevActiveTaskIdRef = (0, import_react8.useRef)(currentActiveTaskId);
+  (0, import_react8.useEffect)(() => {
     if (prevActiveTaskIdRef.current !== currentActiveTaskId) {
       setIsRunning(false);
       const initialTime = getModeTime(mode);
@@ -29896,8 +29669,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       saveTimerState(false, mode, initialTime);
     }
   }, [currentActiveTaskId, mode]);
-  const prevStatusesRef = (0, import_react9.useRef)({});
-  (0, import_react9.useEffect)(() => {
+  const prevStatusesRef = (0, import_react8.useRef)({});
+  (0, import_react8.useEffect)(() => {
     if (currentActiveTaskId && isRunning) {
       const currentTask = issues.find((i) => i.id === currentActiveTaskId);
       const prevStatus = prevStatusesRef.current[currentActiveTaskId];
@@ -29923,8 +29696,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     });
     prevStatusesRef.current = newStatuses;
   }, [issues, currentActiveTaskId, isRunning, app, onRefresh, mode]);
-  const prevIsRunningRef = (0, import_react9.useRef)(isRunning);
-  (0, import_react9.useEffect)(() => {
+  const prevIsRunningRef = (0, import_react8.useRef)(isRunning);
+  (0, import_react8.useEffect)(() => {
     if (isRunning && !prevIsRunningRef.current && mode === "focus" && currentActiveTaskId) {
       const activeTask = issues.find((i) => i.id === currentActiveTaskId);
       if (activeTask) {
@@ -29933,11 +29706,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
     prevIsRunningRef.current = isRunning;
   }, [isRunning, mode, currentActiveTaskId, app, plugin.settings, issues]);
-  const stateRef = (0, import_react9.useRef)({ mode, isRunning, timeLeft });
-  (0, import_react9.useEffect)(() => {
+  const stateRef = (0, import_react8.useRef)({ mode, isRunning, timeLeft });
+  (0, import_react8.useEffect)(() => {
     stateRef.current = { mode, isRunning, timeLeft };
   }, [mode, isRunning, timeLeft]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (!plugin)
       return;
     const handleAction = (action) => {
@@ -29967,7 +29740,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       plugin.unregisterTimerActionListener(handleAction);
     };
   }, [plugin]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (!plugin)
       return;
     const selectedTask2 = issues.find((i) => i.id === currentActiveTaskId);
@@ -29984,7 +29757,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     }
     plugin.updateStatusBar(text);
   }, [plugin, isRunning, timeLeft, mode, currentActiveTaskId, issues]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     stopAlarm();
     if (!isMountedRef.current) {
       isMountedRef.current = true;
@@ -30003,7 +29776,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       setBreakPrompt("");
     }
   }, [mode]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     if (isRunning) {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
@@ -30099,7 +29872,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
     setTimeLeft(initialTime);
     saveTimerState(false, mode, initialTime);
   };
-  (0, import_react9.useEffect)(() => {
+  (0, import_react8.useEffect)(() => {
     const savedIsRunning = getStorage("flow_timer_is_running") === "true";
     const savedTarget = getStorage("flow_timer_target");
     if (savedIsRunning && savedTarget) {
@@ -30159,14 +29932,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   const progressPercent = (activeModeTime - timeLeft) / activeModeTime * 100;
   const isBreakMode = mode === "short-break" || mode === "long-break";
   const breath = isBreakMode ? getBreathingState(timeLeft) : null;
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
     display: "flex",
     flexDirection: "column",
     gap: "12px",
     width: "100%"
   }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "6px", background: "var(--background-primary)", padding: "2px", borderRadius: "8px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "6px", background: "var(--background-primary)", padding: "2px", borderRadius: "8px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         "button",
         {
           onClick: () => setMode("focus"),
@@ -30186,12 +29959,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             cursor: "pointer"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Brain, { size: 12 }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Brain, { size: 12 }),
             "Focus"
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         "button",
         {
           onClick: () => setMode("short-break"),
@@ -30211,12 +29984,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             cursor: "pointer"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Coffee, { size: 12 }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 12 }),
             "Break"
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         "button",
         {
           onClick: () => setMode("long-break"),
@@ -30236,14 +30009,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             cursor: "pointer"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Coffee, { size: 12 }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 12 }),
             "Long Break"
           ]
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "relative", width: "150px", height: "150px", margin: "16px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { position: "relative", width: "150px", height: "150px", margin: "16px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         "svg",
         {
           width: "150",
@@ -30255,11 +30028,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             transition: breath ? "transform 1.8s ease-in-out, opacity 1.8s ease-in-out" : "none"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("linearGradient", { id: "timerGrad", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)" }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("stop", { offset: "100%", stopColor: "#a855f7" })
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("linearGradient", { id: "timerGrad", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("stop", { offset: "100%", stopColor: "#a855f7" })
             ] }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
               "circle",
               {
                 cx: "75",
@@ -30270,7 +30043,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 strokeWidth: "8"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
               "circle",
               {
                 cx: "75",
@@ -30289,7 +30062,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         position: "absolute",
         top: 0,
         left: 0,
@@ -30300,11 +30073,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         alignItems: "center",
         justifyContent: "center"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-6xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: formatTime(timeLeft) }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px", textAlign: "center" }, children: breath ? breath.text : mode.replace("-", " ") })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-6xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: formatTime(timeLeft) }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px", textAlign: "center" }, children: breath ? breath.text : mode.replace("-", " ") })
       ] })
     ] }),
-    isBreakMode && breakPrompt && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+    isBreakMode && breakPrompt && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       background: "var(--background-secondary)",
       border: "1px dashed var(--interactive-accent)",
       borderRadius: "8px",
@@ -30315,30 +30088,30 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       lineHeight: "1.5",
       color: "var(--text-normal)"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "4px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Aktivitas Istirahat Offline:" }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "4px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Aktivitas Istirahat Offline:" }),
       breakPrompt
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", display: "flex", alignItems: "center", gap: "4px", color: "var(--text-muted)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Timer, { size: 11 }),
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)", display: "flex", alignItems: "center", gap: "4px", color: "var(--text-muted)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Timer, { size: 11 }),
         "Focus Queue (Maks 3 Tugas)"
       ] }),
       queue.map((issueId, idx) => {
         const isSlotActive = activeQueueIndex === idx;
         if (!issueId) {
-          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
             "div",
             {
               className: `focus-queue-slot empty-slot ${isSlotActive ? "active" : ""}`,
               onClick: () => setActiveQueueIndex(idx),
-              children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", width: "100%", position: "relative" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Plus, { size: 12 }),
+              children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", width: "100%", position: "relative" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Plus, { size: 12 }),
                   "Slot ",
                   idx + 1,
                   ": Assign Task..."
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "focus-queue-select-wrapper", style: { opacity: 0, position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "focus-queue-select-wrapper", style: { opacity: 0, position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
                   "select",
                   {
                     className: "focus-queue-select",
@@ -30346,10 +30119,10 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                     onChange: (e) => handleSlotChange(idx, e.target.value),
                     style: { height: "100%", width: "100%" },
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "", children: "Assign Task..." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("option", { value: "", children: "Assign Task..." }),
                       (() => {
                         const otherSelected = queue.filter((id, qIdx) => qIdx !== idx && !!id);
-                        return issues.filter((i) => i.today && i.status !== "done" && !otherSelected.includes(i.id)).map((i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("option", { value: i.id, children: [
+                        return issues.filter((i) => i.today && i.status !== "done" && !otherSelected.includes(i.id)).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
                           i.id,
                           " - ",
                           i.title
@@ -30363,13 +30136,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             idx
           );
         }
-        return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+        return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
           "div",
           {
             className: `focus-queue-slot ${isSlotActive ? "active" : ""}`,
             onClick: () => setActiveQueueIndex(idx),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
                 width: "12px",
                 height: "12px",
                 borderRadius: "50%",
@@ -30378,13 +30151,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0
-              }, children: isSlotActive && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+              }, children: isSlotActive && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
                 width: "4px",
                 height: "4px",
                 borderRadius: "50%",
                 backgroundColor: "var(--interactive-accent)"
               } }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "focus-queue-select-wrapper", onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "focus-queue-select-wrapper", onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
                 "select",
                 {
                   className: "focus-queue-select",
@@ -30392,7 +30165,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                   onChange: (e) => handleSlotChange(idx, e.target.value),
                   children: (() => {
                     const otherSelected = queue.filter((id, qIdx) => qIdx !== idx && !!id);
-                    return issues.filter((i) => i.today && i.status !== "done" && !otherSelected.includes(i.id) || i.id === issueId).map((i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("option", { value: i.id, children: [
+                    return issues.filter((i) => i.today && i.status !== "done" && !otherSelected.includes(i.id) || i.id === issueId).map((i) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("option", { value: i.id, children: [
                       i.id,
                       " - ",
                       i.title
@@ -30400,7 +30173,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                   })()
                 }
               ) }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
                 "button",
                 {
                   onClick: (e) => {
@@ -30428,8 +30201,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         );
       })
     ] }),
-    selectedTask && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+    selectedTask && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         display: "flex",
         flexDirection: "column",
         gap: "8px",
@@ -30438,35 +30211,35 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         borderRadius: "8px",
         border: "1px solid var(--background-modifier-border)"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Difficulty" }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: `flow-difficulty-badge ${selectedTask.difficulty || "normal"}`, children: selectedTask.difficulty || "normal" })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Difficulty" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: `flow-difficulty-badge ${selectedTask.difficulty || "normal"}`, children: selectedTask.difficulty || "normal" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: [
             "Pomodoros (",
             selectedTask.logged || 0,
             "/",
             selectedTask.estimate || "-",
             ")"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "pomodoro-tally", children: (() => {
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "pomodoro-tally", children: (() => {
             const logged = parseInt(selectedTask.logged, 10) || 0;
             const estimate = parseInt(selectedTask.estimate, 10) || 0;
             const totalDots = Math.max(logged, estimate, 1);
             const dots = [];
             for (let i = 0; i < totalDots; i++) {
               if (i < logged) {
-                dots.push(/* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "pomodoro-tally-dot filled" }, i));
+                dots.push(/* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "pomodoro-tally-dot filled" }, i));
               } else {
-                dots.push(/* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "pomodoro-tally-dot empty" }, i));
+                dots.push(/* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "pomodoro-tally-dot empty" }, i));
               }
             }
             return dots;
           })() })
         ] })
       ] }),
-      selectedTask.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      selectedTask.status !== "done" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         "button",
         {
           onClick: async () => {
@@ -30504,8 +30277,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "8px", marginTop: "4px" }, children: [
-      isAlarmActive ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "8px", marginTop: "4px" }, children: [
+      isAlarmActive ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         "button",
         {
           onClick: stopAlarm,
@@ -30524,11 +30297,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             cursor: "pointer"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(VolumeX, { size: 13 }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Matikan Alarm" })
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(VolumeX, { size: 13 }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: "Matikan Alarm" })
           ]
         }
-      ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      ) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
         "button",
         {
           onClick: toggleTimer,
@@ -30548,12 +30321,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             cursor: "pointer"
           },
           children: [
-            isRunning ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Pause, { size: 13 }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Play, { size: 13 }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: isRunning ? "Pause" : isBreakMode ? "Start Break" : "Start Focus" })
+            isRunning ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Pause, { size: 13 }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Play, { size: 13 }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: isRunning ? "Pause" : isBreakMode ? "Start Break" : "Start Focus" })
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         "button",
         {
           onClick: resetTimer,
@@ -30570,11 +30343,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             cursor: "pointer"
           },
           title: "Reset timer",
-          children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(RotateCcw, { size: 13 })
+          children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(RotateCcw, { size: 13 })
         }
       )
     ] }),
-    showRecommendation && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+    showRecommendation && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       marginTop: "8px",
       background: "var(--background-secondary)",
       borderLeft: "3px solid var(--interactive-accent)",
@@ -30584,13 +30357,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       flexDirection: "column",
       gap: "4px"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Recommended Task" }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-normal)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 600, color: "var(--text-accent, var(--interactive-accent))", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Recommended Task" }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-normal)" }, children: [
         recommendedTask.id,
         " - ",
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontWeight: "normal", color: "var(--text-muted)" }, children: recommendedTask.title })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontWeight: "normal", color: "var(--text-muted)" }, children: recommendedTask.title })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         "button",
         {
           onClick: async () => {
@@ -30618,7 +30391,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
       )
     ] }),
-    (isBreakMode && isRunning || isAlarmActive) && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+    (isBreakMode && isRunning || isAlarmActive) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
       position: "fixed",
       top: 0,
       left: 0,
@@ -30634,7 +30407,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       justifyContent: "center",
       padding: "24px",
       boxSizing: "border-box"
-    }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+    }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       maxWidth: "420px",
       width: "100%",
       display: "flex",
@@ -30650,21 +30423,21 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       boxSizing: "border-box",
       color: "var(--text-normal)"
     }, children: [
-      isAlarmActive ? mode === "focus" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-success, #10b981)", justifyContent: "center" }, children: "Waktu Istirahat Selesai" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Tubuh dan otak Anda telah beristirahat. Mari kita kembali fokus!" })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: "Sesi Fokus Selesai" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Kerja bagus! Sekarang saatnya melepaskan penat sejenak." })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-accent)", justifyContent: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Coffee, { size: 20 }),
+      isAlarmActive ? mode === "focus" ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-success, #10b981)", justifyContent: "center" }, children: "Waktu Istirahat Selesai" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Tubuh dan otak Anda telah beristirahat. Mari kita kembali fokus!" })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: "Sesi Fokus Selesai" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Kerja bagus! Sekarang saatnya melepaskan penat sejenak." })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-accent)", justifyContent: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 20 }),
           "Sesi Istirahat Aktif"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Rilekskan pikiran Anda dan menjauhlah dari layar kaca." })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Rilekskan pikiran Anda dan menjauhlah dari layar kaca." })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "relative", width: "170px", height: "170px", margin: "8px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { position: "relative", width: "170px", height: "170px", margin: "8px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
           "svg",
           {
             width: "170",
@@ -30676,11 +30449,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               transition: breath && !isAlarmActive ? "transform 1.8s ease-in-out, opacity 1.8s ease-in-out" : "none"
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("linearGradient", { id: "modalTimerGrad", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("stop", { offset: "100%", stopColor: "#a855f7" })
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("linearGradient", { id: "modalTimerGrad", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)" }),
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("stop", { offset: "100%", stopColor: "#a855f7" })
               ] }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
                 "circle",
                 {
                   cx: "85",
@@ -30691,7 +30464,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                   strokeWidth: "9"
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
                 "circle",
                 {
                   cx: "85",
@@ -30710,7 +30483,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
           position: "absolute",
           top: 0,
           left: 0,
@@ -30721,13 +30494,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           alignItems: "center",
           justifyContent: "center"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-7xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: isAlarmActive ? "00:00" : formatTime(timeLeft) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "4px", textAlign: "center" }, children: isAlarmActive ? mode === "focus" ? "Fokus Berikutnya" : "Mulai Istirahat" : breath ? breath.text : mode.replace("-", " ") })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-7xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: isAlarmActive ? "00:00" : formatTime(timeLeft) }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "4px", textAlign: "center" }, children: isAlarmActive ? mode === "focus" ? "Fokus Berikutnya" : "Mulai Istirahat" : breath ? breath.text : mode.replace("-", " ") })
         ] })
       ] }),
       isAlarmActive && mode === "focus" ? (
         // Break finished -> Transition to focus
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
           background: "var(--background-secondary)",
           border: "1px dashed var(--interactive-accent)",
           borderRadius: "12px",
@@ -30736,12 +30509,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           boxSizing: "border-box",
           boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Tugas Terjadwal Selanjutnya:" }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontSize: "var(--flow-text-base)", lineHeight: "1.6", fontWeight: 600, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "Pilih tugas dari antrean fokus untuk memulai." })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Tugas Terjadwal Selanjutnya:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontSize: "var(--flow-text-base)", lineHeight: "1.6", fontWeight: 600, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "Pilih tugas dari antrean fokus untuk memulai." })
         ] })
       ) : (
         // During break or Focus finished -> Show offline break suggestion
-        breakPrompt && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+        breakPrompt && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
           background: "var(--background-secondary)",
           border: "1px dashed var(--interactive-accent)",
           borderRadius: "12px",
@@ -30750,14 +30523,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           boxSizing: "border-box",
           boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Rekomendasi Aktivitas Istirahat Offline:" }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontSize: "var(--flow-text-base)", lineHeight: "1.6", color: "var(--text-normal)" }, children: breakPrompt })
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontWeight: 700, color: "var(--text-accent)", marginBottom: "6px", textTransform: "uppercase", fontSize: "var(--flow-text-xs)", letterSpacing: "0.5px" }, children: "Rekomendasi Aktivitas Istirahat Offline:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { fontSize: "var(--flow-text-base)", lineHeight: "1.6", color: "var(--text-normal)" }, children: breakPrompt })
         ] })
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
         isAlarmActive ? (
           // If alarm is active, main button is to start next session or silence
-          mode === "focus" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          mode === "focus" ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
             "button",
             {
               onClick: () => {
@@ -30780,11 +30553,11 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 cursor: "pointer"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Rocket, { size: 14 }),
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Rocket, { size: 14 }),
                 "Mulai Sesi Fokus"
               ]
             }
-          ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          ) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
             "button",
             {
               onClick: () => {
@@ -30807,14 +30580,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 cursor: "pointer"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Coffee, { size: 14 }),
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 14 }),
                 "Mulai Istirahat"
               ]
             }
           )
         ) : (
           // During active break, main button is to pause
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
             "button",
             {
               onClick: toggleTimer,
@@ -30834,13 +30607,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
                 cursor: "pointer"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Pause, { size: 14 }),
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Pause, { size: 14 }),
                 "Pause Istirahat"
               ]
             }
           )
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
           "button",
           {
             onClick: () => {
@@ -30865,14 +30638,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               fontWeight: 600
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(SkipForward, { size: 14 }),
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(SkipForward, { size: 14 }),
               "Lewati Istirahat"
             ]
           }
         )
       ] })
     ] }) }),
-    mode === "focus" && isRunning && !isMinimized && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
+    mode === "focus" && isRunning && !isMinimized && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: {
       position: "fixed",
       top: 0,
       left: 0,
@@ -30888,7 +30661,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       justifyContent: "center",
       padding: "24px",
       boxSizing: "border-box"
-    }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+    }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
       maxWidth: "420px",
       width: "100%",
       display: "flex",
@@ -30904,21 +30677,21 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       boxSizing: "border-box",
       color: "var(--text-normal)"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Brain, { size: 20 }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Brain, { size: 20 }),
           "Deep Work Session"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Sesi fokus aktif. Singkirkan gangguan dan selesaikan target Anda." })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Sesi fokus aktif. Singkirkan gangguan dan selesaikan target Anda." })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", textAlign: "center", width: "100%" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Tugas Aktif" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "General Focus Session" })
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", textAlign: "center", width: "100%" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Tugas Aktif" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: selectedTask ? `${selectedTask.id} - ${selectedTask.title}` : "General Focus Session" })
       ] }),
-      !sessionGoal ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", width: "100%", boxSizing: "border-box" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Apa target konkret sesi ini?" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "6px", width: "100%" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      !sessionGoal ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", width: "100%", boxSizing: "border-box" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Apa target konkret sesi ini?" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "6px", width: "100%" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
             "input",
             {
               type: "text",
@@ -30934,7 +30707,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               }
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
             "button",
             {
               onClick: () => {
@@ -30948,7 +30721,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             }
           )
         ] })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: {
         background: "var(--background-secondary)",
         border: "1px dashed var(--interactive-accent)",
         borderRadius: "12px",
@@ -30960,12 +30733,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         gap: "4px",
         position: "relative"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--interactive-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Target Sesi Ini" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)", paddingRight: "20px", lineHeight: "1.4" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--interactive-accent)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Target Sesi Ini" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)", paddingRight: "20px", lineHeight: "1.4" }, children: [
           "Saya akan fokus sampai ",
           sessionGoal
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
           "button",
           {
             onClick: () => setSessionGoal(""),
@@ -30975,14 +30748,14 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "relative", width: "150px", height: "150px", margin: "8px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("svg", { width: "150", height: "150", viewBox: "0 0 150 150", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("linearGradient", { id: "modalTimerGradFocus", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("stop", { offset: "100%", stopColor: "#a855f7" })
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { position: "relative", width: "150px", height: "150px", margin: "8px auto", display: "flex", alignItems: "center", justifyContent: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("svg", { width: "150", height: "150", viewBox: "0 0 150 150", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("linearGradient", { id: "modalTimerGradFocus", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("stop", { offset: "100%", stopColor: "#a855f7" })
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("circle", { cx: "75", cy: "75", r: "65", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "8" }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("circle", { cx: "75", cy: "75", r: "65", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "8" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
             "circle",
             {
               cx: "75",
@@ -30999,13 +30772,13 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-7xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)" }, children: formatTime(timeLeft) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px" }, children: "Fokus" })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-7xl)", fontWeight: 700, fontFamily: "var(--font-monospace, monospace)", color: "var(--text-normal)" }, children: formatTime(timeLeft) }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600, marginTop: "2px" }, children: "Fokus" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
           "button",
           {
             onClick: toggleTimer,
@@ -31025,12 +30798,12 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
               cursor: "pointer"
             },
             children: [
-              isRunning ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Pause, { size: 14 }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Play, { size: 14 }),
+              isRunning ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Pause, { size: 14 }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Play, { size: 14 }),
               isRunning ? "Pause" : "Resume"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
           "button",
           {
             onClick: async () => {
@@ -31095,7 +30868,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         "button",
         {
           onClick: () => setIsMinimized(true),
@@ -31119,7 +30892,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         }
       )
     ] }) }),
-    mode === "focus" && isRunning && isMinimized && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    mode === "focus" && isRunning && isMinimized && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
       "button",
       {
         onClick: () => setIsMinimized(false),
@@ -31142,7 +30915,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
           gap: "6px"
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Brain, { size: 12 }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Brain, { size: 12 }),
           "Buka Sesi Fokus (",
           formatTime(timeLeft),
           ")"
@@ -31154,9 +30927,9 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
 
 // src/components/WeeklyReviewView.tsx
 var React4 = __toESM(require_react());
-var import_react10 = __toESM(require_react());
+var import_react9 = __toESM(require_react());
 var import_obsidian9 = require("obsidian");
-var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+var import_jsx_runtime8 = __toESM(require_jsx_runtime());
 function getTaskTimeRange(sessions) {
   if (sessions.length === 0)
     return { start: "--:--", end: "--:--" };
@@ -31421,18 +31194,18 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
   const { issues, projects } = index;
   const todayStr = getLocalDateString();
   const weekStr = getISOWeekString();
-  const [mainTab, setMainTab] = (0, import_react10.useState)("daily");
-  const [weeklySubTab, setWeeklySubTab] = (0, import_react10.useState)("overview");
-  const [weeklyPlanning, setWeeklyPlanning] = (0, import_react10.useState)({ target: "", capacity: 10 });
-  const [targetInput, setTargetInput] = (0, import_react10.useState)("");
-  const [capacityInput, setCapacityInput] = (0, import_react10.useState)(10);
-  const [selectedDate, setSelectedDate] = (0, import_react10.useState)(getLocalDateString());
-  const [wentWell, setWentWell] = (0, import_react10.useState)("");
-  const [blocked, setBlocked] = (0, import_react10.useState)("");
-  const [tomorrow, setTomorrow] = (0, import_react10.useState)("");
-  const [saveReflectionStatus, setSaveReflectionStatus] = (0, import_react10.useState)(null);
-  const [isDirty, setIsDirty] = (0, import_react10.useState)(false);
-  const [parsedReport, setParsedReport] = (0, import_react10.useState)(null);
+  const [mainTab, setMainTab] = (0, import_react9.useState)("daily");
+  const [weeklySubTab, setWeeklySubTab] = (0, import_react9.useState)("overview");
+  const [weeklyPlanning, setWeeklyPlanning] = (0, import_react9.useState)({ target: "", capacity: 10 });
+  const [targetInput, setTargetInput] = (0, import_react9.useState)("");
+  const [capacityInput, setCapacityInput] = (0, import_react9.useState)(10);
+  const [selectedDate, setSelectedDate] = (0, import_react9.useState)(getLocalDateString());
+  const [wentWell, setWentWell] = (0, import_react9.useState)("");
+  const [blocked, setBlocked] = (0, import_react9.useState)("");
+  const [tomorrow, setTomorrow] = (0, import_react9.useState)("");
+  const [saveReflectionStatus, setSaveReflectionStatus] = (0, import_react9.useState)(null);
+  const [isDirty, setIsDirty] = (0, import_react9.useState)(false);
+  const [parsedReport, setParsedReport] = (0, import_react9.useState)(null);
   const placeholderWentWell = getPromptForDate(selectedDate, WENT_WELL_PROMPTS);
   const placeholderBlocked = getPromptForDate(selectedDate, BLOCKED_PROMPTS);
   const placeholderTomorrow = getPromptForDate(selectedDate, TOMORROW_PROMPTS);
@@ -31448,7 +31221,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
     setSelectedDate(getLocalDateString(d));
     setIsDirty(false);
   };
-  (0, import_react10.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     const saved = plugin.settings.weeklyPlanning?.[weekStr];
     if (saved) {
       setWeeklyPlanning(saved);
@@ -31460,7 +31233,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
       setCapacityInput(10);
     }
   }, [plugin.settings.weeklyPlanning, weekStr]);
-  (0, import_react10.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     readReflectionFromDailyNote(app, plugin.settings, selectedDate).then((res) => {
       setWentWell(res.wentWell);
       setBlocked(res.blocked);
@@ -31468,7 +31241,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
       setIsDirty(false);
     });
   }, [app, plugin.settings, index.dailyNotes, selectedDate]);
-  (0, import_react10.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     const loadParsedReport = async () => {
       const notePath = `${plugin.settings.dailyNotesFolder}/${selectedDate}.md`;
       const file = app.vault.getAbstractFileByPath(notePath);
@@ -31485,7 +31258,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
     };
     loadParsedReport();
   }, [app, plugin.settings, index.dailyNotes, selectedDate]);
-  (0, import_react10.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     if (!isDirty)
       return;
     const timer = setTimeout(async () => {
@@ -31611,13 +31384,13 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
       }
     }
   };
-  const [chkBlocked, setChkBlocked] = (0, import_react10.useState)(false);
-  const [chkOverdue, setChkOverdue] = (0, import_react10.useState)(false);
-  const [chkBacklog, setChkBacklog] = (0, import_react10.useState)(false);
-  const [chkInbox, setChkInbox] = (0, import_react10.useState)(false);
-  const [reviewMessage, setReviewMessage] = (0, import_react10.useState)(null);
-  const [isReviewedToday, setIsReviewedToday] = (0, import_react10.useState)(false);
-  (0, import_react10.useEffect)(() => {
+  const [chkBlocked, setChkBlocked] = (0, import_react9.useState)(false);
+  const [chkOverdue, setChkOverdue] = (0, import_react9.useState)(false);
+  const [chkBacklog, setChkBacklog] = (0, import_react9.useState)(false);
+  const [chkInbox, setChkInbox] = (0, import_react9.useState)(false);
+  const [reviewMessage, setReviewMessage] = (0, import_react9.useState)(null);
+  const [isReviewedToday, setIsReviewedToday] = (0, import_react9.useState)(false);
+  (0, import_react9.useEffect)(() => {
     const todayNote = index.dailyNotes.find((dn) => dn.date === todayStr);
     if (todayNote && todayNote.reviewedAt === todayStr) {
       setIsReviewedToday(true);
@@ -31686,21 +31459,21 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
   const endOfWeek = new Date(currD.setDate(dDiff + 6));
   const formatDate = (d) => d.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
   const weekRangeStr = `${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "950px", margin: "0 auto" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(127, 127, 127, 0.12)", paddingBottom: "12px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { children: mainTab === "daily" ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Daily Performance Review" }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Reflect on today's focus, achievements, and plan for tomorrow." })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "950px", margin: "0 auto" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(127, 127, 127, 0.12)", paddingBottom: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { children: mainTab === "daily" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Daily Performance Review" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Reflect on today's focus, achievements, and plan for tomorrow." })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           "Weekly Focus Cycle (",
           weekStr,
           ")"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: weekRangeStr })
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: weekRangeStr })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: "4px", background: "var(--background-secondary)", padding: "4px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "4px", background: "var(--background-secondary)", padding: "4px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           "button",
           {
             className: `flow-nav-tab ${mainTab === "daily" ? "active" : ""}`,
@@ -31709,7 +31482,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             children: "Daily Review"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           "button",
           {
             className: `flow-nav-tab ${mainTab === "weekly" ? "active" : ""}`,
@@ -31720,7 +31493,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
         )
       ] })
     ] }),
-    reviewMessage && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+    reviewMessage && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
       background: "rgba(16, 185, 129, 0.15)",
       color: "#10b981",
       padding: "12px 16px",
@@ -31728,8 +31501,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
       fontSize: "var(--flow-text-base)",
       fontWeight: 600
     }, children: reviewMessage }),
-    mainTab === "daily" && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+    mainTab === "daily" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -31738,9 +31511,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
         borderRadius: "8px",
         padding: "10px 16px"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)" }, children: "Review Date:" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)" }, children: "Review Date:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
             fontSize: "var(--flow-text-base)",
             fontFamily: "var(--font-monospace)",
             backgroundColor: "var(--background-primary)",
@@ -31755,7 +31528,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = getLocalDateString(yesterday);
             if (selectedDate === todayStr) {
-              return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: {
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
                 fontSize: "var(--flow-text-xs)",
                 backgroundColor: "rgba(16, 185, 129, 0.15)",
                 color: "var(--text-success, #10b981)",
@@ -31766,7 +31539,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 letterSpacing: "0.5px"
               }, children: "HARI INI (TODAY)" });
             } else if (selectedDate === yesterdayStr) {
-              return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: {
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
                 fontSize: "var(--flow-text-xs)",
                 backgroundColor: "rgba(99, 102, 241, 0.15)",
                 color: "var(--text-accent, #6366f1)",
@@ -31780,8 +31553,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             return null;
           })()
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: "6px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "6px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "button",
             {
               onClick: handlePrevDay,
@@ -31790,7 +31563,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               children: "< Prev Day"
             }
           ),
-          selectedDate !== todayStr && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          selectedDate !== todayStr && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "button",
             {
               onClick: () => setSelectedDate(todayStr),
@@ -31799,7 +31572,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               children: "Today"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "button",
             {
               onClick: handleNextDay,
@@ -31810,16 +31583,16 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           )
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.1fr 1.9fr", gap: "24px", alignItems: "start" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #a855f7" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card-title", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Daily Reflection Note" }),
-            saveReflectionStatus && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "#10b981", fontWeight: 600 }, children: saveReflectionStatus })
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.1fr 1.9fr", gap: "24px", alignItems: "start" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #a855f7" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card-title", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Daily Reflection Note" }),
+            saveReflectionStatus && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "#10b981", fontWeight: 600 }, children: saveReflectionStatus })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "form-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What went well?" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What went well?" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "textarea",
                 {
                   className: "form-input",
@@ -31833,9 +31606,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "form-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What blocked me?" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What blocked me?" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "textarea",
                 {
                   className: "form-input",
@@ -31849,9 +31622,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "form-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What should I do tomorrow?" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "What should I do tomorrow?" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "textarea",
                 {
                   className: "form-input",
@@ -31867,9 +31640,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             ] })
           ] })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Daily Report" }) }),
-          !parsedReport ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { padding: "24px 0", color: "var(--text-muted)", fontSize: "var(--flow-text-base)", textAlign: "center", fontStyle: "italic" }, children: "Daily note untuk tanggal ini belum dibuat atau tidak memiliki aktivitas." }) : (() => {
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Daily Report" }) }),
+          !parsedReport ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "24px 0", color: "var(--text-muted)", fontSize: "var(--flow-text-base)", textAlign: "center", fontStyle: "italic" }, children: "Daily note untuk tanggal ini belum dibuat atau tidak memiliki aktivitas." }) : (() => {
             const totalTasks = parsedReport.completedTasks.length + parsedReport.uncompletedTasks.length;
             const progressPercent = totalTasks > 0 ? Math.round(parsedReport.completedTasks.length / totalTasks * 100) : 0;
             const sortedActivities = [...parsedReport.activities].sort((a, b) => {
@@ -31884,21 +31657,21 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               issueMap.set(i.id.toLowerCase(), i.title);
             });
             const standupData = compileStandupSummary(sortedActivities, issueMap);
-            return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: "12px", background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: "Fokus" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: [
+            return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "12px", background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: "Fokus" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: [
                     parsedReport.pomodorosRun,
                     " Pomodoro (",
                     parsedReport.totalFocusTime,
                     ")"
                   ] })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { width: "1px", background: "var(--background-modifier-border)" } }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian Tugas" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { width: "1px", background: "var(--background-modifier-border)" } }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian Tugas" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 700 }, children: [
                     progressPercent,
                     "% (",
                     parsedReport.completedTasks.length,
@@ -31908,11 +31681,11 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   ] })
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: "Belum ada aktivitas tugas yang tercatat." }) : standupData.tasks.map((task) => {
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: "Belum ada aktivitas tugas yang tercatat." }) : standupData.tasks.map((task) => {
                 const isDone = task.statusChanges.some((s) => s.toLowerCase() === "done" || s.toLowerCase() === "selesai");
                 const notes = task.sessions.map((s) => s.note.trim()).filter((n) => n.length > 0);
                 const taskObj = issues.find((i) => i.id.toLowerCase() === task.id.toLowerCase());
-                return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+                return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
                   background: "var(--background-secondary)",
                   border: "1px solid var(--background-modifier-border)",
                   borderRadius: "8px",
@@ -31921,12 +31694,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   flexDirection: "column",
                   gap: "6px"
                 }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: [
                       task.sessions.length > 0 && (() => {
                         const { start, end } = getTaskTimeRange(task.sessions);
                         const timeDisplay = start === end ? `Jam ${start}` : `${start} - ${end}`;
-                        return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: {
+                        return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
                           fontFamily: "var(--font-monospace)",
                           fontWeight: 600,
                           color: "var(--text-accent, #3b82f6)",
@@ -31937,13 +31710,13 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                           fontSize: "var(--flow-text-xs)"
                         }, children: timeDisplay });
                       })(),
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: {
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: {
                         width: "5px",
                         height: "5px",
                         borderRadius: "50%",
                         backgroundColor: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)"
                       } }),
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                         "span",
                         {
                           style: {
@@ -31955,12 +31728,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                           onClick: () => taskObj && onEditIssue(taskObj),
                           title: taskObj ? "Click to edit task" : void 0,
                           children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { style: {
+                            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { style: {
                               color: taskObj ? "var(--text-accent)" : "var(--text-normal)",
                               fontSize: "var(--flow-text-base)",
                               textDecoration: taskObj ? "underline" : "none"
                             }, children: task.title }),
-                            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-xs)" }, children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-xs)" }, children: [
                               "(",
                               task.id,
                               ")"
@@ -31969,7 +31742,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                         }
                       )
                     ] }),
-                    task.statusChanges.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: {
+                    task.statusChanges.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: {
                       backgroundColor: isDone ? "rgba(16, 185, 129, 0.15)" : "rgba(59, 130, 246, 0.15)",
                       color: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)",
                       fontSize: "var(--flow-text-xs)",
@@ -31982,14 +31755,14 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                       task.statusChanges[task.statusChanges.length - 1]
                     ] })
                   ] }),
-                  notes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+                  notes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
                     display: "flex",
                     flexDirection: "column",
                     gap: "3px",
                     paddingLeft: "10px",
                     borderLeft: "2px solid var(--background-modifier-border)",
                     marginLeft: "4px"
-                  }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
+                  }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
                     "\u2022 ",
                     note
                   ] }, idx)) })
@@ -32000,9 +31773,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
         ] }) })
       ] })
     ] }),
-    mainTab === "weekly" && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "center", gap: "12px", marginBottom: "8px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    mainTab === "weekly" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "center", gap: "12px", marginBottom: "8px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           "button",
           {
             className: `flow-nav-tab ${weeklySubTab === "overview" ? "active" : ""}`,
@@ -32011,7 +31784,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             children: "Active Cycle Progress"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           "button",
           {
             className: `flow-nav-tab ${weeklySubTab !== "overview" ? "active" : ""}`,
@@ -32021,8 +31794,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           }
         )
       ] }),
-      weeklySubTab !== "overview" && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", background: "var(--background-secondary)", padding: "24px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 40px", position: "relative" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { position: "absolute", top: "16px", left: "60px", right: "60px", height: "3px", background: "var(--background-modifier-border)", zIndex: 0 } }),
+      weeklySubTab !== "overview" && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", background: "var(--background-secondary)", padding: "24px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 40px", position: "relative" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { position: "absolute", top: "16px", left: "60px", right: "60px", height: "3px", background: "var(--background-modifier-border)", zIndex: 0 } }),
         [
           { id: "closeout", label: "Closeout" },
           { id: "capacity", label: "Capacity" },
@@ -32032,7 +31805,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           const currentIndex = stepOrder.indexOf(weeklySubTab);
           const isPast = currentIndex > idx;
           const isActive = currentIndex === idx;
-          return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+          return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
             "div",
             {
               onClick: () => setWeeklySubTab(step.id),
@@ -32048,7 +31821,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 opacity: isActive || isPast ? 1 : 0.5
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
                   width: "34px",
                   height: "34px",
                   borderRadius: "50%",
@@ -32062,18 +31835,18 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   fontSize: "var(--flow-text-sm)",
                   transition: "all 0.3s ease"
                 }, children: isPast ? "\u2713" : idx + 1 }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: isActive ? 600 : 400, color: isActive ? "var(--text-normal)" : "var(--text-muted)" }, children: step.label })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: isActive ? 600 : 400, color: isActive ? "var(--text-normal)" : "var(--text-muted)" }, children: step.label })
               ]
             },
             step.id
           );
         })
       ] }) }),
-      weeklySubTab === "overview" && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
-        weeklyPlanning.target ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "var(--background-secondary-alt)", borderLeft: "4px solid var(--interactive-accent)", padding: "16px", borderRadius: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--text-muted)", fontWeight: 600 }, children: "Weekly Focus Goal" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h4", { style: { margin: "4px 0 0 0", fontWeight: 700, fontSize: "var(--flow-text-xl)" }, children: weeklyPlanning.target })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+      weeklySubTab === "overview" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
+        weeklyPlanning.target ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "var(--background-secondary-alt)", borderLeft: "4px solid var(--interactive-accent)", padding: "16px", borderRadius: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--text-muted)", fontWeight: 600 }, children: "Weekly Focus Goal" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h4", { style: { margin: "4px 0 0 0", fontWeight: 700, fontSize: "var(--flow-text-xl)" }, children: weeklyPlanning.target })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
           background: "var(--background-secondary-alt)",
           borderLeft: "4px solid var(--text-muted)",
           padding: "16px",
@@ -32084,8 +31857,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           justifyContent: "space-between",
           alignItems: "center"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Belum ada target yang diset untuk minggu ini." }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Belum ada target yang diset untuk minggu ini." }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "button",
             {
               className: "flow-nav-tab",
@@ -32095,11 +31868,11 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "grid", gridTemplateColumns: "1fr", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", borderLeft: "3px solid var(--interactive-accent)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "relative", width: "56px", height: "56px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("svg", { width: "56", height: "56", viewBox: "0 0 56 56", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("circle", { cx: "28", cy: "28", r: "23", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "5.5" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "grid", gridTemplateColumns: "1fr", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", borderLeft: "3px solid var(--interactive-accent)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "relative", width: "56px", height: "56px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("svg", { width: "56", height: "56", viewBox: "0 0 56 56", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("circle", { cx: "28", cy: "28", r: "23", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "5.5" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "circle",
                 {
                   cx: "28",
@@ -32116,20 +31889,20 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "absolute", fontSize: "var(--flow-text-sm)", fontWeight: "bold", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { position: "absolute", fontSize: "var(--flow-text-sm)", fontWeight: "bold", color: "var(--text-normal)" }, children: [
               plannedTasks.length > 0 ? Math.round(completedPlannedTasks.length / plannedTasks.length * 100) : 0,
               "%"
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", flexGrow: 1 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Progress Tugas Rencana" }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { fontSize: "var(--flow-text-lg)", color: "var(--text-normal)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", flexGrow: 1 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Progress Tugas Rencana" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { fontSize: "var(--flow-text-lg)", color: "var(--text-normal)" }, children: [
               completedPlannedTasks.length,
               " / ",
               plannedTasks.length,
               " Selesai"
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { height: "5px", background: "var(--background-secondary-alt)", borderRadius: "2.5px", overflow: "hidden", marginTop: "4px", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: "5px", background: "var(--background-secondary-alt)", borderRadius: "2.5px", overflow: "hidden", marginTop: "4px", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
               height: "100%",
               background: "var(--text-success, #10b981)",
               width: `${plannedTasks.length > 0 ? completedPlannedTasks.length / plannedTasks.length * 100 : 0}%`,
@@ -32138,15 +31911,15 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             } }) })
           ] })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px", alignItems: "start" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card-title", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px", alignItems: "start" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card-title", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
                 "Planned Issues for this Cycle (",
                 plannedTasks.length,
                 " tasks)"
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600 }, children: [
                 "Capacity: ",
                 totalPlannedEstimates,
                 " / ",
@@ -32154,12 +31927,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 " pmd"
               ] })
             ] }),
-            totalPlannedEstimates > weeklyPlanning.capacity && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)", borderLeft: "4px solid #ef4444", marginBottom: "12px" }, children: [
+            totalPlannedEstimates > weeklyPlanning.capacity && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)", borderLeft: "4px solid #ef4444", marginBottom: "12px" }, children: [
               "Planned issues exceed weekly capacity (",
               weeklyPlanning.capacity,
               " pmd). Consider pruning."
             ] }),
-            plannedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+            plannedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
               padding: "24px 0",
               color: "var(--text-muted)",
               fontSize: "var(--flow-text-base)",
@@ -32169,8 +31942,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               alignItems: "center",
               gap: "12px"
             }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Belum ada tugas yang dimasukkan ke rencana minggu ini." }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Belum ada tugas yang dimasukkan ke rencana minggu ini." }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "button",
                 {
                   className: "flow-nav-tab",
@@ -32179,11 +31952,11 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   children: "Mulai Planning \u2197"
                 }
               )
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => {
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => {
               const estPomos = issue.estimate || 0;
               const loggedPomos = Math.max(issue.logged || 0, issue.status === "done" ? 1 : 0);
               const progress = estPomos > 0 ? Math.min(100, Math.round(loggedPomos / estPomos * 100)) : issue.status === "done" ? 100 : 0;
-              return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+              return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                 "div",
                 {
                   className: "issue-row",
@@ -32197,63 +31970,63 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                     alignItems: "center"
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "kanban-card-id", style: { textDecoration: issue.status === "done" ? "line-through" : "none" }, children: issue.id }),
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "kanban-card-title", style: { textDecoration: issue.status === "done" ? "line-through" : "none", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", width: "90px" }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-id", style: { textDecoration: issue.status === "done" ? "line-through" : "none" }, children: issue.id }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-title", style: { textDecoration: issue.status === "done" ? "line-through" : "none", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", width: "90px" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 500 }, children: [
                         loggedPomos,
                         " / ",
                         estPomos || "-",
                         " pmd"
                       ] }),
-                      estPomos > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { height: "3px", background: "var(--background-secondary-alt)", borderRadius: "1.5px", overflow: "hidden", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+                      estPomos > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: "3px", background: "var(--background-secondary-alt)", borderRadius: "1.5px", overflow: "hidden", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
                         height: "100%",
                         background: issue.status === "done" ? "var(--text-success, #10b981)" : "var(--interactive-accent)",
                         width: `${progress}%`
                       } }) })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: `badge ${issue.status === "done" ? "badge-status-done" : `badge-status-${issue.status}`}`, style: { justifySelf: "end" }, children: issue.status })
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: `badge ${issue.status === "done" ? "badge-status-done" : `badge-status-${issue.status}`}`, style: { justifySelf: "end" }, children: issue.status })
                   ]
                 },
                 issue.id
               );
             }) })
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #8b5cf6" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Focus Insights" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Time by Project" }),
-                sortedProjectFocus.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Belum ada catatan waktu fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedProjectFocus.map((pf) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifySelf: "stretch", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "140px" }, children: pf.projName }),
-                    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { whiteSpace: "nowrap" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #8b5cf6" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", style: { marginBottom: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Focus Insights" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Time by Project" }),
+                sortedProjectFocus.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Belum ada catatan waktu fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedProjectFocus.map((pf) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifySelf: "stretch", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "140px" }, children: pf.projName }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { whiteSpace: "nowrap" }, children: [
                       pf.hours.toFixed(1),
                       "h"
                     ] })
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { height: "5px", background: "var(--background-secondary-alt)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: "5px", background: "var(--background-secondary-alt)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
                     height: "100%",
                     background: "linear-gradient(90deg, #8b5cf6 0%, #a855f7 100%)",
                     width: `${Math.min(100, pf.hours / Math.max(...sortedProjectFocus.map((x) => x.hours)) * 100)}%`
                   } }) })
                 ] }, pf.projId)) })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "10px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Top Focused Tasks" }),
-                topFocusedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Belum ada sesi fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: topFocusedTasks.map((task, idx) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "10px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h5", { style: { margin: "0 0 8px 0", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Top Focused Tasks" }),
+                topFocusedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Belum ada sesi fokus." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: topFocusedTasks.map((task, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                   "div",
                   {
                     onClick: () => onEditIssue(task),
                     style: { display: "flex", justifyContent: "space-between", padding: "4px 6px", fontSize: "var(--flow-text-sm)", background: "var(--background-primary)", borderRadius: "4px", cursor: "pointer" },
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "160px" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "160px" }, children: [
                         "#",
                         idx + 1,
                         " ",
                         task.title
                       ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontWeight: "bold" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontWeight: "bold" }, children: [
                         task.logged,
                         " pmd"
                       ] })
@@ -32266,47 +32039,47 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           ] }) })
         ] })
       ] }),
-      weeklySubTab === "capacity" && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 1.5fr", gap: "24px", alignItems: "start" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #6366f1", display: "flex", flexDirection: "column", gap: "14px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "1. Hitung Kapasitas" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)", display: "flex", flexDirection: "column", gap: "8px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("p", { style: { margin: "0", color: "var(--text-muted)" }, children: [
+      weeklySubTab === "capacity" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 1.5fr", gap: "24px", alignItems: "start" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #6366f1", display: "flex", flexDirection: "column", gap: "14px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "1. Hitung Kapasitas" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)", display: "flex", flexDirection: "column", gap: "8px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { style: { margin: "0", color: "var(--text-muted)" }, children: [
               "Berdasarkan pengaturan jam kerja (",
               workStartHour,
               " - ",
               workEndHour,
               ") untuk 5 hari kerja:"
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Jam Kerja per Hari:" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Jam Kerja per Hari:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { children: [
                 totalMinPerDay / 60,
                 " Jam"
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Durasi Pomodoro:" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Durasi Pomodoro:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { children: [
                 pomodoroDuration,
                 " Menit"
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", borderTop: "1px solid var(--background-modifier-border)", paddingTop: "6px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Kapasitas Mingguan:" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", borderTop: "1px solid var(--background-modifier-border)", paddingTop: "6px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Kapasitas Mingguan:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { children: [
                 calculatedCapacity,
                 " pmd"
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", color: "#10b981", fontWeight: 600 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Kapasitas Aman (30% Buffer):" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", color: "#10b981", fontWeight: 600 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Kapasitas Aman (30% Buffer):" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
                 Math.floor(calculatedCapacity * 0.7),
                 " pmd"
               ] })
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
             background: "rgba(99, 102, 241, 0.08)",
             borderLeft: "3px solid var(--interactive-accent)",
             padding: "8px 12px",
@@ -32316,18 +32089,18 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             color: "var(--text-normal)"
           }, children: [
             "\u{1F4A1} ",
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: "ADHD Tip:" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "ADHD Tip:" }),
             " Otak ADHD bekerja paling baik dengan ruang napas. Kapasitas aman Anda (dengan 30% buffer untuk transisi & distraksi) adalah ",
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { children: [
               Math.floor(calculatedCapacity * 0.7),
               " Pomodoro"
             ] }),
             "."
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Set Kapasitas Pomodoro Minggu Ini:" }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: "8px", flexWrap: "wrap" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Set Kapasitas Pomodoro Minggu Ini:" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "8px", flexWrap: "wrap" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
                   type: "number",
@@ -32337,7 +32110,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   onChange: (e) => setCapacityInput(Number(e.target.value))
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "button",
                 {
                   className: "flow-action-btn",
@@ -32346,7 +32119,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   children: "Gunakan Kapasitas Aman"
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "button",
                 {
                   className: "flow-action-btn",
@@ -32356,14 +32129,14 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", display: "block", marginTop: "4px" }, children: "Angka ini akan digunakan sebagai limit perencanaan tugas di tahap selanjutnya." })
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", display: "block", marginTop: "4px" }, children: "Angka ini akan digunakan sebagai limit perencanaan tugas di tahap selanjutnya." })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #a855f7", display: "flex", flexDirection: "column", gap: "14px", height: "100%" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "2. Tetapkan Target" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "form-group", style: { flexGrow: 1, display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Weekly Goal (Target Utama)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #a855f7", display: "flex", flexDirection: "column", gap: "14px", height: "100%" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "2. Tetapkan Target" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "form-group", style: { flexGrow: 1, display: "flex", flexDirection: "column" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "form-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Weekly Goal (Target Utama)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "textarea",
               {
                 className: "form-input",
@@ -32374,8 +32147,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               }
             )
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: "8px", marginTop: "16px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: "8px", marginTop: "16px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "button",
               {
                 className: "flow-action-btn",
@@ -32384,7 +32157,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 children: "Save Draft"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
               "button",
               {
                 className: "flow-action-btn",
@@ -32403,50 +32176,50 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
         const totalPlannedEstimates2 = plannedTasks.reduce((sum, task) => sum + (task.estimate || 1), 0);
         const limit = weeklyPlanning.capacity || calculatedCapacity || 10;
         const overCapacity = totalPlannedEstimates2 > limit;
-        return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 2fr", gap: "24px", alignItems: "start" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: overCapacity ? "3px solid #ef4444" : "3px solid var(--interactive-accent)", display: "flex", flexDirection: "column", gap: "16px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Kapasitas Rencana" }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Total Estimasi (Pomodoro)" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { fontSize: "var(--flow-text-xl)", color: overCapacity ? "#ef4444" : "var(--text-normal)" }, children: [
+        return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 2fr", gap: "24px", alignItems: "start" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: overCapacity ? "3px solid #ef4444" : "3px solid var(--interactive-accent)", display: "flex", flexDirection: "column", gap: "16px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Kapasitas Rencana" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Total Estimasi (Pomodoro)" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { fontSize: "var(--flow-text-xl)", color: overCapacity ? "#ef4444" : "var(--text-normal)" }, children: [
                   totalPlannedEstimates2,
                   " ",
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontWeight: 400 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontWeight: 400 }, children: [
                     "/ ",
                     limit
                   ] })
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { height: "8px", background: "var(--background-secondary-alt)", borderRadius: "4px", overflow: "hidden", width: "100%", marginTop: "4px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: {
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { height: "8px", background: "var(--background-secondary-alt)", borderRadius: "4px", overflow: "hidden", width: "100%", marginTop: "4px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: {
                 height: "100%",
                 background: overCapacity ? "#ef4444" : "var(--interactive-accent)",
                 width: `${Math.min(100, totalPlannedEstimates2 / limit * 100)}%`,
                 transition: "width 0.3s ease, background-color 0.3s ease"
               } }) })
             ] }),
-            overCapacity ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: "Peringatan Kapasitas:" }),
+            overCapacity ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Peringatan Kapasitas:" }),
               " Total estimasi tugas (",
               totalPlannedEstimates2,
               ") melebihi limit yang ditentukan (",
               limit,
               "). Pertimbangkan untuk mengurangi scope minggu ini agar lebih realistis."
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "rgba(16, 185, 129, 0.1)", color: "#10b981", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: "Kapasitas Aman:" }),
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "rgba(16, 185, 129, 0.1)", color: "#10b981", padding: "10px 12px", borderRadius: "8px", fontSize: "var(--flow-text-sm)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Kapasitas Aman:" }),
               " Masih ada ruang untuk ",
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: limit - totalPlannedEstimates2 }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: limit - totalPlannedEstimates2 }),
               " pomodoro lagi minggu ini."
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "16px", display: "flex", flexDirection: "column", gap: "8px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Target Mingguan" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { fontSize: "var(--flow-text-base)", fontWeight: 500, fontStyle: "italic" }, children: weeklyPlanning.target ? `"${weeklyPlanning.target}"` : "Belum diset." })
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "16px", display: "flex", flexDirection: "column", gap: "8px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Target Mingguan" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { fontSize: "var(--flow-text-base)", fontWeight: 500, fontStyle: "italic" }, children: weeklyPlanning.target ? `"${weeklyPlanning.target}"` : "Belum diset." })
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h3", { style: { margin: "0", fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Add Issues to Cycle Plan" }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", margin: "0" }, children: "Assign open tasks from the backlog to this week's active cycle." }),
-            sortedBacklog.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: {
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0", fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Add Issues to Cycle Plan" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", margin: "0" }, children: "Assign open tasks from the backlog to this week's active cycle." }),
+            sortedBacklog.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: {
               background: "linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%)",
               border: "1px solid rgba(99, 102, 241, 0.2)",
               borderRadius: "8px",
@@ -32455,10 +32228,10 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               flexDirection: "column",
               gap: "10px"
             }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--text-accent, #6366f1)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Saran Cerdas (Smart Suggestions)" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedBacklog.slice(0, 3).map(({ issue, score }) => {
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--text-accent, #6366f1)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Saran Cerdas (Smart Suggestions)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: sortedBacklog.slice(0, 3).map(({ issue, score }) => {
                 const breakdown = calculateTaskScore(issue, issues).breakdown.join(", ");
-                return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                   "div",
                   {
                     style: {
@@ -32471,18 +32244,18 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                       border: "1px solid var(--background-modifier-border)"
                     },
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }, children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }, children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-normal)" }, children: [
                           issue.id,
                           " - ",
                           issue.title
                         ] }),
-                        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "280px" }, title: breakdown, children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "280px" }, title: breakdown, children: [
                           "Reason: ",
                           breakdown
                         ] })
                       ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                         "button",
                         {
                           className: "flow-action-btn",
@@ -32497,8 +32270,8 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 );
               }) })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h4", { style: { margin: "8px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "All Backlog Tasks" }),
-            sortedBacklog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--flow-text-base)" }, children: "Tidak ada tugas backlog yang terbuka." }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", maxHeight: "250px", overflowY: "auto" }, children: sortedBacklog.map(({ issue, score }) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h4", { style: { margin: "8px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "All Backlog Tasks" }),
+            sortedBacklog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--flow-text-base)" }, children: "Tidak ada tugas backlog yang terbuka." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", maxHeight: "250px", overflowY: "auto" }, children: sortedBacklog.map(({ issue, score }) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
               "div",
               {
                 style: {
@@ -32511,13 +32284,13 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   fontSize: "var(--flow-text-base)"
                 },
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "kanban-card-id", children: issue.id }),
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "kanban-card-title", style: { textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-id", children: issue.id }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "kanban-card-title", style: { textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }, children: issue.title }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                     "Score: ",
                     score
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                     "button",
                     {
                       className: "flow-action-btn",
@@ -32530,19 +32303,19 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               },
               issue.id
             )) }),
-            plannedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", marginTop: "20px", paddingTop: "16px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h4", { style: { margin: "0 0 12px 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: [
+            plannedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", marginTop: "20px", paddingTop: "16px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("h4", { style: { margin: "0 0 12px 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: [
                 "Currently Planned Issues (",
                 plannedTasks.length,
                 ")"
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--background-secondary-alt)", padding: "6px 12px", borderRadius: "6px", fontSize: "var(--flow-text-sm)" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: issue.id }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: plannedTasks.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--background-secondary-alt)", padding: "6px 12px", borderRadius: "6px", fontSize: "var(--flow-text-sm)" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: issue.id }),
                   " - ",
                   issue.title
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                   "button",
                   {
                     className: "flow-nav-tab",
@@ -32556,12 +32329,12 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           ] })
         ] });
       })(),
-      weeklySubTab === "closeout" && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "24px", alignItems: "start" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { padding: "20px", display: "flex", flexDirection: "column", gap: "16px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Daftar Periksa Review Mingguan" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      weeklySubTab === "closeout" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "24px", alignItems: "start" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { padding: "20px", display: "flex", flexDirection: "column", gap: "16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Daftar Periksa Review Mingguan" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
                   type: "checkbox",
@@ -32570,13 +32343,13 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   style: { marginTop: "2px" }
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
                 "Tinjau ulang tugas ",
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: "Blocked" })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Blocked" })
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "var(--flow-text-base)", cursor: "pointer", color: "var(--text-normal)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "input",
                 {
                   type: "checkbox",
@@ -32585,14 +32358,14 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                   style: { marginTop: "2px" }
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
                 "Jadwal ulang tugas ",
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: "Overdue" })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Overdue" })
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                   "input",
                   {
                     type: "checkbox",
@@ -32601,9 +32374,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                     style: { marginTop: "2px" }
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Bersihkan backlog lama" })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Bersihkan backlog lama" })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "button",
                 {
                   className: "flow-nav-tab",
@@ -32613,9 +32386,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                   "input",
                   {
                     type: "checkbox",
@@ -32624,9 +32397,9 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                     style: { marginTop: "2px" }
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Kosongkan Inbox (Zero Inbox)" })
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Kosongkan Inbox (Zero Inbox)" })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "button",
                 {
                   className: "flow-nav-tab",
@@ -32637,7 +32410,7 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
               )
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "button",
             {
               onClick: handleCompleteReview,
@@ -32657,44 +32430,44 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "8px", padding: "16px 20px", borderLeft: "3px solid #8b5cf6" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Perbandingan Mingguan (Minggu Ini vs Lalu)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)", marginTop: "2px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Total Fokus (Pomodoro):" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "8px", padding: "16px 20px", borderLeft: "3px solid #8b5cf6" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Perbandingan Mingguan (Minggu Ini vs Lalu)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)", marginTop: "2px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Total Fokus (Pomodoro):" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
                 thisWeekStats.pomodoros,
                 " ",
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { color: "var(--text-muted)", fontWeight: "normal" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontWeight: "normal" }, children: [
                   "vs ",
                   lastWeekStats.pomodoros
                 ] }),
-                thisWeekStats.pomodoros >= lastWeekStats.pomodoros ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "#10b981", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2191" }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "#ef4444", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2193" })
+                thisWeekStats.pomodoros >= lastWeekStats.pomodoros ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#10b981", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2191" }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#ef4444", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2193" })
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Jumlah Tugas Selesai:" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--flow-text-base)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "var(--text-muted)" }, children: "Jumlah Tugas Selesai:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
                 thisWeekStats.completedCount,
                 " ",
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { color: "var(--text-muted)", fontWeight: "normal" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { style: { color: "var(--text-muted)", fontWeight: "normal" }, children: [
                   "vs ",
                   lastWeekStats.completedCount
                 ] }),
-                thisWeekStats.completedCount >= lastWeekStats.completedCount ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "#10b981", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2191" }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "#ef4444", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2193" })
+                thisWeekStats.completedCount >= lastWeekStats.completedCount ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#10b981", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2191" }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { color: "#ef4444", marginLeft: "6px", fontSize: "var(--flow-text-sm)" }, children: "\u2193" })
               ] })
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #ef4444" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Active Cycle Risks" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px", fontSize: "var(--flow-text-sm)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { color: "#ef4444" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { borderLeft: "3px solid #ef4444" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dashboard-card-title", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { display: "flex", alignItems: "center", gap: "6px" }, children: "Active Cycle Risks" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px", fontSize: "var(--flow-text-sm)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "#ef4444" }, children: [
                   "Overdue Tasks (",
                   overdueIssues.length,
                   ")"
                 ] }),
-                overdueIssues.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", marginTop: "4px" }, children: overdueIssues.slice(0, 3).map((i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                overdueIssues.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", marginTop: "4px" }, children: overdueIssues.slice(0, 3).map((i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                   "div",
                   {
                     onClick: () => onEditIssue(i),
@@ -32710,21 +32483,21 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                     onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "var(--background-primary)",
                     title: "Klik untuk mengedit/menjadwal ulang tugas ini",
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { style: { color: "var(--text-accent)" }, children: i.id }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { style: { color: "var(--text-accent)" }, children: i.id }),
                       " - ",
                       i.title
                     ]
                   },
                   i.id
-                )) }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "Tidak ada tugas overdue." })
+                )) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "Tidak ada tugas overdue." })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "8px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { color: "#f59e0b" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { borderTop: "1px solid var(--background-modifier-border)", paddingTop: "8px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "#f59e0b" }, children: [
                   "Blocked Tasks (",
                   blockedIssues.length,
                   ")"
                 ] }),
-                blockedIssues.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", marginTop: "4px" }, children: blockedIssues.slice(0, 3).map((i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+                blockedIssues.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", marginTop: "4px" }, children: blockedIssues.slice(0, 3).map((i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                   "div",
                   {
                     onClick: () => onEditIssue(i),
@@ -32740,13 +32513,13 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
                     onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "var(--background-primary)",
                     title: "Klik untuk mengedit/membuka blokir tugas ini",
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { style: { color: "var(--text-accent)" }, children: i.id }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { style: { color: "var(--text-accent)" }, children: i.id }),
                       " - ",
                       i.title
                     ]
                   },
                   i.id
-                )) }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "Tidak ada tugas terblokir." })
+                )) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "Tidak ada tugas terblokir." })
               ] })
             ] })
           ] })
@@ -32779,28 +32552,28 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
           return weeks;
         };
         const history = getPastWeeks(4);
-        return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "dashboard-card", style: { marginTop: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h3", { style: { margin: "0 0 16px 0", fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Weekly History" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }, children: history.map((h, i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px", borderLeft: "3px solid var(--background-modifier-border)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", marginBottom: "8px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { style: { fontSize: "var(--flow-text-base)" }, children: h.weekStr }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: h.rangeStr })
+        return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "dashboard-card", style: { marginTop: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { style: { margin: "0 0 16px 0", fontSize: "var(--flow-text-lg)", fontWeight: 600 }, children: "Weekly History" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }, children: history.map((h, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { background: "var(--background-secondary-alt)", padding: "12px", borderRadius: "8px", borderLeft: "3px solid var(--background-modifier-border)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px", marginBottom: "8px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { style: { fontSize: "var(--flow-text-base)" }, children: h.weekStr }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: h.rangeStr })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginBottom: "8px", fontStyle: "italic", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginBottom: "8px", fontStyle: "italic", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }, children: [
               '"',
               h.target,
               '"'
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Total Fokus:" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Total Fokus:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { style: { color: "var(--text-normal)" }, children: [
                 h.stats.pomodoros,
                 " pmd"
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: "Tugas Selesai:" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { style: { color: "var(--text-normal)" }, children: h.stats.completedCount })
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-sm)" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "Tugas Selesai:" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { style: { color: "var(--text-normal)" }, children: h.stats.completedCount })
             ] })
           ] }, h.weekStr)) })
         ] });
@@ -32810,10 +32583,10 @@ function WeeklyReviewView({ index, plugin, app, onRefresh, onEditIssue, onNaviga
 }
 
 // src/components/InboxView.tsx
-var import_react11 = __toESM(require_react());
-var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+var import_react10 = __toESM(require_react());
+var import_jsx_runtime9 = __toESM(require_jsx_runtime());
 function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
-  const [title, setTitle] = (0, import_react11.useState)("");
+  const [title, setTitle] = (0, import_react10.useState)("");
   const inboxIssues = index.issues.filter((i) => i.isInbox);
   const handleCapture = async (e) => {
     e.preventDefault();
@@ -32827,16 +32600,16 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
       console.error("Failed to capture inbox task:", err);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "800px", margin: "0 auto", padding: "10px 0" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Inbox, { size: 20, style: { color: "var(--interactive-accent)" } }),
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px", maxWidth: "800px", margin: "0 auto", padding: "10px 0" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Inbox, { size: 20, style: { color: "var(--interactive-accent)" } }),
         "Inbox Tasks"
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Quickly capture raw tasks and thoughts, then process them later into projects, epics, or the backlog." })
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Quickly capture raw tasks and thoughts, then process them later into projects, epics, or the backlog." })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("form", { onSubmit: handleCapture, style: { display: "flex", gap: "10px", background: "var(--background-secondary)", padding: "16px", borderRadius: "10px", border: "1px solid var(--background-modifier-border)" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: handleCapture, style: { display: "flex", gap: "10px", background: "var(--background-secondary)", padding: "16px", borderRadius: "10px", border: "1px solid var(--background-modifier-border)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         "input",
         {
           type: "text",
@@ -32848,21 +32621,21 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
           autoFocus: true
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("button", { type: "submit", className: "flow-action-btn", style: { padding: "10px 16px", display: "flex", alignItems: "center", gap: "6px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Plus, { size: 14 }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("button", { type: "submit", className: "flow-action-btn", style: { padding: "10px 16px", display: "flex", alignItems: "center", gap: "6px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Plus, { size: 14 }),
         "Capture Task"
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)" }, children: [
         "Unprocessed Items (",
         inboxIssues.length,
         ")"
       ] }) }),
-      inboxIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flow-empty-state", style: { padding: "48px 24px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state-title", children: "Inbox is clear!" }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flow-empty-state-subtitle", children: "All captured tasks have been processed or completed." })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: inboxIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+      inboxIssues.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "flow-empty-state", style: { padding: "48px 24px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "flow-empty-state-title", children: "Inbox is clear!" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "flow-empty-state-subtitle", children: "All captured tasks have been processed or completed." })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: inboxIssues.map((issue) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
         "div",
         {
           style: {
@@ -32877,14 +32650,14 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
           },
           className: "inbox-item-card",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontWeight: 600, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: issue.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontWeight: 600, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: issue.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
                 "Captured: ",
                 issue.filePath.split("/").pop()?.replace(".md", "")
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
               "button",
               {
                 onClick: () => onEditIssue(issue),
@@ -32901,7 +32674,7 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
                   gap: "6px"
                 },
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PenLine, { size: 12 }),
+                  /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(PenLine, { size: 12 }),
                   "Process Item"
                 ]
               }
@@ -32916,7 +32689,7 @@ function InboxView({ app, index, settings, onRefresh, onEditIssue }) {
 
 // src/components/ProductivityView.tsx
 var React5 = __toESM(require_react());
-var import_react13 = __toESM(require_react());
+var import_react12 = __toESM(require_react());
 var import_obsidian11 = require("obsidian");
 
 // src/components/DailyReportModal.tsx
@@ -32924,16 +32697,16 @@ var import_obsidian10 = require("obsidian");
 var import_client = __toESM(require_client());
 
 // src/components/DailyReportModalView.tsx
-var import_react12 = __toESM(require_react());
-var import_jsx_runtime11 = __toESM(require_jsx_runtime());
+var import_react11 = __toESM(require_react());
+var import_jsx_runtime10 = __toESM(require_jsx_runtime());
 function formatActivityMessage(message, issueMap) {
   let match = message.match(/^Finished focus:\s+([A-Z0-9_-]+-\d+|INBOX-[A-Za-z0-9_-]+)(?:\s+-\s+(.*))?/i);
   if (match) {
     const id = match[1];
     const notes = match[2] ? match[2].trim() : "";
     const title = issueMap.get(id.toLowerCase()) || "";
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
         backgroundColor: "rgba(16, 185, 129, 0.15)",
         color: "var(--text-success, #10b981)",
         padding: "2px 6px",
@@ -32942,13 +32715,13 @@ function formatActivityMessage(message, issueMap) {
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Selesai" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
       ] }),
-      notes && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontStyle: "italic" }, children: [
+      notes && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontStyle: "italic" }, children: [
         '\u2014 "',
         notes,
         '"'
@@ -32959,8 +32732,8 @@ function formatActivityMessage(message, issueMap) {
   if (match) {
     const id = match[1];
     const title = issueMap.get(id.toLowerCase()) || "";
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
         backgroundColor: "rgba(59, 130, 246, 0.15)",
         color: "var(--text-accent, #3b82f6)",
         padding: "2px 6px",
@@ -32969,8 +32742,8 @@ function formatActivityMessage(message, issueMap) {
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Mulai" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -32981,8 +32754,8 @@ function formatActivityMessage(message, issueMap) {
   if (match) {
     const id = match[1];
     const title = issueMap.get(id.toLowerCase()) || "";
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
         backgroundColor: "rgba(245, 158, 11, 0.15)",
         color: "#f59e0b",
         padding: "2px 6px",
@@ -32991,8 +32764,8 @@ function formatActivityMessage(message, issueMap) {
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Jeda" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -33003,8 +32776,8 @@ function formatActivityMessage(message, issueMap) {
   if (match) {
     const id = match[1];
     const title = issueMap.get(id.toLowerCase()) || "";
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", flexWrap: "wrap", gap: "6px", rowGap: "4px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
         backgroundColor: "rgba(59, 130, 246, 0.15)",
         color: "var(--text-accent, #3b82f6)",
         padding: "2px 6px",
@@ -33013,8 +32786,8 @@ function formatActivityMessage(message, issueMap) {
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Lanjut" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title || id }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
         "(",
         id,
         ")"
@@ -33022,8 +32795,8 @@ function formatActivityMessage(message, issueMap) {
     ] });
   }
   if (message.includes("Completed Pomodoro") || message.includes("Selesai Pomodoro")) {
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", gap: "6px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", gap: "6px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
         backgroundColor: "rgba(239, 68, 68, 0.15)",
         color: "#ef4444",
         padding: "2px 6px",
@@ -33032,7 +32805,7 @@ function formatActivityMessage(message, issueMap) {
         fontWeight: 700,
         textTransform: "uppercase"
       }, children: "Pomodoro" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { color: "var(--text-normal)" }, children: "Selesai 1 sesi fokus Pomodoro" })
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-normal)" }, children: "Selesai 1 sesi fokus Pomodoro" })
     ] });
   }
   const genericIdMatch = message.match(/([A-Z0-9_-]+-\d+|INBOX-[A-Za-z0-9_-]+)/i);
@@ -33041,10 +32814,10 @@ function formatActivityMessage(message, issueMap) {
     const title = issueMap.get(id.toLowerCase());
     if (title) {
       const parts = message.split(genericIdMatch[0]);
-      return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
+      return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-normal)" }, children: [
         parts[0],
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)" }, children: title }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
           " (",
           id,
           ")"
@@ -33053,7 +32826,7 @@ function formatActivityMessage(message, issueMap) {
       ] });
     }
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { color: "var(--text-normal)" }, children: message });
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-normal)" }, children: message });
 }
 function getTaskTimeRange2(sessions) {
   if (sessions.length === 0)
@@ -33194,10 +32967,10 @@ function compileStandupSummary2(activities, issueMap) {
   };
 }
 function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
-  const [report, setReport] = (0, import_react12.useState)(null);
-  const [loading, setLoading] = (0, import_react12.useState)(true);
-  const [issueMap, setIssueMap] = (0, import_react12.useState)(/* @__PURE__ */ new Map());
-  const [activeTab, setActiveTab] = (0, import_react12.useState)("report");
+  const [report, setReport] = (0, import_react11.useState)(null);
+  const [loading, setLoading] = (0, import_react11.useState)(true);
+  const [issueMap, setIssueMap] = (0, import_react11.useState)(/* @__PURE__ */ new Map());
+  const [activeTab, setActiveTab] = (0, import_react11.useState)("report");
   const dateStr = file.basename;
   const formatIndonesianDate = (dateString) => {
     try {
@@ -33244,7 +33017,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
       return -1;
     return a.time.localeCompare(b.time);
   }) : [];
-  (0, import_react12.useEffect)(() => {
+  (0, import_react11.useEffect)(() => {
     const loadAndParseDailyNote = async () => {
       try {
         setLoading(true);
@@ -33364,14 +33137,14 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
     return reportData;
   };
   if (loading || !report) {
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", height: "300px", width: "100%", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Clock, { size: 32, style: { animation: "spin 2s linear infinite" } }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: "Memuat Laporan Harian..." })
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", height: "300px", width: "100%", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Clock, { size: 32, style: { animation: "spin 2s linear infinite" } }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "Memuat Laporan Harian..." })
     ] }) });
   }
   const totalTasks = report.completedTasks.length + report.uncompletedTasks.length;
   const progressPercent = totalTasks > 0 ? Math.round(report.completedTasks.length / totalTasks * 100) : 0;
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "flow-daily-report-root", style: {
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flow-daily-report-root", style: {
     display: "flex",
     flexDirection: "column",
     height: "100%",
@@ -33379,7 +33152,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
     color: "var(--text-normal)",
     fontFamily: "var(--font-interface)"
   }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -33388,8 +33161,8 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
       background: "var(--background-secondary)",
       position: "relative"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -33400,13 +33173,13 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           border: "1px solid var(--background-modifier-border)",
           color: "var(--text-accent)",
           flexShrink: 0
-        }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Calendar, { size: 18 }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "1px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: "Laporan Harian" }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: formatIndonesianDate(report.date) })
+        }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Calendar, { size: 18 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "1px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: "Laporan Harian" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: formatIndonesianDate(report.date) })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
         "button",
         {
           onClick: onClose,
@@ -33439,7 +33212,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
       flex: 1,
       overflowY: "auto",
       padding: "24px",
@@ -33449,12 +33222,12 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
       maxHeight: "calc(85vh - 140px)"
       // adjust based on header/footer
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
         gap: "16px"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
           background: "var(--background-secondary)",
           border: "1px solid var(--background-modifier-border)",
           borderRadius: "10px",
@@ -33463,19 +33236,19 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           alignItems: "center",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { color: "var(--interactive-accent)" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Brain, { size: 24 }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { color: "var(--interactive-accent)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Brain, { size: 24 }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: [
               "Fokus ",
               temporalLabel
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 700 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 700 }, children: [
               report.pomodorosRun,
               " Pomodoro"
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
           background: "var(--background-secondary)",
           border: "1px solid var(--background-modifier-border)",
           borderRadius: "10px",
@@ -33484,13 +33257,13 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           alignItems: "center",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { color: "var(--text-accent)" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Clock, { size: 24 }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Total Durasi" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 700 }, children: report.totalFocusTime })
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { color: "var(--text-accent)" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Clock, { size: 24 }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Total Durasi" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 700 }, children: report.totalFocusTime })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
           background: "var(--background-secondary)",
           border: "1px solid var(--background-modifier-border)",
           borderRadius: "10px",
@@ -33499,10 +33272,10 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           alignItems: "center",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { position: "relative", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("svg", { width: "36", height: "36", viewBox: "0 0 36 36", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("circle", { cx: "18", cy: "18", r: "15", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "3.5" }),
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { position: "relative", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: "36", height: "36", viewBox: "0 0 36 36", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("circle", { cx: "18", cy: "18", r: "15", fill: "none", stroke: "var(--background-secondary-alt)", strokeWidth: "3.5" }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                 "circle",
                 {
                   cx: "18",
@@ -33519,14 +33292,14 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { position: "absolute", fontSize: "var(--flow-text-xs)", fontWeight: "bold", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { position: "absolute", fontSize: "var(--flow-text-xs)", fontWeight: "bold", color: "var(--text-normal)" }, children: [
               progressPercent,
               "%"
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontWeight: 500 }, children: "Penyelesaian" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: [
               report.completedTasks.length,
               " / ",
               totalTasks,
@@ -33535,12 +33308,12 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
         gap: "20px"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
           border: "1px solid var(--background-modifier-border)",
           borderRadius: "10px",
           padding: "16px",
@@ -33549,21 +33322,21 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           flexDirection: "column",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-success, #10b981)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CheckCircle2, { size: 14 }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-success, #10b981)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CheckCircle2, { size: 14 }),
             "Selesai (",
             report.completedTasks.length,
             ")"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.completedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.completedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: [
             "Belum ada tugas selesai ",
             temporalSuffix,
             "."
-          ] }) : report.completedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "var(--flow-text-base)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { color: "var(--text-success, #10b981)", marginTop: "2px" }, children: "\u2713" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontWeight: 600, color: "var(--text-normal)" }, children: task.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
+          ] }) : report.completedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "var(--flow-text-base)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-success, #10b981)", marginTop: "2px" }, children: "\u2713" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontWeight: 600, color: "var(--text-normal)" }, children: task.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                 task.id,
                 " \u2022 ",
                 task.detail
@@ -33571,7 +33344,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             ] })
           ] }, i)) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
           border: "1px solid var(--background-modifier-border)",
           borderRadius: "10px",
           padding: "16px",
@@ -33580,21 +33353,21 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           flexDirection: "column",
           gap: "12px"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-accent)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CheckSquare, { size: 14 }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-accent)", display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid var(--background-modifier-border)", paddingBottom: "8px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CheckSquare, { size: 14 }),
             "Belum Selesai (",
             report.uncompletedTasks.length,
             ")"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.uncompletedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", maxHeight: "180px", overflowY: "auto" }, children: report.uncompletedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic" }, children: [
             "Semua tugas rencana ",
             temporalSuffix,
             " selesai."
-          ] }) : report.uncompletedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "var(--flow-text-base)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "\u2022" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontWeight: 600, color: "var(--text-normal)" }, children: task.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
+          ] }) : report.uncompletedTasks.map((task, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "var(--flow-text-base)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-muted)", marginTop: "2px" }, children: "\u2022" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontWeight: 600, color: "var(--text-normal)" }, children: task.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                 task.id,
                 " \u2022 ",
                 task.detail
@@ -33603,7 +33376,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           ] }, i)) })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         border: "1px solid var(--background-modifier-border)",
         borderRadius: "10px",
         padding: "16px 18px",
@@ -33612,17 +33385,17 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         flexDirection: "column",
         gap: "12px"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", paddingBottom: "8px", borderBottom: "1px solid var(--background-modifier-border)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Coffee, { size: 13, style: { color: "var(--text-muted)" } }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.3px" }, children: "Refleksi Harian" })
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", paddingBottom: "8px", borderBottom: "1px solid var(--background-modifier-border)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Coffee, { size: 13, style: { color: "var(--text-muted)" } }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.3px" }, children: "Refleksi Harian" })
         ] }),
-        !report.reflection.wentWell && !report.reflection.blocked && !report.reflection.tomorrow ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "8px 0" }, children: [
+        !report.reflection.wentWell && !report.reflection.blocked && !report.reflection.tomorrow ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "8px 0" }, children: [
           "Belum ada refleksi harian yang ditulis untuk ",
           temporalSuffix,
           "."
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
-          report.reflection.wentWell && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "14px" }, children: [
+          report.reflection.wentWell && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
               display: "inline-flex",
               alignSelf: "flex-start",
               fontSize: "var(--flow-text-xs)",
@@ -33634,10 +33407,10 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               padding: "2px 7px",
               letterSpacing: "0.3px"
             }, children: "Berjalan Lancar" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.wentWell })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.wentWell })
           ] }),
-          report.reflection.blocked && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+          report.reflection.blocked && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
               display: "inline-flex",
               alignSelf: "flex-start",
               fontSize: "var(--flow-text-xs)",
@@ -33649,10 +33422,10 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               padding: "2px 7px",
               letterSpacing: "0.3px"
             }, children: "Hambatan" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.blocked })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.blocked })
           ] }),
-          report.reflection.tomorrow && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+          report.reflection.tomorrow && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
               display: "inline-flex",
               alignSelf: "flex-start",
               fontSize: "var(--flow-text-xs)",
@@ -33664,22 +33437,22 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               padding: "2px 7px",
               letterSpacing: "0.3px"
             }, children: "Rencana Besok" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.tomorrow })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: 0, fontSize: "var(--flow-text-base)", color: "var(--text-normal)", whiteSpace: "pre-wrap", lineHeight: "1.5", paddingLeft: "2px" }, children: report.reflection.tomorrow })
           ] })
         ] })
       ] }),
-      sortedActivities.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+      sortedActivities.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
         display: "flex",
         flexDirection: "column",
         gap: "12px"
       }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-normal)", display: "flex", alignItems: "center", gap: "8px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Clock, { size: 14 }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("h4", { style: { margin: 0, fontSize: "var(--flow-text-base)", fontWeight: 700, color: "var(--text-normal)", display: "flex", alignItems: "center", gap: "8px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Clock, { size: 14 }),
             "Aktivitas ",
             temporalLabel
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
             display: "flex",
             gap: "2px",
             background: "var(--background-secondary)",
@@ -33687,7 +33460,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             borderRadius: "6px",
             border: "1px solid var(--background-modifier-border)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
               "button",
               {
                 onClick: () => setActiveTab("timeline"),
@@ -33705,7 +33478,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                 children: "Kronologis"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
               "button",
               {
                 onClick: () => setActiveTab("report"),
@@ -33725,7 +33498,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             )
           ] })
         ] }),
-        activeTab === "timeline" ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: {
+        activeTab === "timeline" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
           display: "flex",
           flexDirection: "column",
           position: "relative",
@@ -33733,8 +33506,8 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           borderLeft: "2px solid var(--background-modifier-border)",
           margin: "4px 0 4px 8px",
           gap: "12px"
-        }, children: sortedActivities.map((act, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "12px", position: "relative", fontSize: "var(--flow-text-base)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: {
+        }, children: sortedActivities.map((act, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "12px", position: "relative", fontSize: "var(--flow-text-base)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
             position: "absolute",
             left: "-21px",
             top: "4px",
@@ -33744,19 +33517,19 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
             backgroundColor: "var(--interactive-accent)",
             border: "2px solid var(--background-primary)"
           } }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontFamily: "var(--font-monospace)", fontWeight: 600, color: "var(--text-accent)", flexShrink: 0 }, children: act.time }),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { color: "var(--text-normal)", lineHeight: "1.4" }, children: formatActivityMessage(act.message, issueMap) })
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontFamily: "var(--font-monospace)", fontWeight: 600, color: "var(--text-accent)", flexShrink: 0 }, children: act.time }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "var(--text-normal)", lineHeight: "1.4" }, children: formatActivityMessage(act.message, issueMap) })
         ] }, i)) }) : (() => {
           const standupData = compileStandupSummary2(sortedActivities, issueMap);
-          return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-            standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic", padding: "10px 0" }, children: [
+          return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+            standupData.tasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", fontStyle: "italic", padding: "10px 0" }, children: [
               "Tidak ada aktivitas tugas yang tercatat untuk report ",
               temporalSuffix,
               "."
             ] }) : standupData.tasks.map((task) => {
               const isDone = task.statusChanges.some((s) => s.toLowerCase() === "done" || s.toLowerCase() === "selesai");
               const notes = task.sessions.map((s) => s.note.trim()).filter((n) => n.length > 0);
-              return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+              return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
                 background: "var(--background-secondary)",
                 border: "1px solid var(--background-modifier-border)",
                 borderRadius: "8px",
@@ -33765,12 +33538,12 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                 flexDirection: "column",
                 gap: "8px"
               }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
                     task.sessions.length > 0 && (() => {
                       const { start, end } = getTaskTimeRange2(task.sessions);
                       const timeDisplay = start === end ? `Jam ${start}` : `${start} - ${end}`;
-                      return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+                      return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
                         fontFamily: "var(--font-monospace)",
                         fontWeight: 600,
                         color: "var(--text-accent, #3b82f6)",
@@ -33781,20 +33554,20 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                         fontSize: "var(--flow-text-xs)"
                       }, children: timeDisplay });
                     })(),
-                    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: {
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: {
                       width: "6px",
                       height: "6px",
                       borderRadius: "50%",
                       backgroundColor: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)"
                     } }),
-                    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { style: { color: "var(--text-normal)", fontSize: "var(--flow-text-base)" }, children: task.title }),
-                    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { style: { color: "var(--text-normal)", fontSize: "var(--flow-text-base)" }, children: task.title }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { color: "var(--text-muted)", fontSize: "var(--flow-text-sm)" }, children: [
                       "(",
                       task.id,
                       ")"
                     ] })
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", gap: "6px", alignItems: "center" }, children: task.statusChanges.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: {
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", gap: "6px", alignItems: "center" }, children: task.statusChanges.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: {
                     backgroundColor: isDone ? "rgba(16, 185, 129, 0.15)" : "rgba(59, 130, 246, 0.15)",
                     color: isDone ? "var(--text-success, #10b981)" : "var(--text-accent, #3b82f6)",
                     fontSize: "var(--flow-text-xs)",
@@ -33807,22 +33580,22 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
                     task.statusChanges[task.statusChanges.length - 1]
                   ] }) })
                 ] }),
-                notes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: {
+                notes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: {
                   display: "flex",
                   flexDirection: "column",
                   gap: "4px",
                   paddingLeft: "14px",
                   borderLeft: "2px solid var(--background-modifier-border)",
                   marginLeft: "8px"
-                }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
+                }, children: notes.map((note, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-normal)", lineHeight: "1.4" }, children: [
                   "\u2022 ",
                   note
                 ] }, idx)) })
               ] }, task.id);
             }),
-            standupData.general.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", marginTop: "8px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Lainnya / Umum" }),
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px" }, children: standupData.general.map((act, idx) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", lineHeight: "1.4" }, children: [
+            standupData.general.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "6px", marginTop: "8px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Lainnya / Umum" }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px" }, children: standupData.general.map((act, idx) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-muted)", lineHeight: "1.4" }, children: [
                 "\u2022 ",
                 act
               ] }, idx)) })
@@ -33831,7 +33604,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
         })()
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: {
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -33839,7 +33612,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
       borderTop: "1px solid var(--background-modifier-border)",
       background: "var(--background-secondary)"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
         "button",
         {
           onClick: onEdit,
@@ -33859,13 +33632,13 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
           },
           title: "Edit file catatan mentah",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(PenLine, { size: 13 }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PenLine, { size: 13 }),
             "Edit Catatan Asli"
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: "10px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: "10px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
           "button",
           {
             onClick: () => {
@@ -33886,12 +33659,12 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
               cursor: "pointer"
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LayoutDashboard, { size: 13 }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LayoutDashboard, { size: 13 }),
               "Ke Dashboard"
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           "button",
           {
             onClick: onClose,
@@ -33914,7 +33687,7 @@ function DailyReportModalView({ app, plugin, file, onClose, onEdit }) {
 }
 
 // src/components/DailyReportModal.tsx
-var import_jsx_runtime12 = __toESM(require_jsx_runtime());
+var import_jsx_runtime11 = __toESM(require_jsx_runtime());
 var DailyReportModal = class extends import_obsidian10.Modal {
   constructor(app, plugin, file, onEdit) {
     super(app);
@@ -33942,7 +33715,7 @@ var DailyReportModal = class extends import_obsidian10.Modal {
     }
     this.root = (0, import_client.createRoot)(contentEl);
     this.root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
         DailyReportModalView,
         {
           app: this.app,
@@ -33968,11 +33741,11 @@ var DailyReportModal = class extends import_obsidian10.Modal {
 };
 
 // src/components/ProductivityView.tsx
-var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 function ProductivityView({ index, app, plugin, onRefresh }) {
   const { dailyNotes } = index;
   const [currentPage, setCurrentPage] = React5.useState(0);
-  const stats = (0, import_react13.useMemo)(() => {
+  const stats = (0, import_react12.useMemo)(() => {
     const { currentStreak, bestStreak, activeDaysCount, activeDays } = calculateStreak(index.issues);
     let totalPomos = 0;
     dailyNotes.forEach((dn) => {
@@ -34011,7 +33784,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
       consistencyRate
     };
   }, [dailyNotes, index.issues, plugin.settings.pomodoroDuration]);
-  const heatmapWeeks = (0, import_react13.useMemo)(() => {
+  const heatmapWeeks = (0, import_react12.useMemo)(() => {
     const today = /* @__PURE__ */ new Date();
     const currentDay = today.getDay();
     const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
@@ -34034,14 +33807,14 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
   }, []);
   const renderMonthHeader = () => {
     let prevMonth = "";
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", gap: "4px", marginBottom: "2px", paddingLeft: "32px" }, children: heatmapWeeks.map((week, idx) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", gap: "4px", marginBottom: "2px", paddingLeft: "32px" }, children: heatmapWeeks.map((week, idx) => {
       const firstDay = week[0];
       const monthName = firstDay.toLocaleString("default", { month: "short" });
       const showMonth = monthName !== prevMonth;
       if (showMonth) {
         prevMonth = monthName;
       }
-      return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
         "div",
         {
           style: {
@@ -34085,7 +33858,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
   const getCompletedCountForDate = (dateStr) => {
     return index.issues.filter((issue) => issue.status === "done" && issue.completedDate === dateStr).length;
   };
-  const last14DaysPomos = (0, import_react13.useMemo)(() => {
+  const last14DaysPomos = (0, import_react12.useMemo)(() => {
     const data = [];
     const today = /* @__PURE__ */ new Date();
     for (let i = 13; i >= 0; i--) {
@@ -34125,7 +33898,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
       app.workspace.openLinkText(dateStr, "");
     }
   };
-  const recentNotes = (0, import_react13.useMemo)(() => {
+  const recentNotes = (0, import_react12.useMemo)(() => {
     return [...dailyNotes].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 16);
   }, [dailyNotes]);
   const [cardsPerPage, setCardsPerPage] = React5.useState(4);
@@ -34153,55 +33926,55 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
       setCurrentPage(totalPages - 1);
     }
   }, [totalPages, currentPage]);
-  const pagedNotes = (0, import_react13.useMemo)(() => {
+  const pagedNotes = (0, import_react12.useMemo)(() => {
     const startIndex = currentPage * cardsPerPage;
     return recentNotes.slice(startIndex, startIndex + cardsPerPage);
   }, [recentNotes, currentPage, cardsPerPage]);
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Productivity & Consistency" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { margin: "4px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Visualize your focus metrics, streak consistency, and review historical daily note summaries." })
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "20px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: "Productivity & Consistency" }),
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { margin: "4px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Visualize your focus metrics, streak consistency, and review historical daily note summaries." })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "stat-widget-list", style: { gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Total Focus Days" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget-list", style: { gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid var(--interactive-accent)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Total Focus Days" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.activeDaysCount,
           " ",
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: "normal", color: "var(--text-muted)" }, children: "days" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: "Out of 84 days tracked" })
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: "Out of 84 days tracked" })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #f59e0b" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Consistency" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #f59e0b" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Consistency" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.consistencyRate,
           "%"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: "Overall habit formation" })
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: "Overall habit formation" })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #10b981" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "stat-label", children: "Total Focus Time" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { className: "stat-value", style: { fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #10b981" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", children: "Total Focus Time" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.totalHours,
           "h ",
           stats.totalMins,
           "m"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: [
           stats.totalPomos,
           " Pomodoros (",
           stats.averagePomos,
           " avg/active day)"
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #8b5cf6" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Task Planning Accuracy" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "stat-widget", style: { borderLeft: "3px solid #8b5cf6" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "stat-label", style: { fontSize: "var(--flow-text-sm)" }, children: "Task Planning Accuracy" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "stat-value", style: { display: "flex", alignItems: "baseline", gap: "4px", fontSize: "var(--flow-text-4xl)", fontWeight: 700 }, children: [
           stats.completionRate,
           "%"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "2px" }, children: [
           stats.completedTasksCount,
           "/",
           stats.totalTasksTaken,
@@ -34209,22 +33982,22 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Consistency Calendar (Done Tasks Heatmap)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: "24px", flexWrap: "wrap" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", overflowX: "auto", paddingBottom: "4px", flex: "1 1 auto" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "dashboard-card", style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Consistency Calendar (Done Tasks Heatmap)" }),
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: "24px", flexWrap: "wrap" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", overflowX: "auto", paddingBottom: "4px", flex: "1 1 auto" }, children: [
           renderMonthHeader(),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "start", alignSelf: "start" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", marginRight: "8px", width: "24px", textAlign: "right", paddingTop: "1px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Mon" }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Wed" }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Fri" }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { height: "12px", lineHeight: "12px" } })
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "start", alignSelf: "start" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", marginRight: "8px", width: "24px", textAlign: "right", paddingTop: "1px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Mon" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Wed" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" }, children: "Fri" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { height: "12px", lineHeight: "12px" } })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", gap: "4px" }, children: heatmapWeeks.map((week, wIdx) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", gap: "4px" }, children: heatmapWeeks.map((week, wIdx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
               "div",
               {
                 className: "flow-heatmap-column",
@@ -34234,7 +34007,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                   const completedCount = getCompletedCountForDate(dateStr);
                   const isCurrentDay = dateStr === getLocalDateString();
                   const isFuture = dateObj.getTime() > (/* @__PURE__ */ new Date()).setHours(23, 59, 59, 999);
-                  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                     "div",
                     {
                       className: `flow-heatmap-cell ${getDoneHeatmapColorClass(completedCount)}`,
@@ -34266,18 +34039,18 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
               wIdx
             )) })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", alignSelf: "start", marginTop: "12px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Less" }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-heatmap-cell flow-cell-empty", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-1", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-2", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-3", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-4", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "More" })
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", alignSelf: "start", marginTop: "12px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: "Less" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-empty", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-1", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-2", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-3", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-heatmap-cell flow-cell-level-4", style: { width: "10px", height: "10px", borderRadius: "2px" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: "More" })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: "16px", flexWrap: "wrap", flex: "1 1 auto", justifyContent: "flex-end" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: "16px", flexWrap: "wrap", flex: "1 1 auto", justifyContent: "flex-end" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -34292,17 +34065,17 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
             minWidth: "120px",
             boxShadow: "inset 0 1px 2px rgba(0,0,0,0.05)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", letterSpacing: "0.5px" }, children: "Current Streak" }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-5xl)", fontWeight: 800, lineHeight: 1, color: "var(--interactive-accent)" }, children: stats.currentStreak }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)" }, children: "days" })
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", letterSpacing: "0.5px" }, children: "Current Streak" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: "4px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-5xl)", fontWeight: 800, lineHeight: 1, color: "var(--interactive-accent)" }, children: stats.currentStreak }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-base)", fontWeight: 600, color: "var(--text-muted)" }, children: "days" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
               "Best: ",
               stats.bestStreak
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: {
             display: "flex",
             flexDirection: "column",
             gap: "12px",
@@ -34315,9 +34088,9 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
             maxWidth: "100%",
             boxSizing: "border-box"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 700, textTransform: "uppercase", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: "Pomodoro Trend (14 Days)" }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", fontWeight: 700, textTransform: "uppercase", color: "var(--text-normal)", letterSpacing: "0.5px" }, children: "Pomodoro Trend (14 Days)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
                 "Avg: ",
                 (stats.totalPomos / (stats.activeDaysCount || 1)).toFixed(1),
                 " / active day"
@@ -34340,20 +34113,20 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
               });
               const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
               const areaD = `${pathD} L ${points[points.length - 1].x} ${height - paddingBottom} L ${points[0].x} ${height - paddingBottom} Z`;
-              return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("svg", { width: "100%", height, viewBox: `0 0 ${width} ${height}`, style: { overflow: "visible" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("linearGradient", { id: "pomodoro-trend-gradient", x1: "0", y1: "0", x2: "0", y2: "1", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)", stopOpacity: "0.25" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("stop", { offset: "100%", stopColor: "var(--interactive-accent)", stopOpacity: "0" })
+              return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("svg", { width: "100%", height, viewBox: `0 0 ${width} ${height}`, style: { overflow: "visible" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("linearGradient", { id: "pomodoro-trend-gradient", x1: "0", y1: "0", x2: "0", y2: "1", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("stop", { offset: "0%", stopColor: "var(--interactive-accent)", stopOpacity: "0.25" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("stop", { offset: "100%", stopColor: "var(--interactive-accent)", stopOpacity: "0" })
                 ] }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: paddingLeft, y1: height - paddingBottom, x2: width - paddingRight, y2: height - paddingBottom, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3" }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: paddingLeft, y1: height - paddingBottom - chartHeight / 2, x2: width - paddingRight, y2: height - paddingBottom - chartHeight / 2, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3", opacity: 0.5 }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: paddingLeft, y1: paddingTop, x2: width - paddingRight, y2: paddingTop, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3", opacity: 0.3 }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("text", { x: paddingLeft - 4, y: height - paddingBottom + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: "0" }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("text", { x: paddingLeft - 4, y: height - paddingBottom - chartHeight / 2 + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: Math.round(maxPomos / 2) }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("text", { x: paddingLeft - 4, y: paddingTop + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: maxPomos }),
-                points.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("path", { d: areaD, fill: "url(#pomodoro-trend-gradient)" }),
-                points.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("path", { d: pathD, fill: "none", stroke: "var(--interactive-accent)", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }),
-                points.map((p, idx) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("line", { x1: paddingLeft, y1: height - paddingBottom, x2: width - paddingRight, y2: height - paddingBottom, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3" }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("line", { x1: paddingLeft, y1: height - paddingBottom - chartHeight / 2, x2: width - paddingRight, y2: height - paddingBottom - chartHeight / 2, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3", opacity: 0.5 }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("line", { x1: paddingLeft, y1: paddingTop, x2: width - paddingRight, y2: paddingTop, stroke: "var(--background-modifier-border)", strokeWidth: 1, strokeDasharray: "3 3", opacity: 0.3 }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft - 4, y: height - paddingBottom + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: "0" }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft - 4, y: height - paddingBottom - chartHeight / 2 + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: Math.round(maxPomos / 2) }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft - 4, y: paddingTop + 3, textAnchor: "end", fontSize: "8", fill: "var(--text-muted)", children: maxPomos }),
+                points.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("path", { d: areaD, fill: "url(#pomodoro-trend-gradient)" }),
+                points.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("path", { d: pathD, fill: "none", stroke: "var(--interactive-accent)", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }),
+                points.map((p, idx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                   "circle",
                   {
                     cx: p.x,
@@ -34362,30 +34135,30 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     fill: "var(--background-primary)",
                     stroke: "var(--interactive-accent)",
                     strokeWidth: 1,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("title", { children: `${p.dateStr}: ${p.pomos} pmd` })
+                    children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("title", { children: `${p.dateStr}: ${p.pomos} pmd` })
                   },
                   idx
                 )),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("text", { x: paddingLeft, y: height - 4, fontSize: "8", fill: "var(--text-muted)", textAnchor: "start", children: last14DaysPomos[0].label }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("text", { x: width - paddingRight, y: height - 4, fontSize: "8", fill: "var(--text-muted)", textAnchor: "end", children: last14DaysPomos[13].label })
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: paddingLeft, y: height - 4, fontSize: "8", fill: "var(--text-muted)", textAnchor: "start", children: last14DaysPomos[0].label }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("text", { x: width - paddingRight, y: height - 4, fontSize: "8", fill: "var(--text-muted)", textAnchor: "end", children: last14DaysPomos[13].label })
               ] });
             })()
           ] })
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "dashboard-card", ref: containerRef, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Recent Daily Reports" }),
-        recentNotes.length > 0 && totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "dashboard-card", ref: containerRef, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: { margin: 0, fontSize: "var(--flow-text-2xl)", fontWeight: 700 }, children: "Recent Daily Reports" }),
+        recentNotes.length > 0 && totalPages > 1 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: [
             "Page ",
             currentPage + 1,
             " of ",
             totalPages
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: "6px" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: "6px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
               "button",
               {
                 className: "flow-nav-tab",
@@ -34402,7 +34175,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                 children: "\u2190 Prev"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
               "button",
               {
                 className: "flow-nav-tab",
@@ -34422,7 +34195,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
           ] })
         ] })
       ] }),
-      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", alignItems: "stretch" }, children: pagedNotes.map((note) => {
+      recentNotes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-empty-state", style: { margin: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flow-empty-state-subtitle", children: "No daily note reports logged yet." }) }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", alignItems: "stretch" }, children: pagedNotes.map((note) => {
         const pomos = note.pomodorosRun || 0;
         const estimate = note.totalEstimate || 0;
         const hasReportData = pomos > 0 || note.tasksTaken && note.tasksTaken.length > 0;
@@ -34435,7 +34208,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
             completedCount++;
           return { id: taskId, name, isDone };
         }) || [];
-        return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
           "div",
           {
             style: {
@@ -34450,9 +34223,9 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
               minHeight: "180px"
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontWeight: 700, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: note.date }),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontWeight: 700, fontSize: "var(--flow-text-base)", color: "var(--text-normal)" }, children: note.date }),
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                   "button",
                   {
                     className: "flow-nav-tab",
@@ -34462,23 +34235,23 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                   }
                 )
               ] }),
-              hasReportData ? /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px", flexGrow: 1, justifyContent: "space-between" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { children: [
+              hasReportData ? /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "10px", flexGrow: 1, justifyContent: "space-between" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { children: [
                         "Focus: ",
-                        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("strong", { children: pomos }),
+                        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("strong", { children: pomos }),
                         "/",
                         estimate || 0,
                         " pmd"
                       ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { children: [
                         pomos * (plugin.settings.pomodoroDuration || 25),
                         "m"
                       ] })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "100%", height: "4px", background: "var(--background-secondary)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { width: "100%", height: "4px", background: "var(--background-secondary)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                       "div",
                       {
                         style: {
@@ -34490,17 +34263,17 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                       }
                     ) })
                   ] }),
-                  mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { children: [
+                  mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "2px" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", justifyContent: "space-between", fontSize: "var(--flow-text-xs)", color: "var(--text-muted)" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { children: [
                       "Tasks: ",
-                      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("strong", { children: completedCount }),
+                      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("strong", { children: completedCount }),
                       "/",
                       mappedTasks.length,
                       " (",
                       Math.round(completedCount / mappedTasks.length * 100),
                       "%)"
                     ] }) }),
-                    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "100%", height: "4px", background: "var(--background-secondary)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { width: "100%", height: "4px", background: "var(--background-secondary)", borderRadius: "2px", overflow: "hidden" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                       "div",
                       {
                         style: {
@@ -34513,8 +34286,8 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     ) })
                   ] })
                 ] }),
-                mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "4px" }, children: [
-                  mappedTasks.slice(0, 3).map((t, idx) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                mappedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "4px" }, children: [
+                  mappedTasks.slice(0, 3).map((t, idx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                     "span",
                     {
                       className: `badge ${t.isDone ? "badge-status-done" : "badge-status-in-progress"}`,
@@ -34535,7 +34308,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     },
                     idx
                   )),
-                  mappedTasks.length > 3 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+                  mappedTasks.length > 3 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
                     "span",
                     {
                       className: "badge",
@@ -34548,7 +34321,7 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
                     }
                   )
                 ] })
-              ] }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "10px 0" }, children: "No focus activity or tasks were recorded in metadata." })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", padding: "10px 0" }, children: "No focus activity or tasks were recorded in metadata." })
             ]
           },
           note.date
@@ -34559,9 +34332,9 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
 }
 
 // src/components/FlowApp.tsx
-var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+var import_jsx_runtime13 = __toESM(require_jsx_runtime());
 function FlowApp({ plugin, app }) {
-  const [index, setIndex] = (0, import_react14.useState)({
+  const [index, setIndex] = (0, import_react13.useState)({
     issues: [],
     projects: [],
     epics: [],
@@ -34569,13 +34342,13 @@ function FlowApp({ plugin, app }) {
     dailyNotes: [],
     tags: []
   });
-  const [activeTab, setActiveTab] = (0, import_react14.useState)("dashboard");
-  const [editingIssue, setEditingIssue] = (0, import_react14.useState)(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = (0, import_react14.useState)(false);
-  const [isSidebarOpen, setIsSidebarOpen] = (0, import_react14.useState)(true);
-  const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react14.useState)("");
-  const [selectedProjectId, setSelectedProjectId] = (0, import_react14.useState)(null);
-  const [selectedEpicId, setSelectedEpicId] = (0, import_react14.useState)(null);
+  const [activeTab, setActiveTab] = (0, import_react13.useState)("dashboard");
+  const [editingIssue, setEditingIssue] = (0, import_react13.useState)(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = (0, import_react13.useState)(false);
+  const [isSidebarOpen, setIsSidebarOpen] = (0, import_react13.useState)(true);
+  const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react13.useState)("");
+  const [selectedProjectId, setSelectedProjectId] = (0, import_react13.useState)(null);
+  const [selectedEpicId, setSelectedEpicId] = (0, import_react13.useState)(null);
   const reloadIndex = React6.useCallback(() => {
     const freshIndex = plugin.globalIndex || { issues: [], projects: [], epics: [], docs: [], dailyNotes: [], tags: [] };
     setIndex(freshIndex);
@@ -34591,7 +34364,7 @@ function FlowApp({ plugin, app }) {
       });
     }
   }, [app, plugin.settings]);
-  (0, import_react14.useEffect)(() => {
+  (0, import_react13.useEffect)(() => {
     ensureFolderStructure(app, plugin.settings).then(() => {
       reloadIndex();
     });
@@ -34621,62 +34394,62 @@ function FlowApp({ plugin, app }) {
   const handleSelectPomodoroTask = (taskId) => {
     setActivePomodoroTaskId(taskId);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flow-tracker-container", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("header", { className: "flow-header", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flow-logo-area", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flow-logo-icon", children: "F" }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "flow-title", children: "Flow Tracker" })
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flow-tracker-container", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("header", { className: "flow-header", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flow-logo-area", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-logo-icon", children: "F" }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "flow-title", children: "Flow Tracker" })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("nav", { className: "flow-nav-tabs", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("nav", { className: "flow-nav-tabs", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "dashboard" ? "active" : ""}`,
             onClick: () => setActiveTab("dashboard"),
             title: "Dashboard",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(LayoutDashboard, { size: 16 }),
-              activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Dashboard" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LayoutDashboard, { size: 16 }),
+              activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Dashboard" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "inbox" ? "active" : ""}`,
             onClick: () => setActiveTab("inbox"),
             title: "Inbox",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Inbox, { size: 16 }),
-              activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Inbox" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Inbox, { size: 16 }),
+              activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Inbox" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "board" ? "active" : ""}`,
             onClick: () => setActiveTab("board"),
             title: "Board",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(KanbanSquare, { size: 16 }),
-              activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Board" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(KanbanSquare, { size: 16 }),
+              activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Board" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "backlog" ? "active" : ""}`,
             onClick: () => setActiveTab("backlog"),
             title: "Task List",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ListTodo, { size: 16 }),
-              activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Task List" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ListTodo, { size: 16 }),
+              activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Task List" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "projects" ? "active" : ""}`,
@@ -34687,50 +34460,38 @@ function FlowApp({ plugin, app }) {
             },
             title: "Projects & Epics",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(FolderKanban, { size: 16 }),
-              activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Projects & Epics" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(FolderKanban, { size: 16 }),
+              activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Projects & Epics" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "review" ? "active" : ""}`,
             onClick: () => setActiveTab("review"),
             title: "Review",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CheckSquare, { size: 16 }),
-              activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Review" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CheckSquare, { size: 16 }),
+              activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Review" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "productivity" ? "active" : ""}`,
             onClick: () => setActiveTab("productivity"),
             title: "Productivity",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TrendingUp, { size: 16 }),
-              activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Productivity" })
-            ]
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
-          "button",
-          {
-            className: `flow-nav-tab ${activeTab === "settings" ? "active" : ""}`,
-            onClick: () => setActiveTab("settings"),
-            title: "Settings",
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Settings, { size: 16 }),
-              activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Settings" })
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(TrendingUp, { size: 16 }),
+              activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Productivity" })
             ]
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           "button",
           {
             className: `flow-nav-tab ${isSidebarOpen ? "active" : ""}`,
@@ -34742,18 +34503,18 @@ function FlowApp({ plugin, app }) {
             },
             onClick: () => setIsSidebarOpen(!isSidebarOpen),
             title: "Toggle Focus Sidebar",
-            children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Timer, { size: 16, style: { color: "var(--text-normal)" } })
+            children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Timer, { size: 16, style: { color: "var(--text-normal)" } })
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("button", { className: "flow-action-btn", onClick: handleCreateIssue, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Plus, { size: 16 }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("button", { className: "flow-action-btn", onClick: handleCreateIssue, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Plus, { size: 16 }),
           "New Issue"
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flex: 1, overflow: "hidden" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("main", { className: "flow-content", style: { flex: 1, overflowY: "auto" }, children: [
-        activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flex: 1, overflow: "hidden" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("main", { className: "flow-content", style: { flex: 1, overflowY: "auto" }, children: [
+        activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           DashboardView,
           {
             index,
@@ -34767,7 +34528,7 @@ function FlowApp({ plugin, app }) {
             onRefresh: reloadIndex
           }
         ),
-        activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           InboxView,
           {
             app,
@@ -34777,7 +34538,7 @@ function FlowApp({ plugin, app }) {
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           BoardView,
           {
             index,
@@ -34788,14 +34549,14 @@ function FlowApp({ plugin, app }) {
             wipLimit: plugin.settings.wipLimit
           }
         ),
-        activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           TaskListView,
           {
             index,
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           ProjectsView,
           {
             index,
@@ -34808,7 +34569,7 @@ function FlowApp({ plugin, app }) {
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           WeeklyReviewView,
           {
             index,
@@ -34819,7 +34580,7 @@ function FlowApp({ plugin, app }) {
             onNavigate: setActiveTab
           }
         ),
-        activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           ProductivityView,
           {
             index,
@@ -34827,23 +34588,14 @@ function FlowApp({ plugin, app }) {
             plugin,
             onRefresh: reloadIndex
           }
-        ),
-        activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
-          SettingsView,
-          {
-            plugin,
-            onSettingsChanged: () => {
-              reloadIndex();
-            }
-          }
         )
       ] }),
-      isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("aside", { className: "flow-sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "sidebar-section", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
+      isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("aside", { className: "flow-sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sidebar-section", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
           "Focus & Pomodoro"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
           PomodoroTimer,
           {
             app,
@@ -34856,7 +34608,7 @@ function FlowApp({ plugin, app }) {
         )
       ] }) })
     ] }),
-    editingIssue && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+    editingIssue && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
       IssueEditor,
       {
         issue: editingIssue,
@@ -34867,7 +34619,7 @@ function FlowApp({ plugin, app }) {
         onSave: reloadIndex
       }
     ),
-    isCreateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+    isCreateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
       IssueEditor,
       {
         issue: null,
@@ -34882,7 +34634,7 @@ function FlowApp({ plugin, app }) {
 }
 
 // src/FlowView.tsx
-var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+var import_jsx_runtime14 = __toESM(require_jsx_runtime());
 var FLOW_VIEW_TYPE = "flow-project-view";
 var FlowView = class extends import_obsidian12.ItemView {
   constructor(leaf, plugin) {
@@ -34909,7 +34661,7 @@ var FlowView = class extends import_obsidian12.ItemView {
     container.addClass("flow-tracker-view-container");
     this.root = (0, import_client2.createRoot)(container);
     this.root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(FlowApp, { plugin: this.plugin, app: this.app })
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(FlowApp, { plugin: this.plugin, app: this.app })
     );
   }
   async onClose() {
@@ -35226,6 +34978,7 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
       FLOW_VIEW_TYPE,
       (leaf) => new FlowView(leaf, this)
     );
+    this.addSettingTab(new FlowSettingTab(this.app, this));
     this.addRibbonIcon("list-todo", "Open Flow Tracker", () => {
       this.activateView();
     });
@@ -35361,6 +35114,73 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
     workspace.revealLeaf(leaf);
   }
 };
+var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
+  constructor(app, plugin) {
+    super(app, plugin);
+    this.plugin = plugin;
+  }
+  display() {
+    const { containerEl } = this;
+    containerEl.empty();
+    containerEl.createEl("h2", { text: "Flow Project Tracker Settings" });
+    containerEl.createEl("h3", { text: "Folder Locations" });
+    new import_obsidian13.Setting(containerEl).setName("Inbox Folder").setDesc("Folder where new inbox tasks are placed.").addText((text) => text.setPlaceholder("2. WORK/INBOX").setValue(this.plugin.settings.inboxFolder).onChange(async (value) => {
+      this.plugin.settings.inboxFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Issues Folder").setDesc("Default folder for standalone tasks. (Tasks linked to a Project will be saved inside the Project's folder).").addText((text) => text.setPlaceholder("Issues").setValue(this.plugin.settings.issuesFolder).onChange(async (value) => {
+      this.plugin.settings.issuesFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Projects Folder").setDesc("Root folder where your Project directories will be created.").addText((text) => text.setPlaceholder("Projects").setValue(this.plugin.settings.projectsFolder).onChange(async (value) => {
+      this.plugin.settings.projectsFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Epics Folder").setDesc("Default folder for standalone epics. (Epics linked to a Project will be saved inside the Project's folder).").addText((text) => text.setPlaceholder("Epics").setValue(this.plugin.settings.epicsFolder).onChange(async (value) => {
+      this.plugin.settings.epicsFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Docs Folder").setDesc("Folder where general documents are stored.").addText((text) => text.setPlaceholder("Docs").setValue(this.plugin.settings.docsFolder).onChange(async (value) => {
+      this.plugin.settings.docsFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Daily Notes Folder").setDesc("Folder where daily notes are stored.").addText((text) => text.setPlaceholder("Daily Notes").setValue(this.plugin.settings.dailyNotesFolder).onChange(async (value) => {
+      this.plugin.settings.dailyNotesFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Archive Folder").setDesc("Root folder where archived tasks and projects will be moved.").addText((text) => text.setPlaceholder("Archive").setValue(this.plugin.settings.archiveFolder).onChange(async (value) => {
+      this.plugin.settings.archiveFolder = value;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Auto-Archive Days").setDesc("Number of days after completion before a task or project is automatically archived. Set to 0 to disable.").addText((text) => text.setPlaceholder("30").setValue(this.plugin.settings.autoArchiveDays.toString()).onChange(async (value) => {
+      const num = parseInt(value, 10);
+      if (!isNaN(num)) {
+        this.plugin.settings.autoArchiveDays = num;
+        await this.plugin.saveSettings();
+      }
+    }));
+    containerEl.createEl("h3", { text: "Focus & Work Schedule" });
+    new import_obsidian13.Setting(containerEl).setName("Work Start Time").setDesc("Start time of your daily work hours in HH:MM format (default: 09:00).").addText((text) => text.setPlaceholder("09:00").setValue(this.plugin.settings.workStartHour || "09:00").onChange(async (value) => {
+      this.plugin.settings.workStartHour = value || "09:00";
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Work End Time").setDesc("End time of your daily work hours in HH:MM format (default: 17:00).").addText((text) => text.setPlaceholder("17:00").setValue(this.plugin.settings.workEndHour || "17:00").onChange(async (value) => {
+      this.plugin.settings.workEndHour = value || "17:00";
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian13.Setting(containerEl).setName("Pomodoro Duration").setDesc("Duration of a single Pomodoro session in minutes (default: 25).").addText((text) => text.setPlaceholder("25").setValue((this.plugin.settings.pomodoroDuration || 25).toString()).onChange(async (value) => {
+      const num = parseInt(value, 10);
+      this.plugin.settings.pomodoroDuration = isNaN(num) ? 25 : num;
+      await this.plugin.saveSettings();
+    }));
+    containerEl.createEl("h3", { text: "Workflow Limits" });
+    new import_obsidian13.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
+      const num = parseInt(value, 10);
+      this.plugin.settings.wipLimit = isNaN(num) ? 3 : num;
+      await this.plugin.saveSettings();
+    }));
+  }
+};
 var ChangelogModal = class extends import_obsidian13.Modal {
   constructor(app, plugin, version) {
     super(app);
@@ -35393,8 +35213,8 @@ var ChangelogModal = class extends import_obsidian13.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ("### Added\n- **Klasifikasi File di Subfolder Terstruktur**: Memperbaiki bug di mana catatan/dokumen umum (tanpa `frontmatter.type`) yang diletakkan di dalam subfolder `Docs/` pada project, epic, atau folder issues terdeteksi salah sebagai task/issue dan bocor masuk ke dalam daftar tugas (Backlog/Task List). Klasifikasi kini memprioritaskan pencocokan segment jalur folder seperti `/docs/`, `/tasks/`, dan `/epics/`.".trim()) {
-        await import_obsidian13.MarkdownRenderer.render(this.app, "### Added\n- **Klasifikasi File di Subfolder Terstruktur**: Memperbaiki bug di mana catatan/dokumen umum (tanpa `frontmatter.type`) yang diletakkan di dalam subfolder `Docs/` pada project, epic, atau folder issues terdeteksi salah sebagai task/issue dan bocor masuk ke dalam daftar tugas (Backlog/Task List). Klasifikasi kini memprioritaskan pencocokan segment jalur folder seperti `/docs/`, `/tasks/`, dan `/epics/`.", listContainer, "", this.plugin);
+      if ("### Added\n- **Settings Page**: remove redundant Settings tab for configuring the plugin.".trim()) {
+        await import_obsidian13.MarkdownRenderer.render(this.app, "### Added\n- **Settings Page**: remove redundant Settings tab for configuring the plugin.", listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {
@@ -35652,14 +35472,6 @@ lucide-react/dist/esm/icons/rocket.js:
    *)
 
 lucide-react/dist/esm/icons/rotate-ccw.js:
-  (**
-   * @license lucide-react v0.312.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
-lucide-react/dist/esm/icons/settings.js:
   (**
    * @license lucide-react v0.312.0 - ISC
    *

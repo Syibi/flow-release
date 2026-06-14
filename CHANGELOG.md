@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.6.3] - 2026-06-14
+
+### Added
+- **Settings Page**: remove redundant Settings tab for configuring the plugin.
+
 ## [0.6.2] - 2026-06-14
 
 ### Added
