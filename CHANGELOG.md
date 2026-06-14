@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.6.1] - 2026-06-14
+
+### Added
+- **ADHD-Friendly Micro-Prompts**: Placeholder refleksi harian dinamis dan deterministik berbasis tanggal untuk mencegah *blank-page anxiety*.
+- **Widget Status Bar dengan Judul Tugas**: Menampilkan judul tugas aktif yang sedang dikerjakan secara langsung di status bar timer.
+- **Visual Time Proximity Badges**: Indikator warna hangat/urgensi dinamis untuk tanggal jatuh tempo tugas di Kanban Board dan Backlog.
+- **Celebration Confetti Animations**: Ledakan animasi partikel konfeti (canvas murni) saat sesi fokus selesai atau tugas dipindahkan ke "Done".
+- **ADHD Capacity Buffer**: Rekomendasi "Kapasitas Aman" (buffer 30%) untuk menghindari *over-planning* saat perencanaan mingguan.
+- **Pencatatan Pomodoro Hari Itu Saja (Isolasi)**: Menghitung total pomodoro harian langsung dari log aktivitas catatan harian untuk mencegah progress bar terisi otomatis akibat properti salinan/stale.
+- **Stepper Wizard Weekly Review**: Alur perencanaan mingguan dirancang ulang menggunakan timeline 3 langkah (Closeout, Capacity, Planning) yang terstruktur.
+- **Kartu Riwayat Performa Mingguan (Weekly History)**: Riwayat produktivitas dipisah ke kartu tersendiri dengan rentang tanggal lengkap untuk 4 minggu ke belakang.
+- **Banner Pengingat Review Dinamis**: Banner otomatis hilang saat review mingguan selesai dicatat, dan memiliki opsi tutup (dismiss) per minggu.
+- **Closeout Checklist Interaktif**: Tugas Overdue dan Blocked dapat langsung diklik untuk diedit, serta ditambahkan tautan cepat ke Inbox dan Backlog.
+- **Penyatuan Siklus Baru**: Tombol pembuat siklus baru digabungkan ke tombol penyelesaian review demi alur kerja yang lebih ringkas.
+
+### Changed
+- **Dashboard Stats Simplification**: Menyederhanakan metrics progress bar dashboard (hanya menampilkan persentase) dan sub-header rencana harian untuk tampilan yang lebih bersih dan minimalis.
+
+---
+
 ## [0.6.0] - 2026-06-14
 
 ### Added
