@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.6.4] - 2026-06-18
+
+### Added
+- **Global Pomodoro Widget**: Pomodoro timer kini bisa melayang (global widget) dan digunakan di luar tab utama.
+- **Auto-Prefix File Names**: Setiap pembuatan file Project dan Epic baru akan otomatis memiliki prefix `[Project]` atau `[Epic]` pada nama filenya untuk mempermudah pencarian.
+- **Factory Reset**: Menambahkan tombol bahaya "Factory Reset" di halaman Settings Obsidian native untuk keperluan *testing* / reset plugin.
+
+### Changed
+- **Strict Smart Score Sync**: Antrean (Focus Queue) pada Pomodoro Timer kini secara agresif akan me-reset dan mengurutkan ulang dirinya sendiri untuk *selalu* sesuai dengan urutan Smart Score tertinggi di "Today's Plan". Urutan hanya dipertahankan sementara (*preserved*) jika ada sesi *timer* yang sedang berjalan aktif.
+- **Human-Readable Titles**: UI pada Kanban Board dan Modal kini memunculkan judul asli Project/Epic sebagai pengganti *raw ID* yang sulit dibaca.
+- **Wikilink Graph Relations**: Mengubah cara plugin menyimpan *frontmatter* relasi menjadi *Wikilink* penuh (`[[path|ID]]`) agar Graph View Obsidian terbaca dengan sempurna (tanpa *node* abu-abu / *unresolved link*).
+
+### Fixed
+- **Clean Task Hierarchy**: Memaksa hierarki Task -> Epic -> Project yang ketat. Jika task sudah tertaut pada Epic, relasi ke Project tidak lagi ditulis agar Graph View tidak semrawut (menghindari koneksi segitiga/ganda).
+- **Epic Dropdown Filter**: Memperbaiki filter pada dropdown pilihan Epic di layar pembuatan Issue yang sebelumnya bocor (menampilkan epic dari project lain).
+- **Form Reset**: Memperbaiki bug di mana modal "New Issue" memuat *state* form sisa dari penambahan issue sebelumnya.
+- **Timezone Accuracy**: Memperbaiki bug *timestamp* yang menggunakan UTC pada laporan Daily Note. Sekarang semuanya menggunakan `window.moment()` untuk menyesuaikan dengan zona waktu lokal secara akurat.
+
+---
 ## [0.6.3] - 2026-06-14
 
 ### Added

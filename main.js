@@ -24529,11 +24529,20 @@ function isPathInFolder(filePath, folderPath) {
 function stripWikilinks(val) {
   if (!val)
     return void 0;
+  if (Array.isArray(val)) {
+    if (val.length === 0)
+      return void 0;
+    val = val[0];
+  }
   if (typeof val === "string") {
     const match = val.match(/^\[\[(.*?)\]\]$/);
-    return match ? match[1] : val;
+    if (match) {
+      const parts = match[1].split("|");
+      return parts.length > 1 ? parts[1].trim() : parts[0].trim();
+    }
+    return val.trim();
   }
-  return val;
+  return String(val).trim();
 }
 function getNextIssueId(issues) {
   let maxNum = 0;
@@ -24570,15 +24579,12 @@ function serializeFrontmatter(frontmatter) {
         }
       }
     } else if (typeof value === "string") {
-      if (key === "epic") {
-        yaml += `${key}: "[[${value}]]"
-`;
-      } else if (key === "project") {
-        if (frontmatter.epic) {
+      if (key === "epic" || key === "project") {
+        if (value.startsWith("[[") && value.endsWith("]]")) {
           yaml += `${key}: "${value}"
 `;
         } else {
-          yaml += `${key}: "[[${value}]]"
+          yaml += `${key}: ${value}
 `;
         }
       } else {
@@ -24842,9 +24848,11 @@ async function createProjectFile(app, settings, id, title) {
   };
   const frontmatterStr = serializeFrontmatter(frontmatterData);
   const content = `${frontmatterStr}
+# ${title}
 `;
-  const filename = cleanId.toLowerCase();
-  const projectFolderName = `${settings.projectsFolder}/${filename}`;
+  const safeTitle = title.replace(/[\\/:*?"<>|]/g, "-").trim();
+  const filename = `[Project] ${safeTitle}`;
+  const projectFolderName = `${settings.projectsFolder}/${safeTitle}`;
   await app.vault.createFolder(projectFolderName).catch(() => {
   });
   await app.vault.createFolder(`${projectFolderName}/Epics`).catch(() => {
@@ -24862,12 +24870,14 @@ async function createEpicFile(app, settings, id, title, projectId, projectsList)
     id: cleanId,
     aliases: [cleanId],
     type: "epic",
-    project: projectId
+    project: projectId ? projectsList?.find((p) => p.id === projectId)?.filePath ? `[[${projectsList.find((p) => p.id === projectId).filePath.replace(/\.md$/i, "")}|${projectId}]]` : `[[${projectId}]]` : void 0
   };
   const frontmatterStr = serializeFrontmatter(frontmatterData);
   const content = `${frontmatterStr}
+# ${title}
 `;
-  const filename = cleanId.toLowerCase();
+  const safeTitle = title.replace(/[\\/:*?"<>|]/g, "-").trim();
+  const filename = `[Epic] ${safeTitle}`;
   let targetFolder = settings.epicsFolder;
   if (projectId && projectsList) {
     const projId = stripWikilinks(projectId);
@@ -25033,7 +25043,8 @@ type: daily-note
   if (!(file instanceof import_obsidian2.TFile))
     return;
   const content = await app.vault.read(file);
-  const timestamp = (/* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const now = /* @__PURE__ */ new Date();
+  const timestamp = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const logEntry = `- [${timestamp}] ${text}
 `;
   const activityRegex = /## Activity\n([\s\S]*?)(?=\n## |$)/;
@@ -27336,10 +27347,16 @@ function ProjectsView({
   const [activeOverviewTab, setActiveOverviewTab] = (0, import_react6.useState)("active");
   const [editingItem, setEditingItem] = (0, import_react6.useState)(null);
   const handleDeleteProject = async (project) => {
-    if (confirm(`Are you sure you want to delete the project "${project.title}"?`)) {
+    if (confirm(`Are you sure you want to delete the project "${project.title}" and all its files?`)) {
       const file = app.vault.getAbstractFileByPath(project.filePath);
       if (file && file instanceof import_obsidian6.TFile) {
-        await app.vault.trash(file, true);
+        const parentFolder = file.parent;
+        const projectsFolderObj = app.vault.getAbstractFileByPath(settings.projectsFolder);
+        if (parentFolder && parentFolder.path !== projectsFolderObj?.path && parentFolder.path !== "/") {
+          await app.vault.trash(parentFolder, true);
+        } else {
+          await app.vault.trash(file, true);
+        }
         onSelectProject(null);
       }
     }
@@ -28303,6 +28320,18 @@ ${fileBody}`);
     rawText,
     editorMode
   ]);
+  const formatRelationLink = (id, type, disableWikilink = false) => {
+    if (!id)
+      return void 0;
+    if (disableWikilink)
+      return id;
+    const list = type === "project" ? index.projects : index.epics;
+    const item = list.find((x) => x.id === id);
+    if (item) {
+      return `[[${item.filePath.replace(/\.md$/i, "")}|${id}]]`;
+    }
+    return `[[${id}]]`;
+  };
   const handleToggleRaw = () => {
     if (editorMode === "form") {
       const finalTags = [...tags];
@@ -28318,8 +28347,8 @@ ${fileBody}`);
         title,
         status,
         priority,
-        project: projectId || void 0,
-        epic: epicId || void 0,
+        project: formatRelationLink(projectId, "project", !!epicId),
+        epic: formatRelationLink(epicId, "epic"),
         created: issue?.created || getLocalDateString(),
         due: due || void 0,
         tags: finalTags,
@@ -28526,8 +28555,8 @@ ${body}`);
           title,
           status,
           priority,
-          project: projectId || void 0,
-          epic: epicId || void 0,
+          project: formatRelationLink(projectId, "project", !!epicId),
+          epic: formatRelationLink(epicId, "epic"),
           created: createdDate,
           due: due || void 0,
           tags: finalTags,
@@ -28568,8 +28597,8 @@ ${body}`);
               title,
               status,
               priority,
-              project: projectId || void 0,
-              epic: epicId || void 0,
+              project: formatRelationLink(projectId, "project", !!epicId),
+              epic: formatRelationLink(epicId, "epic"),
               due: due || void 0,
               tags: finalTags,
               related: parsedRelated,
@@ -28596,8 +28625,8 @@ ${body}`);
                 title,
                 status,
                 priority,
-                project: projectId || void 0,
-                epic: epicId || void 0,
+                project: formatRelationLink(projectId, "project", !!epicId),
+                epic: formatRelationLink(epicId, "epic"),
                 created: issue.created,
                 due: due || void 0,
                 tags: finalTags,
@@ -28839,7 +28868,7 @@ ${body}`);
                 },
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("option", { value: "", children: "None" }),
-                  index.epics.filter((e) => !projectId || e.project === projectId || !e.project).map((e) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("option", { value: e.id, children: e.title }, e.id))
+                  index.epics.filter((e) => !projectId ? true : e.project === projectId).map((e) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("option", { value: e.id, children: e.title }, e.id))
                 ]
               }
             )
@@ -29575,31 +29604,46 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   (0, import_react8.useEffect)(() => {
     if (issues.length === 0)
       return;
-    setQueue((prev) => {
-      let changed = false;
-      const next = prev.map((id) => {
-        if (!id)
-          return "";
-        const task = issues.find((i) => i.id === id);
-        if (!task || task.status === "done" || !task.today) {
-          changed = true;
-          return "";
-        }
-        return id;
-      });
-      const todayIssues2 = issues.filter((i) => i.today && i.status !== "done");
-      todayIssues2.forEach((issue) => {
-        if (!next.includes(issue.id)) {
-          const emptyIdx = next.findIndex((id) => !id);
-          if (emptyIdx !== -1) {
-            next[emptyIdx] = issue.id;
-            changed = true;
-          }
-        }
-      });
-      return changed ? next : prev;
-    });
-  }, [issues]);
+    const todayIssues2 = issues.filter((i) => i.today && i.status !== "done").map((i) => ({ issue: i, score: calculateTaskScore(i, issues).score })).sort((a, b) => b.score - a.score).map((x) => x.issue);
+    let newQueue = ["", "", ""];
+    let newActiveIndex = activeQueueIndex;
+    if (isRunning) {
+      const activeTaskId = queue[activeQueueIndex];
+      let preserved = false;
+      if (activeTaskId && todayIssues2.some((i) => i.id === activeTaskId)) {
+        newQueue[activeQueueIndex] = activeTaskId;
+        preserved = true;
+      }
+      let fillPtr = 0;
+      for (const t of todayIssues2) {
+        if (fillPtr === activeQueueIndex && preserved)
+          fillPtr++;
+        if (fillPtr >= 3)
+          break;
+        if (preserved && t.id === activeTaskId)
+          continue;
+        newQueue[fillPtr] = t.id;
+        fillPtr++;
+      }
+    } else {
+      for (let i = 0; i < Math.min(3, todayIssues2.length); i++) {
+        newQueue[i] = todayIssues2[i].id;
+      }
+      const activeTaskId = queue[activeQueueIndex];
+      const newPos = newQueue.indexOf(activeTaskId);
+      if (newPos !== -1 && activeTaskId) {
+        newActiveIndex = newPos;
+      } else {
+        newActiveIndex = 0;
+      }
+    }
+    const queueChanged = queue[0] !== newQueue[0] || queue[1] !== newQueue[1] || queue[2] !== newQueue[2];
+    const indexChanged = activeQueueIndex !== newActiveIndex;
+    if (queueChanged)
+      setQueue(newQueue);
+    if (indexChanged)
+      setActiveQueueIndex(newActiveIndex);
+  }, [issues, queue, activeQueueIndex, isRunning]);
   (0, import_react8.useEffect)(() => {
     let needsCompaction = false;
     let foundEmpty = false;
@@ -29665,6 +29709,7 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       setIsRunning(false);
       const initialTime = getModeTime(mode);
       setTimeLeft(initialTime);
+      setSessionGoal("");
       prevActiveTaskIdRef.current = currentActiveTaskId;
       saveTimerState(false, mode, initialTime);
     }
@@ -35179,6 +35224,40 @@ var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
       this.plugin.settings.wipLimit = isNaN(num) ? 3 : num;
       await this.plugin.saveSettings();
     }));
+    containerEl.createEl("h3", { text: "Danger Zone", cls: "flow-danger-zone" });
+    new import_obsidian13.Setting(containerEl).setName("Factory Reset").setDesc("DEV ONLY: Delete all files managed by Flow Tracker and clear local storage.").addButton(
+      (btn) => btn.setButtonText("Reset All Data").setWarning().onClick(async () => {
+        if (confirm("DANGER: This will delete ALL files in your Flow Tracker folders. Are you absolutely sure?")) {
+          const foldersToClear = [
+            this.plugin.settings.issuesFolder,
+            this.plugin.settings.projectsFolder,
+            this.plugin.settings.epicsFolder,
+            this.plugin.settings.docsFolder,
+            this.plugin.settings.dailyNotesFolder,
+            this.plugin.settings.inboxFolder,
+            this.plugin.settings.archiveFolder
+          ];
+          for (const folder of foldersToClear) {
+            if (!folder)
+              continue;
+            const folderObj = this.app.vault.getAbstractFileByPath(folder);
+            if (folderObj) {
+              await this.app.vault.trash(folderObj, true).catch(() => {
+              });
+            }
+          }
+          const vaultId = this.app.appId || this.app.vault.getName();
+          const prefix = `${vaultId}_flow_`;
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith(prefix)) {
+              localStorage.removeItem(key);
+            }
+          }
+          alert("Factory reset complete!");
+        }
+      })
+    );
   }
 };
 var ChangelogModal = class extends import_obsidian13.Modal {
@@ -35213,8 +35292,8 @@ var ChangelogModal = class extends import_obsidian13.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ("### Added\n- **Settings Page**: remove redundant Settings tab for configuring the plugin.".trim()) {
-        await import_obsidian13.MarkdownRenderer.render(this.app, "### Added\n- **Settings Page**: remove redundant Settings tab for configuring the plugin.", listContainer, "", this.plugin);
+      if ('### Added\n- **Global Pomodoro Widget**: Pomodoro timer kini bisa melayang (global widget) dan digunakan di luar tab utama.\n- **Auto-Prefix File Names**: Setiap pembuatan file Project dan Epic baru akan otomatis memiliki prefix `[Project]` atau `[Epic]` pada nama filenya untuk mempermudah pencarian.\n- **Factory Reset**: Menambahkan tombol bahaya "Factory Reset" di halaman Settings Obsidian native untuk keperluan *testing* / reset plugin.\n\n### Changed\n- **Strict Smart Score Sync**: Antrean (Focus Queue) pada Pomodoro Timer kini secara agresif akan me-reset dan mengurutkan ulang dirinya sendiri untuk *selalu* sesuai dengan urutan Smart Score tertinggi di "Today\'s Plan". Urutan hanya dipertahankan sementara (*preserved*) jika ada sesi *timer* yang sedang berjalan aktif.\n- **Human-Readable Titles**: UI pada Kanban Board dan Modal kini memunculkan judul asli Project/Epic sebagai pengganti *raw ID* yang sulit dibaca.\n- **Wikilink Graph Relations**: Mengubah cara plugin menyimpan *frontmatter* relasi menjadi *Wikilink* penuh (`[[path|ID]]`) agar Graph View Obsidian terbaca dengan sempurna (tanpa *node* abu-abu / *unresolved link*).\n\n### Fixed\n- **Clean Task Hierarchy**: Memaksa hierarki Task -> Epic -> Project yang ketat. Jika task sudah tertaut pada Epic, relasi ke Project tidak lagi ditulis agar Graph View tidak semrawut (menghindari koneksi segitiga/ganda).\n- **Epic Dropdown Filter**: Memperbaiki filter pada dropdown pilihan Epic di layar pembuatan Issue yang sebelumnya bocor (menampilkan epic dari project lain).\n- **Form Reset**: Memperbaiki bug di mana modal "New Issue" memuat *state* form sisa dari penambahan issue sebelumnya.\n- **Timezone Accuracy**: Memperbaiki bug *timestamp* yang menggunakan UTC pada laporan Daily Note. Sekarang semuanya menggunakan `window.moment()` untuk menyesuaikan dengan zona waktu lokal secara akurat.\n\n---'.trim()) {
+        await import_obsidian13.MarkdownRenderer.render(this.app, '### Added\n- **Global Pomodoro Widget**: Pomodoro timer kini bisa melayang (global widget) dan digunakan di luar tab utama.\n- **Auto-Prefix File Names**: Setiap pembuatan file Project dan Epic baru akan otomatis memiliki prefix `[Project]` atau `[Epic]` pada nama filenya untuk mempermudah pencarian.\n- **Factory Reset**: Menambahkan tombol bahaya "Factory Reset" di halaman Settings Obsidian native untuk keperluan *testing* / reset plugin.\n\n### Changed\n- **Strict Smart Score Sync**: Antrean (Focus Queue) pada Pomodoro Timer kini secara agresif akan me-reset dan mengurutkan ulang dirinya sendiri untuk *selalu* sesuai dengan urutan Smart Score tertinggi di "Today\'s Plan". Urutan hanya dipertahankan sementara (*preserved*) jika ada sesi *timer* yang sedang berjalan aktif.\n- **Human-Readable Titles**: UI pada Kanban Board dan Modal kini memunculkan judul asli Project/Epic sebagai pengganti *raw ID* yang sulit dibaca.\n- **Wikilink Graph Relations**: Mengubah cara plugin menyimpan *frontmatter* relasi menjadi *Wikilink* penuh (`[[path|ID]]`) agar Graph View Obsidian terbaca dengan sempurna (tanpa *node* abu-abu / *unresolved link*).\n\n### Fixed\n- **Clean Task Hierarchy**: Memaksa hierarki Task -> Epic -> Project yang ketat. Jika task sudah tertaut pada Epic, relasi ke Project tidak lagi ditulis agar Graph View tidak semrawut (menghindari koneksi segitiga/ganda).\n- **Epic Dropdown Filter**: Memperbaiki filter pada dropdown pilihan Epic di layar pembuatan Issue yang sebelumnya bocor (menampilkan epic dari project lain).\n- **Form Reset**: Memperbaiki bug di mana modal "New Issue" memuat *state* form sisa dari penambahan issue sebelumnya.\n- **Timezone Accuracy**: Memperbaiki bug *timestamp* yang menggunakan UTC pada laporan Daily Note. Sekarang semuanya menggunakan `window.moment()` untuk menyesuaikan dengan zona waktu lokal secara akurat.\n\n---', listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {
