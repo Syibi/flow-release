@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.7.0] - 2026-06-18
+
+### Added
+- **Task Activation Flow**: Fitur aktivasi tugas (pengganti *Morning Activation*) berupa *wizard* yang membantu mengambil langkah pertama. Akan muncul otomatis hanya jika dibuka *sebelum* jam kerja dimulai, atau bisa dipicu manual lewat tombol "Plan Your Day" di Dashboard kapan saja.
+- **Energy-based Smart Recommendations**: Menggabungkan pilihan level energi Anda ke dalam algoritma rekomendasi Smart Score (+500 poin jika energinya cocok), agar tugas yang direkomendasikan selalu sesuai dengan kapasitas mental Anda saat itu.
+- **Native SVG Badges**: Tampilan komponen UI dan lencana rekomendasi kini menggunakan Native SVG Icons Obsidian yang lebih profesional (menggantikan *emoji*).
+
+---
 ## [0.6.4] - 2026-06-18
 
 ### Added

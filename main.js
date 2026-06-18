@@ -1093,7 +1093,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState13(initialState) {
+        function useState14(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1105,7 +1105,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect11(create, deps) {
+        function useEffect12(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1121,7 +1121,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo5(create, deps) {
+        function useMemo6(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1888,15 +1888,15 @@ var require_react_development = __commonJS({
         exports.useContext = useContext;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect11;
+        exports.useEffect = useEffect12;
         exports.useId = useId;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
         exports.useLayoutEffect = useLayoutEffect;
-        exports.useMemo = useMemo5;
+        exports.useMemo = useMemo6;
         exports.useReducer = useReducer;
         exports.useRef = useRef3;
-        exports.useState = useState13;
+        exports.useState = useState14;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -2443,7 +2443,7 @@ var require_react_dom_development = __commonJS({
         var HostPortal = 4;
         var HostComponent = 5;
         var HostText = 6;
-        var Fragment4 = 7;
+        var Fragment5 = 7;
         var Mode = 8;
         var ContextConsumer = 9;
         var ContextProvider = 10;
@@ -3599,7 +3599,7 @@ var require_react_dom_development = __commonJS({
               return "DehydratedFragment";
             case ForwardRef:
               return getWrappedName$1(type, type.render, "ForwardRef");
-            case Fragment4:
+            case Fragment5:
               return "Fragment";
             case HostComponent:
               return type;
@@ -12000,7 +12000,7 @@ var require_react_dom_development = __commonJS({
             }
           }
           function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-            if (current2 === null || current2.tag !== Fragment4) {
+            if (current2 === null || current2.tag !== Fragment5) {
               var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
               created.return = returnFiber;
               return created;
@@ -12403,7 +12403,7 @@ var require_react_dom_development = __commonJS({
               if (child.key === key) {
                 var elementType = element.type;
                 if (elementType === REACT_FRAGMENT_TYPE) {
-                  if (child.tag === Fragment4) {
+                  if (child.tag === Fragment5) {
                     deleteRemainingChildren(returnFiber, child.sibling);
                     var existing = useFiber(child, element.props.children);
                     existing.return = returnFiber;
@@ -17880,7 +17880,7 @@ var require_react_dom_development = __commonJS({
               var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
               return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
             }
-            case Fragment4:
+            case Fragment5:
               return updateFragment(current2, workInProgress2, renderLanes2);
             case Mode:
               return updateMode(current2, workInProgress2, renderLanes2);
@@ -18153,7 +18153,7 @@ var require_react_dom_development = __commonJS({
             case SimpleMemoComponent:
             case FunctionComponent:
             case ForwardRef:
-            case Fragment4:
+            case Fragment5:
             case Mode:
             case Profiler:
             case ContextConsumer:
@@ -22412,7 +22412,7 @@ var require_react_dom_development = __commonJS({
           return fiber;
         }
         function createFiberFromFragment(elements, mode, lanes, key) {
-          var fiber = createFiber(Fragment4, elements, key, mode);
+          var fiber = createFiber(Fragment5, elements, key, mode);
           fiber.lanes = lanes;
           return fiber;
         }
@@ -24444,11 +24444,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx15 = jsxWithValidationDynamic;
-        var jsxs13 = jsxWithValidationStatic;
+        var jsx16 = jsxWithValidationDynamic;
+        var jsxs14 = jsxWithValidationStatic;
         exports.Fragment = REACT_FRAGMENT_TYPE;
-        exports.jsx = jsx15;
-        exports.jsxs = jsxs13;
+        exports.jsx = jsx16;
+        exports.jsxs = jsxs14;
       })();
     }
   }
@@ -24480,7 +24480,7 @@ var import_client2 = __toESM(require_client());
 
 // src/components/FlowApp.tsx
 var React6 = __toESM(require_react());
-var import_react13 = __toESM(require_react());
+var import_react14 = __toESM(require_react());
 
 // src/utils/fileSystem.ts
 var import_obsidian = require("obsidian");
@@ -25487,26 +25487,6 @@ var Plus = createLucideIcon("Plus", [
   ["path", { d: "M12 5v14", key: "s699le" }]
 ]);
 
-// node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/icons/rocket.js
-var Rocket = createLucideIcon("Rocket", [
-  [
-    "path",
-    {
-      d: "M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z",
-      key: "m3kijz"
-    }
-  ],
-  [
-    "path",
-    {
-      d: "m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z",
-      key: "1fmvmk"
-    }
-  ],
-  ["path", { d: "M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0", key: "1f8sc4" }],
-  ["path", { d: "M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5", key: "qeys4" }]
-]);
-
 // node_modules/.pnpm/lucide-react@0.312.0_react@18.3.1/node_modules/lucide-react/dist/esm/icons/rotate-ccw.js
 var RotateCcw = createLucideIcon("RotateCcw", [
   ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
@@ -25658,7 +25638,8 @@ function DashboardView({
   activePomodoroTaskId,
   app,
   plugin,
-  onRefresh
+  onRefresh,
+  onManualActivation
 }) {
   const { issues, projects } = index;
   const [energyFilter, setEnergyFilter] = (0, import_react2.useState)("all");
@@ -26014,6 +25995,44 @@ function DashboardView({
     }) });
   };
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: "800px", margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", gap: "20px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+      background: "linear-gradient(to right, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05))",
+      border: "1px solid var(--background-modifier-border)",
+      borderRadius: "12px",
+      padding: "16px 20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: "16px"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "4px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { style: { fontSize: "var(--flow-text-lg)", color: "var(--text-normal)" }, children: "Mulai Hari dengan Terarah" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)" }, children: "Ambil 2 menit untuk membersihkan pikiran dan menyusun fokus utama Anda hari ini." })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        "button",
+        {
+          className: "flow-action-btn",
+          style: {
+            background: "var(--interactive-accent)",
+            color: "white",
+            border: "none",
+            fontWeight: 600,
+            padding: "10px 20px",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            whiteSpace: "nowrap"
+          },
+          onClick: onManualActivation,
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, { size: 14 }),
+            "Plan Your Day"
+          ]
+        }
+      )
+    ] }),
     showReviewBanner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
       background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)",
       border: "1px solid var(--interactive-accent)",
@@ -29494,7 +29513,7 @@ var BREAK_PROMPTS = [
   "Rapikan meja kerja Anda dari barang berserakan",
   "Putar pergelangan tangan dan kaki Anda perlahan"
 ];
-function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelectIssue }) {
+function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelectIssue, injectedSessionGoal, autoStartInjected }) {
   const getStorage = (key) => {
     return localStorage.getItem(getVaultKey(app, key));
   };
@@ -29559,9 +29578,25 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
   const alarmIntervalRef = (0, import_react8.useRef)(null);
   const [isMinimized, setIsMinimized] = (0, import_react8.useState)(false);
   const [sessionGoal, setSessionGoal] = (0, import_react8.useState)(() => getStorage("flow_active_session_goal") || "");
+  const [isFirstSessionOfDay, setIsFirstSessionOfDay] = (0, import_react8.useState)(false);
   (0, import_react8.useEffect)(() => {
     setStorage("flow_active_session_goal", sessionGoal);
   }, [sessionGoal]);
+  (0, import_react8.useEffect)(() => {
+    if (injectedSessionGoal) {
+      setSessionGoal(injectedSessionGoal);
+    }
+  }, [injectedSessionGoal]);
+  (0, import_react8.useEffect)(() => {
+    if (autoStartInjected && injectedSessionGoal && !isRunning && mode === "focus") {
+      const remaining = getModeTime(mode);
+      setTimeLeft(remaining);
+      setIsRunning(true);
+      setSessionGoal(injectedSessionGoal);
+      setIsFirstSessionOfDay(true);
+      saveTimerState(true, mode, remaining);
+    }
+  }, [autoStartInjected, injectedSessionGoal]);
   (0, import_react8.useEffect)(() => {
     if (!isRunning || mode !== "focus") {
       setIsMinimized(false);
@@ -30472,8 +30507,8 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-success, #10b981)", justifyContent: "center" }, children: "Waktu Istirahat Selesai" }),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Tubuh dan otak Anda telah beristirahat. Mari kita kembali fokus!" })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: "Sesi Fokus Selesai" }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: "Kerja bagus! Sekarang saatnya melepaskan penat sejenak." })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--interactive-accent)", justifyContent: "center" }, children: isFirstSessionOfDay ? "\u{1F389} Anda berhasil memulai." : "Sesi Fokus Selesai" }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: { margin: "6px 0 0 0", fontSize: "var(--flow-text-base)", color: "var(--text-muted)" }, children: isFirstSessionOfDay ? "Langkah pertama adalah yang paling berat, dan Anda baru saja melaluinya!" : "Kerja bagus! Sekarang saatnya melepaskan penat sejenak." })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("h2", { style: { margin: 0, fontWeight: 700, fontSize: "var(--flow-text-4xl)", display: "flex", alignItems: "center", gap: "8px", color: "var(--text-accent)", justifyContent: "center" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 20 }),
@@ -30575,34 +30610,82 @@ function PomodoroTimer({ app, plugin, issues, onRefresh, activeIssueId, onSelect
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { display: "flex", gap: "12px", width: "100%", marginTop: "12px" }, children: [
         isAlarmActive ? (
           // If alarm is active, main button is to start next session or silence
-          mode === "focus" ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
-            "button",
-            {
-              onClick: () => {
-                stopAlarm();
-                setIsRunning(true);
-                saveTimerState(true, "focus", getModeTime("focus"));
-              },
-              className: "alarm-active-btn",
-              style: {
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "6px",
-                fontSize: "var(--flow-text-base)",
-                fontWeight: 600,
-                padding: "10px",
-                borderRadius: "8px",
-                border: "none",
-                cursor: "pointer"
-              },
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Rocket, { size: 14 }),
-                "Mulai Sesi Fokus"
-              ]
-            }
-          ) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+          mode === "focus" ? isFirstSessionOfDay ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "button",
+              {
+                onClick: () => {
+                  stopAlarm();
+                  setIsRunning(true);
+                  setIsFirstSessionOfDay(false);
+                  saveTimerState(true, "focus", getModeTime("focus"));
+                },
+                className: "alarm-active-btn",
+                style: { flex: 1, padding: "10px", borderRadius: "8px", border: "none", cursor: "pointer", background: "var(--interactive-accent)", color: "white", fontWeight: 600 },
+                children: "Lanjut 25 Menit"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "button",
+              {
+                onClick: () => {
+                  stopAlarm();
+                  setMode("short-break");
+                  setIsRunning(true);
+                  setIsFirstSessionOfDay(false);
+                  saveTimerState(true, "short-break", getModeTime("short-break"));
+                },
+                className: "alarm-active-btn",
+                style: { flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid var(--interactive-accent)", cursor: "pointer", background: "transparent", color: "var(--interactive-accent)", fontWeight: 600 },
+                children: "Istirahat"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "button",
+              {
+                onClick: () => {
+                  stopAlarm();
+                  setIsRunning(false);
+                  setIsFirstSessionOfDay(false);
+                  saveTimerState(false, "focus", getModeTime("focus"));
+                },
+                className: "alarm-active-btn",
+                style: { flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)", cursor: "pointer", background: "var(--background-secondary)", color: "var(--text-normal)", fontWeight: 600 },
+                children: "Ganti Task"
+              }
+            )
+          ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+              "button",
+              {
+                onClick: () => {
+                  stopAlarm();
+                  setMode("short-break");
+                  setIsRunning(true);
+                  saveTimerState(true, "short-break", getModeTime("short-break"));
+                },
+                className: "alarm-active-btn",
+                style: { flex: 2, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontSize: "var(--flow-text-base)", fontWeight: 600, padding: "10px", borderRadius: "8px", border: "none", cursor: "pointer", background: "var(--interactive-accent)", color: "white" },
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Coffee, { size: 14 }),
+                  "Mulai Istirahat"
+                ]
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "button",
+              {
+                onClick: () => {
+                  stopAlarm();
+                  setIsRunning(false);
+                  saveTimerState(false, "focus", getModeTime("focus"));
+                },
+                className: "alarm-active-btn",
+                style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontSize: "var(--flow-text-base)", fontWeight: 600, padding: "10px", borderRadius: "8px", border: "1px solid var(--background-modifier-border)", cursor: "pointer", background: "var(--background-secondary)", color: "var(--text-normal)" },
+                children: "Tutup"
+              }
+            )
+          ] }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
             "button",
             {
               onClick: () => {
@@ -34376,10 +34459,377 @@ function ProductivityView({ index, app, plugin, onRefresh }) {
   ] });
 }
 
-// src/components/FlowApp.tsx
+// src/components/TaskActivation.tsx
+var import_react13 = __toESM(require_react());
 var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+var STEPS = ["energy", "new-task", "recommendation", "first-action"];
+function TaskActivation({ app, plugin, issues, onRefresh, onComplete }) {
+  const [step, setStep] = (0, import_react13.useState)("energy");
+  const [isTransitioning, setIsTransitioning] = (0, import_react13.useState)(false);
+  const [energy, setEnergy] = (0, import_react13.useState)(null);
+  const [newTaskTitle, setNewTaskTitle] = (0, import_react13.useState)("");
+  const [capturedTasks, setCapturedTasks] = (0, import_react13.useState)([]);
+  const [selectedTaskId, setSelectedTaskId] = (0, import_react13.useState)(null);
+  const [firstAction, setFirstAction] = (0, import_react13.useState)("");
+  const recommendedTasks = (0, import_react13.useMemo)(() => {
+    return issues.filter((i) => !i.isInbox && i.status !== "done").map((i) => {
+      const baseScore = calculateTaskScore(i, issues);
+      let finalScore = baseScore.score;
+      const finalBreakdown = [...baseScore.breakdown];
+      if (energy === "low") {
+        if (i.energy === "low") {
+          finalScore += 500;
+          finalBreakdown.push("Cocok dengan Energi Rendah (+500)");
+        } else {
+          finalScore -= 300;
+          finalBreakdown.push("Butuh energi terlalu besar (-300)");
+        }
+      } else if (energy === "high") {
+        if (i.energy === "high" || i.priority === "high" || i.urgent) {
+          finalScore += 200;
+          finalBreakdown.push("Maksimalkan Energi Tinggi (+200)");
+        }
+      } else if (energy === "medium") {
+        if (!i.energy) {
+          finalScore += 100;
+          finalBreakdown.push("Cocok dengan Energi Sedang (+100)");
+        }
+      }
+      return { issue: i, score: finalScore, breakdown: finalBreakdown };
+    }).sort((a, b) => b.score - a.score).slice(0, 3);
+  }, [issues, energy]);
+  const changeStep = (nextStep) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setStep(nextStep);
+      setIsTransitioning(false);
+    }, 250);
+  };
+  const handleCaptureTask = async () => {
+    if (!newTaskTitle.trim())
+      return;
+    try {
+      const issueId = `ISSUE-${Date.now()}`;
+      const inboxFolder = plugin.settings.inboxFolder || "Inbox";
+      const fileName = `${issueId} - ${newTaskTitle.replace(/[/\\?%*:|"<>]/g, "-")}.md`;
+      const filePath = `${inboxFolder}/${fileName}`;
+      const content = `---
+id: ${issueId}
+title: "${newTaskTitle.replace(/"/g, '\\"')}"
+status: todo
+created: ${getLocalDateString()}
+type: issue
+---
+
+`;
+      await app.vault.create(filePath, content);
+      setCapturedTasks((prev) => [...prev, newTaskTitle.trim()]);
+      setNewTaskTitle("");
+      onRefresh();
+    } catch (e) {
+      console.error("Failed to create quick task", e);
+    }
+  };
+  const handleComplete = () => {
+    if (selectedTaskId && firstAction.length >= 5) {
+      onComplete(selectedTaskId, firstAction);
+    }
+  };
+  const currentStepIndex = STEPS.indexOf(step) + 1;
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "var(--background-primary)",
+    zIndex: 100,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "40px"
+  }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { position: "absolute", top: "40px", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 600, color: "var(--interactive-accent)", display: "flex", alignItems: "center", gap: "8px" }, children: "Task Activation" }),
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: STEPS.map((s, idx) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "var(--flow-text-xs)",
+          fontWeight: 600,
+          background: currentStepIndex >= idx + 1 ? "var(--interactive-accent)" : "var(--background-secondary)",
+          color: currentStepIndex >= idx + 1 ? "white" : "var(--text-muted)",
+          transition: "all 0.3s ease"
+        }, children: idx + 1 }),
+        idx < STEPS.length - 1 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: {
+          width: "40px",
+          height: "2px",
+          background: currentStepIndex > idx + 1 ? "var(--interactive-accent)" : "var(--background-modifier-border)",
+          transition: "all 0.3s ease"
+        } })
+      ] }, s)) })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+      maxWidth: "540px",
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      gap: "24px",
+      opacity: isTransitioning ? 0 : 1,
+      transform: isTransitioning ? "translateY(10px)" : "translateY(0)",
+      transition: "opacity 0.25s ease, transform 0.25s ease",
+      background: "var(--background-primary)",
+      padding: "32px",
+      borderRadius: "16px",
+      border: "1px solid var(--background-modifier-border)",
+      boxShadow: "0 12px 40px rgba(0,0,0,0.1)"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { textAlign: "center", marginBottom: "8px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("h1", { style: { fontSize: "var(--flow-text-3xl)", fontWeight: 800, margin: "0 0 12px 0", color: "var(--text-normal)" }, children: [
+          step === "energy" && "Bagaimana kondisi Anda?",
+          step === "new-task" && "Ada tugas baru di pikiran Anda?",
+          step === "recommendation" && "Rekomendasi Fokus",
+          step === "first-action" && "Langkah Pertama"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("p", { style: { color: "var(--text-muted)", margin: 0, fontSize: "var(--flow-text-base)", lineHeight: 1.5 }, children: [
+          step === "energy" && "Pilih level energi Anda saat ini agar kami dapat memandu Anda dengan lebih baik hari ini.",
+          step === "new-task" && "Tulis singkat saja. Tugas akan masuk ke Inbox untuk diproses nanti, agar pikiran Anda tenang selama bekerja.",
+          step === "recommendation" && "Berdasarkan algoritma Smart Score, berikut 3 tugas teratas yang paling mendesak dan penting untuk diselesaikan hari ini.",
+          step === "first-action" && "Tugas yang besar seringkali menakutkan. Mari pecah menjadi satu tindakan kecil pertama."
+        ] })
+      ] }),
+      step === "energy" && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "12px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+          "div",
+          {
+            role: "button",
+            tabIndex: 0,
+            onClick: () => {
+              setEnergy("high");
+              changeStep("new-task");
+            },
+            style: { display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%", padding: "16px 20px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)", borderRadius: "12px", cursor: "pointer", textAlign: "left", transition: "all 0.2s" },
+            onMouseEnter: (e) => e.currentTarget.style.borderColor = "#10b981",
+            onMouseLeave: (e) => e.currentTarget.style.borderColor = "var(--background-modifier-border)",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px", color: "#10b981" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "12px", height: "12px", borderRadius: "50%", background: "#10b981", boxShadow: "0 0 8px rgba(16, 185, 129, 0.5)", flexShrink: 0 } }),
+                "Energi Tinggi"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "6px", lineHeight: 1.4 }, children: "Saya merasa fokus, siap berpikir dan menyelesaikan masalah yang kompleks." })
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+          "div",
+          {
+            role: "button",
+            tabIndex: 0,
+            onClick: () => {
+              setEnergy("medium");
+              changeStep("new-task");
+            },
+            style: { display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%", padding: "16px 20px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)", borderRadius: "12px", cursor: "pointer", textAlign: "left", transition: "all 0.2s" },
+            onMouseEnter: (e) => e.currentTarget.style.borderColor = "#f59e0b",
+            onMouseLeave: (e) => e.currentTarget.style.borderColor = "var(--background-modifier-border)",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px", color: "#f59e0b" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "12px", height: "12px", borderRadius: "50%", background: "#f59e0b", boxShadow: "0 0 8px rgba(245, 158, 11, 0.5)", flexShrink: 0 } }),
+                "Energi Sedang"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "6px", lineHeight: 1.4 }, children: "Saya bisa bekerja normal, tetapi ingin menghindari terlalu banyak perpindahan konteks." })
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+          "div",
+          {
+            role: "button",
+            tabIndex: 0,
+            onClick: () => {
+              setEnergy("low");
+              changeStep("new-task");
+            },
+            style: { display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%", padding: "16px 20px", background: "var(--background-secondary)", border: "1px solid var(--background-modifier-border)", borderRadius: "12px", cursor: "pointer", textAlign: "left", transition: "all 0.2s" },
+            onMouseEnter: (e) => e.currentTarget.style.borderColor = "#ef4444",
+            onMouseLeave: (e) => e.currentTarget.style.borderColor = "var(--background-modifier-border)",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { fontSize: "var(--flow-text-lg)", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px", color: "#ef4444" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: "12px", height: "12px", borderRadius: "50%", background: "#ef4444", boxShadow: "0 0 8px rgba(239, 68, 68, 0.5)", flexShrink: 0 } }),
+                "Energi Rendah"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-sm)", color: "var(--text-muted)", marginTop: "6px", lineHeight: 1.4 }, children: "Saya lelah, sulit fokus, dan ingin memulai dari tugas sederhana." })
+            ]
+          }
+        )
+      ] }),
+      step === "new-task" && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            "input",
+            {
+              type: "text",
+              autoFocus: true,
+              className: "form-input",
+              style: { flex: 1, padding: "12px 16px", borderRadius: "8px" },
+              placeholder: "Ketuk Enter untuk menyimpan ke Inbox...",
+              value: newTaskTitle,
+              onChange: (e) => setNewTaskTitle(e.target.value),
+              onKeyDown: (e) => {
+                if (e.key === "Enter")
+                  handleCaptureTask();
+              }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            "button",
+            {
+              className: "flow-action-btn",
+              onClick: handleCaptureTask,
+              disabled: !newTaskTitle.trim(),
+              style: { padding: "0 20px", background: newTaskTitle.trim() ? "var(--interactive-accent)" : "var(--background-modifier-border)", color: "white", borderRadius: "8px", border: "none" },
+              children: "Tambah"
+            }
+          )
+        ] }),
+        capturedTasks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px", background: "var(--background-secondary)", padding: "16px", borderRadius: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Baru Ditambahkan:" }),
+          capturedTasks.map((t, idx) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px", fontSize: "var(--flow-text-sm)", color: "var(--text-normal)" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { color: "#10b981", display: "flex" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CheckCircle2, { size: 14 }) }),
+            " ",
+            t
+          ] }, idx))
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", justifyContent: "center", marginTop: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          "button",
+          {
+            className: "flow-action-btn",
+            onClick: () => changeStep("recommendation"),
+            style: { padding: "12px 32px", fontSize: "var(--flow-text-base)" },
+            children: capturedTasks.length > 0 ? "Selesai & Lanjut" : "Tidak Ada, Lanjut"
+          }
+        ) })
+      ] }),
+      step === "recommendation" && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+        recommendedTasks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { textAlign: "center", color: "var(--text-muted)", padding: "20px" }, children: "Tidak ada tugas aktif yang tersedia. Buat tugas baru terlebih dahulu." }) : recommendedTasks.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+          "div",
+          {
+            onClick: () => {
+              setSelectedTaskId(item.issue.id);
+              changeStep("first-action");
+            },
+            style: {
+              background: "var(--background-secondary)",
+              border: "1px solid var(--background-modifier-border)",
+              borderRadius: "12px",
+              padding: "16px 20px",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              position: "relative",
+              overflow: "hidden"
+            },
+            onMouseEnter: (e) => e.currentTarget.style.borderColor = "var(--interactive-accent)",
+            onMouseLeave: (e) => e.currentTarget.style.borderColor = "var(--background-modifier-border)",
+            children: [
+              index === 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { position: "absolute", top: 0, left: 0, width: "4px", height: "100%", background: "var(--interactive-accent)" } }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 600, color: "var(--text-normal)" }, children: item.issue.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: "4px", fontSize: "var(--flow-text-sm)", color: "var(--interactive-accent)", fontWeight: 600, background: "rgba(var(--interactive-accent-rgb), 0.1)", padding: "2px 8px", borderRadius: "12px" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Star, { size: 12 }),
+                  " ",
+                  item.score
+                ] })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-muted)", display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }, children: item.breakdown.map((reason, idx) => {
+                if (reason.includes("Normal Task"))
+                  return null;
+                const isNegative = reason.includes("(-");
+                const isEnergy = reason.toLowerCase().includes("energi");
+                return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "4px", background: "var(--background-primary)", padding: "4px 8px", borderRadius: "4px", border: "1px solid var(--background-modifier-border)", color: isNegative ? "#ef4444" : "var(--text-muted)" }, children: [
+                  isNegative ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(AlertCircle, { size: 12 }) : isEnergy ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(TrendingUp, { size: 12, color: "#10b981" }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CheckCircle2, { size: 12, color: "#10b981" }),
+                  reason.replace(/\s\([+-]?\d+\)$/, "")
+                ] }, idx);
+              }) })
+            ]
+          },
+          item.issue.id
+        )),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          "button",
+          {
+            className: "flow-nav-tab",
+            onClick: () => onComplete("", ""),
+            style: { alignSelf: "center", marginTop: "12px", padding: "8px 16px", fontSize: "var(--flow-text-sm)" },
+            children: "Lewati (Saya ingin pilih sendiri di Dashboard)"
+          }
+        )
+      ] }),
+      step === "first-action" && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "24px" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { background: "var(--background-secondary)", padding: "20px", borderRadius: "12px", border: "1px dashed var(--interactive-accent)", textAlign: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-xs)", color: "var(--text-accent)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: 600 }, children: "Target Fokus Anda:" }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: "var(--flow-text-xl)", fontWeight: 700, color: "var(--text-normal)" }, children: issues.find((i) => i.id === selectedTaskId)?.title || "Task" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { fontSize: "var(--flow-text-base)", color: "var(--text-normal)", lineHeight: 1.5, textAlign: "center" }, children: [
+            "Jika Anda harus mengerjakan ini dalam ",
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("strong", { children: "30 detik ke depan" }),
+            ",",
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("br", {}),
+            "apa yang akan Anda lakukan?"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            "input",
+            {
+              type: "text",
+              autoFocus: true,
+              className: "form-input",
+              style: { padding: "16px", fontSize: "var(--flow-text-lg)", textAlign: "center", borderRadius: "8px", background: "var(--background-primary)" },
+              placeholder: "Contoh: Buka VSCode",
+              value: firstAction,
+              onChange: (e) => setFirstAction(e.target.value),
+              onKeyDown: (e) => {
+                if (e.key === "Enter" && firstAction.length >= 5)
+                  handleComplete();
+              }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: "16px", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: "var(--flow-text-xs)", color: firstAction.length > 0 && firstAction.length < 5 ? "#ef4444" : "var(--text-muted)" }, children: firstAction.length > 0 && firstAction.length < 5 ? "Ketik minimal 5 karakter." : "Aksi ini akan menjadi Session Goal Anda." }),
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+              "button",
+              {
+                className: "flow-action-btn",
+                disabled: firstAction.length < 5,
+                onClick: handleComplete,
+                style: { padding: "14px 40px", fontSize: "var(--flow-text-lg)", width: "100%", background: firstAction.length >= 5 ? "linear-gradient(90deg, var(--interactive-accent) 0%, #a855f7 100%)" : "var(--background-modifier-border)" },
+                children: "Mulai Sesi Fokus"
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          "button",
+          {
+            className: "flow-nav-tab",
+            onClick: () => changeStep("recommendation"),
+            style: { alignSelf: "center", padding: "8px 16px", fontSize: "var(--flow-text-sm)" },
+            children: "\u2190 Kembali ke Rekomendasi"
+          }
+        )
+      ] })
+    ] })
+  ] });
+}
+
+// src/components/FlowApp.tsx
+var import_jsx_runtime14 = __toESM(require_jsx_runtime());
 function FlowApp({ plugin, app }) {
-  const [index, setIndex] = (0, import_react13.useState)({
+  const [index, setIndex] = (0, import_react14.useState)({
     issues: [],
     projects: [],
     epics: [],
@@ -34387,13 +34837,34 @@ function FlowApp({ plugin, app }) {
     dailyNotes: [],
     tags: []
   });
-  const [activeTab, setActiveTab] = (0, import_react13.useState)("dashboard");
-  const [editingIssue, setEditingIssue] = (0, import_react13.useState)(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = (0, import_react13.useState)(false);
-  const [isSidebarOpen, setIsSidebarOpen] = (0, import_react13.useState)(true);
-  const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react13.useState)("");
-  const [selectedProjectId, setSelectedProjectId] = (0, import_react13.useState)(null);
-  const [selectedEpicId, setSelectedEpicId] = (0, import_react13.useState)(null);
+  const [activeTab, setActiveTab] = (0, import_react14.useState)("dashboard");
+  const [editingIssue, setEditingIssue] = (0, import_react14.useState)(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = (0, import_react14.useState)(false);
+  const [isSidebarOpen, setIsSidebarOpen] = (0, import_react14.useState)(true);
+  const [activePomodoroTaskId, setActivePomodoroTaskId] = (0, import_react14.useState)("");
+  const [selectedProjectId, setSelectedProjectId] = (0, import_react14.useState)(null);
+  const [selectedEpicId, setSelectedEpicId] = (0, import_react14.useState)(null);
+  const [injectedSessionGoal, setInjectedSessionGoal] = (0, import_react14.useState)("");
+  const [autoStartInjected, setAutoStartInjected] = (0, import_react14.useState)(false);
+  const [showTaskActivation, setShowTaskActivation] = (0, import_react14.useState)(() => {
+    const workSchedule = getRemainingWorkHours(plugin.settings);
+    const isWorkDayStarted = workSchedule.remaining < workSchedule.total;
+    const lastDate = localStorage.getItem(getVaultKey(app, "flow_task_activation_last_date"));
+    const isToday = lastDate === getLocalDateString();
+    const todayStr = getLocalDateString();
+    const hasTaskDoneToday = index.issues.some((i) => i.status === "done" && i.completedDate === todayStr);
+    return !isToday && !isWorkDayStarted && !hasTaskDoneToday;
+  });
+  const handleActivationComplete = (taskId, firstAction) => {
+    localStorage.setItem(getVaultKey(app, "flow_task_activation_last_date"), getLocalDateString());
+    setShowTaskActivation(false);
+    if (taskId && firstAction) {
+      setActivePomodoroTaskId(taskId);
+      setInjectedSessionGoal(firstAction);
+      setAutoStartInjected(true);
+      setTimeout(() => setAutoStartInjected(false), 1e3);
+    }
+  };
   const reloadIndex = React6.useCallback(() => {
     const freshIndex = plugin.globalIndex || { issues: [], projects: [], epics: [], docs: [], dailyNotes: [], tags: [] };
     setIndex(freshIndex);
@@ -34409,7 +34880,7 @@ function FlowApp({ plugin, app }) {
       });
     }
   }, [app, plugin.settings]);
-  (0, import_react13.useEffect)(() => {
+  (0, import_react14.useEffect)(() => {
     ensureFolderStructure(app, plugin.settings).then(() => {
       reloadIndex();
     });
@@ -34439,62 +34910,72 @@ function FlowApp({ plugin, app }) {
   const handleSelectPomodoroTask = (taskId) => {
     setActivePomodoroTaskId(taskId);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flow-tracker-container", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("header", { className: "flow-header", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flow-logo-area", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flow-logo-icon", children: "F" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "flow-title", children: "Flow Tracker" })
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flow-tracker-container", style: { position: "relative" }, children: [
+    showTaskActivation && index.issues.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+      TaskActivation,
+      {
+        app,
+        plugin,
+        issues: index.issues,
+        onRefresh: reloadIndex,
+        onComplete: handleActivationComplete
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("header", { className: "flow-header", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flow-logo-area", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flow-logo-icon", children: "F" }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "flow-title", children: "Flow Tracker" })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("nav", { className: "flow-nav-tabs", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("nav", { className: "flow-nav-tabs", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "dashboard" ? "active" : ""}`,
             onClick: () => setActiveTab("dashboard"),
             title: "Dashboard",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LayoutDashboard, { size: 16 }),
-              activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Dashboard" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(LayoutDashboard, { size: 16 }),
+              activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Dashboard" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "inbox" ? "active" : ""}`,
             onClick: () => setActiveTab("inbox"),
             title: "Inbox",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Inbox, { size: 16 }),
-              activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Inbox" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Inbox, { size: 16 }),
+              activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Inbox" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "board" ? "active" : ""}`,
             onClick: () => setActiveTab("board"),
             title: "Board",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(KanbanSquare, { size: 16 }),
-              activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Board" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(KanbanSquare, { size: 16 }),
+              activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Board" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "backlog" ? "active" : ""}`,
             onClick: () => setActiveTab("backlog"),
             title: "Task List",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ListTodo, { size: 16 }),
-              activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Task List" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ListTodo, { size: 16 }),
+              activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Task List" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "projects" ? "active" : ""}`,
@@ -34505,38 +34986,38 @@ function FlowApp({ plugin, app }) {
             },
             title: "Projects & Epics",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(FolderKanban, { size: 16 }),
-              activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Projects & Epics" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(FolderKanban, { size: 16 }),
+              activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Projects & Epics" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "review" ? "active" : ""}`,
             onClick: () => setActiveTab("review"),
             title: "Review",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CheckSquare, { size: 16 }),
-              activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Review" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CheckSquare, { size: 16 }),
+              activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Review" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
           "button",
           {
             className: `flow-nav-tab ${activeTab === "productivity" ? "active" : ""}`,
             onClick: () => setActiveTab("productivity"),
             title: "Productivity",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(TrendingUp, { size: 16 }),
-              activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: "Productivity" })
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TrendingUp, { size: 16 }),
+              activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: "Productivity" })
             ]
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: "8px", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           "button",
           {
             className: `flow-nav-tab ${isSidebarOpen ? "active" : ""}`,
@@ -34548,32 +35029,39 @@ function FlowApp({ plugin, app }) {
             },
             onClick: () => setIsSidebarOpen(!isSidebarOpen),
             title: "Toggle Focus Sidebar",
-            children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Timer, { size: 16, style: { color: "var(--text-normal)" } })
+            children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Timer, { size: 16, style: { color: "var(--text-normal)" } })
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("button", { className: "flow-action-btn", onClick: handleCreateIssue, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Plus, { size: 16 }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("button", { className: "flow-action-btn", onClick: handleCreateIssue, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Plus, { size: 16 }),
           "New Issue"
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flex: 1, overflow: "hidden" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("main", { className: "flow-content", style: { flex: 1, overflowY: "auto" }, children: [
-        activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flex: 1, overflow: "hidden" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("main", { className: "flow-content", style: { flex: 1, overflowY: "auto" }, children: [
+        activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           DashboardView,
           {
             index,
             onEditIssue: handleEditIssue,
-            onSelectProject: navigateToProject,
-            onSelectEpic: navigateToEpic,
+            onSelectProject: (id) => {
+              setSelectedProjectId(id);
+              setActiveTab("projects");
+            },
+            onSelectEpic: (id) => {
+              setSelectedEpicId(id);
+              setActiveTab("projects");
+            },
             onNavigate: setActiveTab,
             activePomodoroTaskId,
             app,
             plugin,
-            onRefresh: reloadIndex
+            onRefresh: reloadIndex,
+            onManualActivation: () => setShowTaskActivation(true)
           }
         ),
-        activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        activeTab === "inbox" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           InboxView,
           {
             app,
@@ -34583,7 +35071,7 @@ function FlowApp({ plugin, app }) {
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        activeTab === "board" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           BoardView,
           {
             index,
@@ -34594,14 +35082,14 @@ function FlowApp({ plugin, app }) {
             wipLimit: plugin.settings.wipLimit
           }
         ),
-        activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        activeTab === "backlog" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           TaskListView,
           {
             index,
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        activeTab === "projects" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           ProjectsView,
           {
             index,
@@ -34614,7 +35102,7 @@ function FlowApp({ plugin, app }) {
             onEditIssue: handleEditIssue
           }
         ),
-        activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        activeTab === "review" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           WeeklyReviewView,
           {
             index,
@@ -34625,7 +35113,7 @@ function FlowApp({ plugin, app }) {
             onNavigate: setActiveTab
           }
         ),
-        activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        activeTab === "productivity" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           ProductivityView,
           {
             index,
@@ -34635,12 +35123,12 @@ function FlowApp({ plugin, app }) {
           }
         )
       ] }),
-      isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("aside", { className: "flow-sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sidebar-section", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
+      isSidebarOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("aside", { className: "flow-sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "sidebar-section", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("h3", { style: { margin: 0, fontSize: "var(--flow-text-lg)", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px", color: "var(--text-normal)" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Timer, { size: 14, style: { color: "var(--interactive-accent)" } }),
           "Focus & Pomodoro"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           PomodoroTimer,
           {
             app,
@@ -34648,12 +35136,14 @@ function FlowApp({ plugin, app }) {
             issues: index.issues,
             onRefresh: reloadIndex,
             activeIssueId: activePomodoroTaskId,
-            onSelectIssue: handleSelectPomodoroTask
+            onSelectIssue: handleSelectPomodoroTask,
+            injectedSessionGoal,
+            autoStartInjected
           }
         )
       ] }) })
     ] }),
-    editingIssue && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    editingIssue && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       IssueEditor,
       {
         issue: editingIssue,
@@ -34664,7 +35154,7 @@ function FlowApp({ plugin, app }) {
         onSave: reloadIndex
       }
     ),
-    isCreateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    isCreateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       IssueEditor,
       {
         issue: null,
@@ -34679,7 +35169,7 @@ function FlowApp({ plugin, app }) {
 }
 
 // src/FlowView.tsx
-var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+var import_jsx_runtime15 = __toESM(require_jsx_runtime());
 var FLOW_VIEW_TYPE = "flow-project-view";
 var FlowView = class extends import_obsidian12.ItemView {
   constructor(leaf, plugin) {
@@ -34706,7 +35196,7 @@ var FlowView = class extends import_obsidian12.ItemView {
     container.addClass("flow-tracker-view-container");
     this.root = (0, import_client2.createRoot)(container);
     this.root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(FlowApp, { plugin: this.plugin, app: this.app })
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(FlowApp, { plugin: this.plugin, app: this.app })
     );
   }
   async onClose() {
@@ -35292,8 +35782,8 @@ var ChangelogModal = class extends import_obsidian13.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ('### Added\n- **Global Pomodoro Widget**: Pomodoro timer kini bisa melayang (global widget) dan digunakan di luar tab utama.\n- **Auto-Prefix File Names**: Setiap pembuatan file Project dan Epic baru akan otomatis memiliki prefix `[Project]` atau `[Epic]` pada nama filenya untuk mempermudah pencarian.\n- **Factory Reset**: Menambahkan tombol bahaya "Factory Reset" di halaman Settings Obsidian native untuk keperluan *testing* / reset plugin.\n\n### Changed\n- **Strict Smart Score Sync**: Antrean (Focus Queue) pada Pomodoro Timer kini secara agresif akan me-reset dan mengurutkan ulang dirinya sendiri untuk *selalu* sesuai dengan urutan Smart Score tertinggi di "Today\'s Plan". Urutan hanya dipertahankan sementara (*preserved*) jika ada sesi *timer* yang sedang berjalan aktif.\n- **Human-Readable Titles**: UI pada Kanban Board dan Modal kini memunculkan judul asli Project/Epic sebagai pengganti *raw ID* yang sulit dibaca.\n- **Wikilink Graph Relations**: Mengubah cara plugin menyimpan *frontmatter* relasi menjadi *Wikilink* penuh (`[[path|ID]]`) agar Graph View Obsidian terbaca dengan sempurna (tanpa *node* abu-abu / *unresolved link*).\n\n### Fixed\n- **Clean Task Hierarchy**: Memaksa hierarki Task -> Epic -> Project yang ketat. Jika task sudah tertaut pada Epic, relasi ke Project tidak lagi ditulis agar Graph View tidak semrawut (menghindari koneksi segitiga/ganda).\n- **Epic Dropdown Filter**: Memperbaiki filter pada dropdown pilihan Epic di layar pembuatan Issue yang sebelumnya bocor (menampilkan epic dari project lain).\n- **Form Reset**: Memperbaiki bug di mana modal "New Issue" memuat *state* form sisa dari penambahan issue sebelumnya.\n- **Timezone Accuracy**: Memperbaiki bug *timestamp* yang menggunakan UTC pada laporan Daily Note. Sekarang semuanya menggunakan `window.moment()` untuk menyesuaikan dengan zona waktu lokal secara akurat.\n\n---'.trim()) {
-        await import_obsidian13.MarkdownRenderer.render(this.app, '### Added\n- **Global Pomodoro Widget**: Pomodoro timer kini bisa melayang (global widget) dan digunakan di luar tab utama.\n- **Auto-Prefix File Names**: Setiap pembuatan file Project dan Epic baru akan otomatis memiliki prefix `[Project]` atau `[Epic]` pada nama filenya untuk mempermudah pencarian.\n- **Factory Reset**: Menambahkan tombol bahaya "Factory Reset" di halaman Settings Obsidian native untuk keperluan *testing* / reset plugin.\n\n### Changed\n- **Strict Smart Score Sync**: Antrean (Focus Queue) pada Pomodoro Timer kini secara agresif akan me-reset dan mengurutkan ulang dirinya sendiri untuk *selalu* sesuai dengan urutan Smart Score tertinggi di "Today\'s Plan". Urutan hanya dipertahankan sementara (*preserved*) jika ada sesi *timer* yang sedang berjalan aktif.\n- **Human-Readable Titles**: UI pada Kanban Board dan Modal kini memunculkan judul asli Project/Epic sebagai pengganti *raw ID* yang sulit dibaca.\n- **Wikilink Graph Relations**: Mengubah cara plugin menyimpan *frontmatter* relasi menjadi *Wikilink* penuh (`[[path|ID]]`) agar Graph View Obsidian terbaca dengan sempurna (tanpa *node* abu-abu / *unresolved link*).\n\n### Fixed\n- **Clean Task Hierarchy**: Memaksa hierarki Task -> Epic -> Project yang ketat. Jika task sudah tertaut pada Epic, relasi ke Project tidak lagi ditulis agar Graph View tidak semrawut (menghindari koneksi segitiga/ganda).\n- **Epic Dropdown Filter**: Memperbaiki filter pada dropdown pilihan Epic di layar pembuatan Issue yang sebelumnya bocor (menampilkan epic dari project lain).\n- **Form Reset**: Memperbaiki bug di mana modal "New Issue" memuat *state* form sisa dari penambahan issue sebelumnya.\n- **Timezone Accuracy**: Memperbaiki bug *timestamp* yang menggunakan UTC pada laporan Daily Note. Sekarang semuanya menggunakan `window.moment()` untuk menyesuaikan dengan zona waktu lokal secara akurat.\n\n---', listContainer, "", this.plugin);
+      if ('### Added\n- **Task Activation Flow**: Fitur aktivasi tugas (pengganti *Morning Activation*) berupa *wizard* yang membantu mengambil langkah pertama. Akan muncul otomatis hanya jika dibuka *sebelum* jam kerja dimulai, atau bisa dipicu manual lewat tombol "Plan Your Day" di Dashboard kapan saja.\n- **Energy-based Smart Recommendations**: Menggabungkan pilihan level energi Anda ke dalam algoritma rekomendasi Smart Score (+500 poin jika energinya cocok), agar tugas yang direkomendasikan selalu sesuai dengan kapasitas mental Anda saat itu.\n- **Native SVG Badges**: Tampilan komponen UI dan lencana rekomendasi kini menggunakan Native SVG Icons Obsidian yang lebih profesional (menggantikan *emoji*).\n\n---'.trim()) {
+        await import_obsidian13.MarkdownRenderer.render(this.app, '### Added\n- **Task Activation Flow**: Fitur aktivasi tugas (pengganti *Morning Activation*) berupa *wizard* yang membantu mengambil langkah pertama. Akan muncul otomatis hanya jika dibuka *sebelum* jam kerja dimulai, atau bisa dipicu manual lewat tombol "Plan Your Day" di Dashboard kapan saja.\n- **Energy-based Smart Recommendations**: Menggabungkan pilihan level energi Anda ke dalam algoritma rekomendasi Smart Score (+500 poin jika energinya cocok), agar tugas yang direkomendasikan selalu sesuai dengan kapasitas mental Anda saat itu.\n- **Native SVG Badges**: Tampilan komponen UI dan lencana rekomendasi kini menggunakan Native SVG Icons Obsidian yang lebih profesional (menggantikan *emoji*).\n\n---', listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {
@@ -35535,14 +36025,6 @@ lucide-react/dist/esm/icons/play.js:
    *)
 
 lucide-react/dist/esm/icons/plus.js:
-  (**
-   * @license lucide-react v0.312.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
-lucide-react/dist/esm/icons/rocket.js:
   (**
    * @license lucide-react v0.312.0 - ISC
    *
