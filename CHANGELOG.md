@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.7.1] - 2026-07-12
+
+### Added
+- **Task Activation Flow**: Pengganti *Morning Activation* yang berupa *wizard* interaktif untuk membantu perencanaan harian. Muncul otomatis di awal hari kerja atau dapat dipanggil manual kapan saja.
+
+---
 ## [0.7.0] - 2026-06-18
 
 ### Added

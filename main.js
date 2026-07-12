@@ -34847,6 +34847,9 @@ function FlowApp({ plugin, app }) {
   const [injectedSessionGoal, setInjectedSessionGoal] = (0, import_react14.useState)("");
   const [autoStartInjected, setAutoStartInjected] = (0, import_react14.useState)(false);
   const [showTaskActivation, setShowTaskActivation] = (0, import_react14.useState)(() => {
+    if (plugin.settings.enableDailyPlanPopup === false) {
+      return false;
+    }
     const workSchedule = getRemainingWorkHours(plugin.settings);
     const isWorkDayStarted = workSchedule.remaining < workSchedule.total;
     const lastDate = localStorage.getItem(getVaultKey(app, "flow_task_activation_last_date"));
@@ -35222,7 +35225,8 @@ var DEFAULT_SETTINGS = {
   workStartHour: "09:00",
   workEndHour: "17:00",
   lastVersion: "",
-  weeklyPlanning: {}
+  weeklyPlanning: {},
+  enableDailyPlanPopup: true
 };
 
 // src/utils/vaultParser.ts
@@ -35483,6 +35487,7 @@ function removeFileFromIndex(file, currentIndex) {
 var FlowPlugin = class extends import_obsidian13.Plugin {
   constructor() {
     super(...arguments);
+    // Subscribers (React components) that listen to vault index changes
     this.changeListeners = [];
     this.statusBarEl = null;
     this.timerActionListeners = [];
@@ -35583,6 +35588,7 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
       this.statusBarEl.remove();
     }
   }
+  // --- Settings Management ---
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
@@ -35591,6 +35597,8 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
     this.globalIndex = scanVault(this.app, this.settings);
     this.triggerChange();
   }
+  // --- Obsidian Vault Event Handlers ---
+  // Incremental updates for individual files to avoid expensive full scans:
   handleFileChange(file) {
     if (!this.globalIndex)
       return;
@@ -35610,6 +35618,8 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
     this.globalIndex = removeFileFromIndex(file, this.globalIndex);
     this.triggerChange();
   }
+  // --- React UI Reactivity System ---
+  // React views subscribe to index updates using registerChangeListener:
   registerChangeListener(cb) {
     this.changeListeners.push(cb);
   }
@@ -35708,6 +35718,10 @@ var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
       this.plugin.settings.pomodoroDuration = isNaN(num) ? 25 : num;
       await this.plugin.saveSettings();
     }));
+    new import_obsidian13.Setting(containerEl).setName("Auto-Prompt Plan Your Day").setDesc("Automatically prompt to plan your day when starting your workday.").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableDailyPlanPopup !== false).onChange(async (value) => {
+      this.plugin.settings.enableDailyPlanPopup = value;
+      await this.plugin.saveSettings();
+    }));
     containerEl.createEl("h3", { text: "Workflow Limits" });
     new import_obsidian13.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
       const num = parseInt(value, 10);
@@ -35782,8 +35796,8 @@ var ChangelogModal = class extends import_obsidian13.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ('### Added\n- **Task Activation Flow**: Fitur aktivasi tugas (pengganti *Morning Activation*) berupa *wizard* yang membantu mengambil langkah pertama. Akan muncul otomatis hanya jika dibuka *sebelum* jam kerja dimulai, atau bisa dipicu manual lewat tombol "Plan Your Day" di Dashboard kapan saja.\n- **Energy-based Smart Recommendations**: Menggabungkan pilihan level energi Anda ke dalam algoritma rekomendasi Smart Score (+500 poin jika energinya cocok), agar tugas yang direkomendasikan selalu sesuai dengan kapasitas mental Anda saat itu.\n- **Native SVG Badges**: Tampilan komponen UI dan lencana rekomendasi kini menggunakan Native SVG Icons Obsidian yang lebih profesional (menggantikan *emoji*).\n\n---'.trim()) {
-        await import_obsidian13.MarkdownRenderer.render(this.app, '### Added\n- **Task Activation Flow**: Fitur aktivasi tugas (pengganti *Morning Activation*) berupa *wizard* yang membantu mengambil langkah pertama. Akan muncul otomatis hanya jika dibuka *sebelum* jam kerja dimulai, atau bisa dipicu manual lewat tombol "Plan Your Day" di Dashboard kapan saja.\n- **Energy-based Smart Recommendations**: Menggabungkan pilihan level energi Anda ke dalam algoritma rekomendasi Smart Score (+500 poin jika energinya cocok), agar tugas yang direkomendasikan selalu sesuai dengan kapasitas mental Anda saat itu.\n- **Native SVG Badges**: Tampilan komponen UI dan lencana rekomendasi kini menggunakan Native SVG Icons Obsidian yang lebih profesional (menggantikan *emoji*).\n\n---', listContainer, "", this.plugin);
+      if ("### Added\n- **Task Activation Flow**: Pengganti *Morning Activation* yang berupa *wizard* interaktif untuk membantu perencanaan harian. Muncul otomatis di awal hari kerja atau dapat dipanggil manual kapan saja.\n\n---".trim()) {
+        await import_obsidian13.MarkdownRenderer.render(this.app, "### Added\n- **Task Activation Flow**: Pengganti *Morning Activation* yang berupa *wizard* interaktif untuk membantu perencanaan harian. Muncul otomatis di awal hari kerja atau dapat dipanggil manual kapan saja.\n\n---", listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {
