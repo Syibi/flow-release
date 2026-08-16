@@ -24472,7 +24472,7 @@ __export(main_exports, {
   default: () => FlowPlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian13 = require("obsidian");
+var import_obsidian15 = require("obsidian");
 
 // src/FlowView.tsx
 var import_obsidian12 = require("obsidian");
@@ -35226,7 +35226,9 @@ var DEFAULT_SETTINGS = {
   workEndHour: "17:00",
   lastVersion: "",
   weeklyPlanning: {},
-  enableDailyPlanPopup: true
+  enableDailyPlanPopup: true,
+  autoGenerateFlowGuide: true,
+  flowGuidePath: "FLOW.md"
 };
 
 // src/utils/vaultParser.ts
@@ -35483,8 +35485,417 @@ function removeFileFromIndex(file, currentIndex) {
   return newIndex;
 }
 
+// src/utils/flowGuideGenerator.ts
+var import_obsidian13 = require("obsidian");
+function generateFlowGuideContent(settings, version) {
+  const issuesFolder = settings.issuesFolder || "Issues";
+  const projectsFolder = settings.projectsFolder || "Projects";
+  const epicsFolder = settings.epicsFolder || "Epics";
+  const docsFolder = settings.docsFolder || "Docs";
+  const dailyNotesFolder = settings.dailyNotesFolder || "Daily Notes";
+  const inboxFolder = settings.inboxFolder || "2. WORK/INBOX";
+  const archiveFolder = settings.archiveFolder || "Archive";
+  return `<!--
+  FLOW TRACKER - AGENT CONTEXT, SCHEMA SPECIFICATION & ACTION RECIPES
+  Generated automatically by Obsidian Flow Tracker (v${version || "latest"})
+  Last updated: ${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}
+-->
+
+# Flow Tracker \u2014 Agent & System Context Guide
+
+This document is the authoritative specification and operation manual for the **Flow Tracker** project management system in this Obsidian vault. AI Agents (Claude, Cursor, Antigravity, Copilot, ChatGPT, etc.) must follow this guide when querying, creating, updating, or triaging tasks, projects, and daily planning notes.
+
+---
+
+## 1. Vault Directory Structure & Routing
+
+All entities are Markdown files with YAML Frontmatter stored in the configured paths below:
+
+| Entity | Active Vault Path | Description |
+| :--- | :--- | :--- |
+| **Issues / Tasks** | \`${issuesFolder}/\` | Actionable task cards and issue files |
+| **Projects** | \`${projectsFolder}/\` | High-level projects grouping epics and issues |
+| **Epics** | \`${epicsFolder}/\` | Sub-milestones / modules under projects |
+| **Docs** | \`${docsFolder}/\` | Project specs, research notes, and references |
+| **Daily Notes** | \`${dailyNotesFolder}/\` | Daily logs, focus tasks, and evening review notes |
+| **Inbox** | \`${inboxFolder}/\` | Unsorted incoming notes/tasks awaiting triage |
+| **Archive** | \`${archiveFolder}/\` | Completed or inactive items archived after ${settings.autoArchiveDays || 30} days |
+
+---
+
+## 2. Complete Frontmatter Schemas
+
+### 2.1 Issue (Task Card) Schema
+File path: \`${issuesFolder}/ISSUE-<id>.md\` or \`${issuesFolder}/<Descriptive-Title>.md\`
+
+\`\`\`yaml
+---
+id: "ISSUE-1700000000000"        # Unique ID (e.g., ISSUE-001 or timestamp)
+type: issue                     # MUST be exactly 'issue'
+title: "Implement user auth"    # Concise title of the task
+status: todo                    # backlog | todo | in-progress | in-review | blocked | done
+priority: high                  # high | medium | low | normal
+project: "PROJ-AUTH"           # Optional: Linked Project ID or "[[PROJ-AUTH]]"
+epic: "EPIC-OAUTH"              # Optional: Linked Epic ID or "[[EPIC-OAUTH]]"
+estimate: 3                     # Optional: Estimated Pomodoro units (1 unit = ${settings.pomodoroDuration || 25} min)
+logged: 1                       # Optional: Completed Pomodoro units
+difficulty: medium              # Optional: easy | medium | hard
+energy: high                    # Optional: low | high (mental energy required)
+blockedBy:                      # Optional: IDs or wikilinks of tasks blocking this
+  - "ISSUE-1699999999999"
+today: true                     # Optional: true if scheduled for today's daily focus
+thisWeek: true                  # Optional: true if in current week's sprint
+urgent: true                    # Optional: true for Eisenhower urgent quadrant
+important: true                 # Optional: true for Eisenhower important quadrant
+created: "YYYY-MM-DD HH:mm:ss"  # Creation date/time string
+due: "YYYY-MM-DD"               # Optional: Deadline date
+completedDate: "YYYY-MM-DD"     # Populated when status becomes 'done'
+tags:                           # Optional: Obsidian tags (without '#')
+  - backend
+  - auth
+related:                        # Optional: Wikilinks to reference docs
+  - "[[Authentication Spec]]"
+---
+
+## Description
+Clear context, user stories, or problem statement.
+
+## Acceptance Criteria
+- [ ] Task requirement 1
+- [ ] Task requirement 2
+
+## Notes & Technical Context
+Any implementation notes or error logs.
+\`\`\`
+
+#### Field Values & Enum Constraints:
+* **\`status\`**:
+  * \`backlog\`: Ideas, future backlog, or unscheduled items.
+  * \`todo\`: Ready for execution in current sprint.
+  * \`in-progress\`: Actively being worked on (Respect WIP limit: max **${settings.wipLimit || 3}**).
+  * \`in-review\`: Implemented, awaiting testing, QA, or verification.
+  * \`blocked\`: Cannot proceed due to external blocker or issue in \`blockedBy\`.
+  * \`done\`: Fully completed.
+* **\`priority\`**: \`high\` | \`medium\` | \`low\` | \`normal\`
+* **\`difficulty\`**: \`easy\` | \`medium\` | \`hard\`
+* **\`energy\`**: \`low\` (routine tasks) | \`high\` (deep cognitive work)
+
+---
+
+### 2.2 Project Schema
+File path: \`${projectsFolder}/<Project-Name>.md\`
+
+\`\`\`yaml
+---
+id: "PROJ-AUTH"
+type: project                   # MUST be 'project'
+title: "Authentication & Security Module"
+status: active                  # active | archived
+---
+
+# Project Overview
+High level scope, business objectives, and architecture.
+\`\`\`
+
+---
+
+### 2.3 Epic Schema
+File path: \`${epicsFolder}/<Epic-Name>.md\`
+
+\`\`\`yaml
+---
+id: "EPIC-OAUTH"
+type: epic                      # MUST be 'epic'
+title: "OAuth2 Provider Integration"
+status: active                  # active | archived
+project: "PROJ-AUTH"            # Linked Project ID or name
+---
+
+# Epic Description
+Breakdown of features and technical scope for this epic.
+\`\`\`
+
+---
+
+### 2.4 Daily Note Schema
+File path: \`${dailyNotesFolder}/YYYY-MM-DD.md\`
+
+\`\`\`yaml
+---
+reviewedAt: "2026-08-16 17:30:00"
+pomodorosRun: 6
+totalEstimate: 8
+tasksTaken:
+  - "ISSUE-1700000000000"
+  - "ISSUE-1700000000001"
+taskNames:
+  - "Implement user auth"
+  - "Fix header responsiveness"
+---
+
+# Daily Log
+- Work notes and timestamps.
+- Obstacles encountered.
+\`\`\`
+
+---
+
+## 3. Agent Action Recipes (Step-by-Step Instructions)
+
+### Recipe 1: Creating a New Task / Issue
+When the user asks you to create a task:
+1. Generate a file inside \`${issuesFolder}/\` (e.g. \`${issuesFolder}/ISSUE-\${Date.now()}.md\` or \`${issuesFolder}/\${Title}.md\`).
+2. Write valid YAML frontmatter with \`type: issue\`, \`status: todo\` (or \`backlog\`), and \`priority\`.
+3. If user mentions a project, add \`project: "PROJ-ID"\`.
+4. If urgent/important, set \`urgent: true\` or \`important: true\`.
+5. Provide a clear \`## Acceptance Criteria\` checklist.
+
+### Recipe 2: Completing a Task
+When the user asks you to mark a task as finished:
+1. Open the target issue in \`${issuesFolder}/\`.
+2. Update frontmatter: \`status: done\`.
+3. Add or update: \`completedDate: "YYYY-MM-DD"\` (today's date).
+4. Check off any completed checklist items in the body.
+
+### Recipe 3: Handling Blockers & Dependencies
+When task A is blocked by task B:
+1. In Task A: set \`status: blocked\`.
+2. In Task A frontmatter: add Task B's ID to \`blockedBy: ["ISSUE-B-ID"]\`.
+
+### Recipe 4: Daily Planning (Focus Today)
+When the user asks to plan today's work:
+1. Review all issues with \`status: todo\` or \`priority: high\`.
+2. Set \`today: true\` on selected issues (keep total estimated pomodoros within user capacity, ~6-10 pomodoros).
+3. Ensure no more than **${settings.wipLimit || 3}** issues are marked as \`in-progress\`.
+4. Update or link the tasks in \`${dailyNotesFolder}/YYYY-MM-DD.md\`.
+
+### Recipe 5: Triaging Inbox Notes into Flow Issues
+When user asks to clean or process \`${inboxFolder}/\`:
+1. Read each raw capture note.
+2. If it is an actionable task, extract title and details.
+3. Create a new issue file in \`${issuesFolder}/\` with standard Flow frontmatter.
+4. Move or link the original note to avoid clutter.
+
+---
+
+## 4. Safety & Formatting Rules for AI Agents
+
+1. **Frontmatter Preservation**: Never delete unrecognized YAML fields when updating files.
+2. **No Proprietary DBs**: Everything must remain plain Markdown files.
+3. **WIP Limit Warning**: If more than **${settings.wipLimit || 3}** tasks are \`in-progress\`, notify the user about the WIP constraint.
+4. **Wikilink Syntax**: Use standard Obsidian format: \`[[Note Name|Alias]]\` or \`[[Note Name]]\`.
+
+---
+*Generated by Flow Tracker Plugin \u2014 Local-First Markdown Project Management.*
+`;
+}
+async function ensureAgentsMdIntegration(app) {
+  const possiblePaths = ["AGENTS.md", "agents.md"];
+  for (const path of possiblePaths) {
+    const file = app.vault.getAbstractFileByPath((0, import_obsidian13.normalizePath)(path));
+    if (file instanceof import_obsidian13.TFile) {
+      try {
+        const content = await app.vault.read(file);
+        if (/FLOW\.md/i.test(content)) {
+          return false;
+        }
+        const flowSection = `
+### Flow Task & Issue Management
+Untuk pembuatan, pembaruan, dan pelacakan tugas/issue, rujuk selalu spesifikasi di \`FLOW.md\`. Gunakan skema frontmatter Flow Tracker untuk semua item tugas.
+`;
+        let updatedContent = content;
+        const guidelineMatch = content.match(/(##\s+[^\n]*(?:Konvensi|Guidelines|Aturan)[^\n]*)/i);
+        if (guidelineMatch && guidelineMatch.index !== void 0) {
+          const afterHeader = content.substring(guidelineMatch.index);
+          const nextH2 = afterHeader.substring(guidelineMatch[0].length).search(/\n##\s+/);
+          if (nextH2 !== -1) {
+            const insertPos = guidelineMatch.index + guidelineMatch[0].length + nextH2;
+            updatedContent = content.substring(0, insertPos) + flowSection + content.substring(insertPos);
+          } else {
+            updatedContent = content + "\n" + flowSection;
+          }
+        } else {
+          updatedContent = content + "\n" + flowSection;
+        }
+        await app.vault.modify(file, updatedContent);
+        return true;
+      } catch (err) {
+        console.warn("Flow Tracker: Could not update AGENTS.md:", err);
+      }
+    }
+  }
+  return false;
+}
+async function ensureFlowGuide(app, settings, version, force = false) {
+  if (settings.autoGenerateFlowGuide === false) {
+    return false;
+  }
+  const filePath = (0, import_obsidian13.normalizePath)(settings.flowGuidePath || "FLOW.md");
+  const content = generateFlowGuideContent(settings, version);
+  let updated = false;
+  try {
+    const existingFile = app.vault.getAbstractFileByPath(filePath);
+    if (!existingFile) {
+      await app.vault.create(filePath, content);
+      updated = true;
+    } else if (existingFile instanceof import_obsidian13.TFile) {
+      if (force) {
+        await app.vault.modify(existingFile, content);
+        updated = true;
+      } else {
+        const currentContent = await app.vault.read(existingFile);
+        if (currentContent !== content) {
+          await app.vault.modify(existingFile, content);
+          updated = true;
+        }
+      }
+    }
+    await ensureAgentsMdIntegration(app);
+  } catch (error) {
+    console.error("Flow Tracker: Error generating FLOW.md guide:", error);
+  }
+  return updated;
+}
+
+// src/utils/triageUtils.ts
+var import_obsidian14 = require("obsidian");
+async function convertSelectionToIssue(app, settings, issues, editor, selectionText) {
+  const cleanSelection = selectionText.trim();
+  if (!cleanSelection)
+    return null;
+  let text = cleanSelection.replace(/^[-*+]\s*(\[[ xX]\]\s*)?/, "").trim();
+  const tagMatches = text.match(/#([\w/-]+)/g) || [];
+  const tags = tagMatches.map((t) => t.replace(/^#/, ""));
+  text = text.replace(/#([\w/-]+)/g, "").trim();
+  const urgent = /!(urgent|asap)/i.test(text);
+  const priority = /!(high|p1)/i.test(text) ? "high" : /!(low|p3)/i.test(text) ? "low" : "normal";
+  text = text.replace(/!(urgent|asap|high|p1|low|p3)/gi, "").trim();
+  const lines = text.split("\n");
+  const title = lines[0].trim();
+  const body = lines.slice(1).join("\n").trim();
+  if (!title)
+    return null;
+  const now = /* @__PURE__ */ new Date();
+  const createdDate = getLocalDateString(now);
+  const createdFile = await createIssueFile(app, settings, issues, {
+    title,
+    status: "todo",
+    priority,
+    tags,
+    related: [],
+    created: createdDate,
+    urgent,
+    important: false,
+    body: body ? `## Details
+${body}
+` : void 0
+  });
+  const issueId = createdFile.basename;
+  const replacement = `[[${issueId}|${title}]]`;
+  editor.replaceSelection(replacement);
+  new import_obsidian14.Notice(`Flow: Created ${issueId} \u2014 "${title}"`);
+  return createdFile;
+}
+async function convertNoteToIssue(app, settings, issues, file) {
+  if (file.extension !== "md")
+    return null;
+  const { frontmatter, body } = await readIssueFile(app, file);
+  if (frontmatter.type === "issue") {
+    new import_obsidian14.Notice("This file is already a Flow Issue.");
+    return file;
+  }
+  let title = file.basename;
+  const h1Match = body.match(/^#\s+(.+)$/m);
+  if (h1Match) {
+    title = h1Match[1].trim();
+  } else if (frontmatter.title) {
+    title = frontmatter.title;
+  }
+  const now = /* @__PURE__ */ new Date();
+  const createdDate = frontmatter.created || getLocalDateString(now);
+  const updatedFrontmatter = {
+    ...frontmatter,
+    id: frontmatter.id || file.basename,
+    type: "issue",
+    title,
+    status: frontmatter.status || "todo",
+    priority: frontmatter.priority || "normal",
+    created: createdDate,
+    tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+    related: Array.isArray(frontmatter.related) ? frontmatter.related : []
+  };
+  const frontmatterStr = serializeFrontmatter(updatedFrontmatter);
+  const newContent = `${frontmatterStr}
+${body}`;
+  const targetFolder = settings.issuesFolder || "Issues";
+  await ensureFolderExists(app, targetFolder);
+  const currentFolder = file.parent?.path || "";
+  if ((0, import_obsidian14.normalizePath)(currentFolder) !== (0, import_obsidian14.normalizePath)(targetFolder)) {
+    const newPath = (0, import_obsidian14.normalizePath)(`${targetFolder}/${file.name}`);
+    await app.vault.modify(file, newContent);
+    await app.fileManager.renameFile(file, newPath);
+  } else {
+    await app.vault.modify(file, newContent);
+  }
+  new import_obsidian14.Notice(`Converted "${file.basename}" to Flow Issue.`);
+  return file;
+}
+function validateVaultIssues(issues) {
+  const report = {
+    totalIssues: issues.length,
+    healthyCount: 0,
+    errors: [],
+    warnings: []
+  };
+  const validStatuses = /* @__PURE__ */ new Set(["backlog", "todo", "in-progress", "in-review", "blocked", "done"]);
+  const validPriorities = /* @__PURE__ */ new Set(["high", "medium", "low", "normal"]);
+  const issueIds = new Set(issues.map((i) => i.id));
+  for (const issue of issues) {
+    let hasError = false;
+    if (!issue.id) {
+      report.errors.push({ file: issue.filePath, message: 'Missing "id" field in frontmatter.' });
+      hasError = true;
+    }
+    if (!issue.title) {
+      report.errors.push({ file: issue.filePath, id: issue.id, message: 'Missing "title" field.' });
+      hasError = true;
+    }
+    if (!validStatuses.has(issue.status)) {
+      report.errors.push({
+        file: issue.filePath,
+        id: issue.id,
+        message: `Invalid status: "${issue.status}". Expected one of: ${Array.from(validStatuses).join(", ")}`
+      });
+      hasError = true;
+    }
+    if (issue.priority && !validPriorities.has(issue.priority)) {
+      report.warnings.push({
+        file: issue.filePath,
+        id: issue.id,
+        message: `Unrecognized priority "${issue.priority}". Standard: high | medium | low | normal.`
+      });
+    }
+    if (issue.blockedBy && Array.isArray(issue.blockedBy)) {
+      for (const blockerId of issue.blockedBy) {
+        const cleanBlocker = blockerId.replace(/^\[\[(.*?)\]\]$/, "$1");
+        if (!issueIds.has(cleanBlocker)) {
+          report.warnings.push({
+            file: issue.filePath,
+            id: issue.id,
+            message: `Blocked by unknown issue ID: "${cleanBlocker}".`
+          });
+        }
+      }
+    }
+    if (!hasError) {
+      report.healthyCount++;
+    }
+  }
+  return report;
+}
+
 // src/main.ts
-var FlowPlugin = class extends import_obsidian13.Plugin {
+var FlowPlugin = class extends import_obsidian15.Plugin {
   constructor() {
     super(...arguments);
     // Subscribers (React components) that listen to vault index changes
@@ -35503,11 +35914,13 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
       if (this.globalIndex) {
         await runAutoArchive(this.app, this.settings, this.globalIndex);
       }
+      await ensureFlowGuide(this.app, this.settings, this.manifest.version);
     });
     const currentVersion = this.manifest.version;
     if (this.settings.lastVersion !== currentVersion) {
       this.settings.lastVersion = currentVersion;
       await this.saveSettings();
+      await ensureFlowGuide(this.app, this.settings, currentVersion, true);
       setTimeout(() => {
         new ChangelogModal(this.app, this, currentVersion).open();
       }, 1e3);
@@ -35528,6 +35941,14 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
       callback: () => this.activateView()
     });
     this.addCommand({
+      id: "generate-flow-guide",
+      name: "Generate / Update FLOW.md Agent Guide",
+      callback: async () => {
+        const updated = await ensureFlowGuide(this.app, this.settings, this.manifest.version, true);
+        new import_obsidian15.Notice(updated ? "FLOW.md guide has been updated!" : "FLOW.md is already up to date.");
+      }
+    });
+    this.addCommand({
       id: "start-focus-timer",
       name: "Start Focus Timer",
       callback: () => this.triggerTimerAction("start")
@@ -35542,6 +35963,86 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
       name: "Reset Focus Timer",
       callback: () => this.triggerTimerAction("reset")
     });
+    this.addCommand({
+      id: "convert-selection-to-issue",
+      name: "Convert Selection to Issue",
+      editorCallback: async (editor) => {
+        const selection = editor.getSelection();
+        if (!selection || !selection.trim()) {
+          new import_obsidian15.Notice("Please select some text first to convert into an issue.");
+          return;
+        }
+        if (this.globalIndex) {
+          await convertSelectionToIssue(this.app, this.settings, this.globalIndex.issues, editor, selection);
+        }
+      }
+    });
+    this.addCommand({
+      id: "convert-note-to-issue",
+      name: "Convert Current Note to Issue",
+      checkCallback: (checking) => {
+        const activeFile = this.app.workspace.getActiveFile();
+        if (activeFile && activeFile.extension === "md") {
+          if (!checking && this.globalIndex) {
+            convertNoteToIssue(this.app, this.settings, this.globalIndex.issues, activeFile);
+          }
+          return true;
+        }
+        return false;
+      }
+    });
+    this.addCommand({
+      id: "validate-vault-issues",
+      name: "Validate Vault Issues & Schema",
+      callback: () => {
+        if (!this.globalIndex) {
+          new import_obsidian15.Notice("Flow Index is still initializing...");
+          return;
+        }
+        const report = validateVaultIssues(this.globalIndex.issues);
+        if (report.errors.length === 0 && report.warnings.length === 0) {
+          new import_obsidian15.Notice(`\u2705 All ${report.totalIssues} Flow issues are healthy with valid schemas!`);
+        } else {
+          new import_obsidian15.Notice(`\u26A0\uFE0F Flow Validation: ${report.errors.length} error(s), ${report.warnings.length} warning(s). Check Developer Console for details.`);
+          console.group("Flow Tracker: Issue Validation Report");
+          console.log(`Total Issues: ${report.totalIssues} (${report.healthyCount} healthy)`);
+          if (report.errors.length > 0) {
+            console.error("Errors:", report.errors);
+          }
+          if (report.warnings.length > 0) {
+            console.warn("Warnings:", report.warnings);
+          }
+          console.groupEnd();
+        }
+      }
+    });
+    this.registerEvent(
+      this.app.workspace.on("editor-menu", (menu, editor) => {
+        const selection = editor.getSelection();
+        if (selection && selection.trim().length > 0) {
+          menu.addItem((item) => {
+            item.setTitle("Flow: Convert Selection to Issue").setIcon("list-plus").onClick(async () => {
+              if (this.globalIndex) {
+                await convertSelectionToIssue(this.app, this.settings, this.globalIndex.issues, editor, selection);
+              }
+            });
+          });
+        }
+      })
+    );
+    this.registerEvent(
+      this.app.workspace.on("file-menu", (menu, file) => {
+        if (file instanceof import_obsidian15.TFile && file.extension === "md") {
+          menu.addItem((item) => {
+            item.setTitle("Flow: Convert Note to Issue").setIcon("check-square").onClick(async () => {
+              if (this.globalIndex) {
+                await convertNoteToIssue(this.app, this.settings, this.globalIndex.issues, file);
+              }
+            });
+          });
+        }
+      })
+    );
     this.registerEvent(this.app.vault.on("rename", (file, oldPath) => this.handleFileRename(file, oldPath)));
     this.registerEvent(this.app.vault.on("delete", (file) => this.handleFileDelete(file)));
     this.registerEvent(this.app.metadataCache.on("changed", (file) => this.handleFileChange(file)));
@@ -35551,7 +36052,7 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
     }));
     this.registerEvent(
       this.app.workspace.on("file-open", async (file) => {
-        if (!file || !(file instanceof import_obsidian13.TFile))
+        if (!file || !(file instanceof import_obsidian15.TFile))
           return;
         const folder = this.settings.dailyNotesFolder;
         if (!folder)
@@ -35596,6 +36097,9 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
     await this.saveData(this.settings);
     this.globalIndex = scanVault(this.app, this.settings);
     this.triggerChange();
+    if (this.settings.autoGenerateFlowGuide !== false) {
+      await ensureFlowGuide(this.app, this.settings, this.manifest.version);
+    }
   }
   // --- Obsidian Vault Event Handlers ---
   // Incremental updates for individual files to avoid expensive full scans:
@@ -35659,7 +36163,7 @@ var FlowPlugin = class extends import_obsidian13.Plugin {
     workspace.revealLeaf(leaf);
   }
 };
-var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
+var FlowSettingTab = class extends import_obsidian15.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -35669,35 +36173,35 @@ var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
     containerEl.empty();
     containerEl.createEl("h2", { text: "Flow Project Tracker Settings" });
     containerEl.createEl("h3", { text: "Folder Locations" });
-    new import_obsidian13.Setting(containerEl).setName("Inbox Folder").setDesc("Folder where new inbox tasks are placed.").addText((text) => text.setPlaceholder("2. WORK/INBOX").setValue(this.plugin.settings.inboxFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Inbox Folder").setDesc("Folder where new inbox tasks are placed.").addText((text) => text.setPlaceholder("2. WORK/INBOX").setValue(this.plugin.settings.inboxFolder).onChange(async (value) => {
       this.plugin.settings.inboxFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Issues Folder").setDesc("Default folder for standalone tasks. (Tasks linked to a Project will be saved inside the Project's folder).").addText((text) => text.setPlaceholder("Issues").setValue(this.plugin.settings.issuesFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Issues Folder").setDesc("Default folder for standalone tasks. (Tasks linked to a Project will be saved inside the Project's folder).").addText((text) => text.setPlaceholder("Issues").setValue(this.plugin.settings.issuesFolder).onChange(async (value) => {
       this.plugin.settings.issuesFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Projects Folder").setDesc("Root folder where your Project directories will be created.").addText((text) => text.setPlaceholder("Projects").setValue(this.plugin.settings.projectsFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Projects Folder").setDesc("Root folder where your Project directories will be created.").addText((text) => text.setPlaceholder("Projects").setValue(this.plugin.settings.projectsFolder).onChange(async (value) => {
       this.plugin.settings.projectsFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Epics Folder").setDesc("Default folder for standalone epics. (Epics linked to a Project will be saved inside the Project's folder).").addText((text) => text.setPlaceholder("Epics").setValue(this.plugin.settings.epicsFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Epics Folder").setDesc("Default folder for standalone epics. (Epics linked to a Project will be saved inside the Project's folder).").addText((text) => text.setPlaceholder("Epics").setValue(this.plugin.settings.epicsFolder).onChange(async (value) => {
       this.plugin.settings.epicsFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Docs Folder").setDesc("Folder where general documents are stored.").addText((text) => text.setPlaceholder("Docs").setValue(this.plugin.settings.docsFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Docs Folder").setDesc("Folder where general documents are stored.").addText((text) => text.setPlaceholder("Docs").setValue(this.plugin.settings.docsFolder).onChange(async (value) => {
       this.plugin.settings.docsFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Daily Notes Folder").setDesc("Folder where daily notes are stored.").addText((text) => text.setPlaceholder("Daily Notes").setValue(this.plugin.settings.dailyNotesFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Daily Notes Folder").setDesc("Folder where daily notes are stored.").addText((text) => text.setPlaceholder("Daily Notes").setValue(this.plugin.settings.dailyNotesFolder).onChange(async (value) => {
       this.plugin.settings.dailyNotesFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Archive Folder").setDesc("Root folder where archived tasks and projects will be moved.").addText((text) => text.setPlaceholder("Archive").setValue(this.plugin.settings.archiveFolder).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Archive Folder").setDesc("Root folder where archived tasks and projects will be moved.").addText((text) => text.setPlaceholder("Archive").setValue(this.plugin.settings.archiveFolder).onChange(async (value) => {
       this.plugin.settings.archiveFolder = value;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Auto-Archive Days").setDesc("Number of days after completion before a task or project is automatically archived. Set to 0 to disable.").addText((text) => text.setPlaceholder("30").setValue(this.plugin.settings.autoArchiveDays.toString()).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Auto-Archive Days").setDesc("Number of days after completion before a task or project is automatically archived. Set to 0 to disable.").addText((text) => text.setPlaceholder("30").setValue(this.plugin.settings.autoArchiveDays.toString()).onChange(async (value) => {
       const num = parseInt(value, 10);
       if (!isNaN(num)) {
         this.plugin.settings.autoArchiveDays = num;
@@ -35705,31 +36209,47 @@ var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
       }
     }));
     containerEl.createEl("h3", { text: "Focus & Work Schedule" });
-    new import_obsidian13.Setting(containerEl).setName("Work Start Time").setDesc("Start time of your daily work hours in HH:MM format (default: 09:00).").addText((text) => text.setPlaceholder("09:00").setValue(this.plugin.settings.workStartHour || "09:00").onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Work Start Time").setDesc("Start time of your daily work hours in HH:MM format (default: 09:00).").addText((text) => text.setPlaceholder("09:00").setValue(this.plugin.settings.workStartHour || "09:00").onChange(async (value) => {
       this.plugin.settings.workStartHour = value || "09:00";
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Work End Time").setDesc("End time of your daily work hours in HH:MM format (default: 17:00).").addText((text) => text.setPlaceholder("17:00").setValue(this.plugin.settings.workEndHour || "17:00").onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Work End Time").setDesc("End time of your daily work hours in HH:MM format (default: 17:00).").addText((text) => text.setPlaceholder("17:00").setValue(this.plugin.settings.workEndHour || "17:00").onChange(async (value) => {
       this.plugin.settings.workEndHour = value || "17:00";
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Pomodoro Duration").setDesc("Duration of a single Pomodoro session in minutes (default: 25).").addText((text) => text.setPlaceholder("25").setValue((this.plugin.settings.pomodoroDuration || 25).toString()).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Pomodoro Duration").setDesc("Duration of a single Pomodoro session in minutes (default: 25).").addText((text) => text.setPlaceholder("25").setValue((this.plugin.settings.pomodoroDuration || 25).toString()).onChange(async (value) => {
       const num = parseInt(value, 10);
       this.plugin.settings.pomodoroDuration = isNaN(num) ? 25 : num;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian13.Setting(containerEl).setName("Auto-Prompt Plan Your Day").setDesc("Automatically prompt to plan your day when starting your workday.").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableDailyPlanPopup !== false).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("Auto-Prompt Plan Your Day").setDesc("Automatically prompt to plan your day when starting your workday.").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableDailyPlanPopup !== false).onChange(async (value) => {
       this.plugin.settings.enableDailyPlanPopup = value;
       await this.plugin.saveSettings();
     }));
     containerEl.createEl("h3", { text: "Workflow Limits" });
-    new import_obsidian13.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
+    new import_obsidian15.Setting(containerEl).setName("WIP Limit").setDesc('Maximum number of tasks allowed in the "In Progress" column (recommended: 3).').addText((text) => text.setPlaceholder("3").setValue((this.plugin.settings.wipLimit || 3).toString()).onChange(async (value) => {
       const num = parseInt(value, 10);
       this.plugin.settings.wipLimit = isNaN(num) ? 3 : num;
       await this.plugin.saveSettings();
     }));
+    containerEl.createEl("h3", { text: "AI & Agent Integration" });
+    new import_obsidian15.Setting(containerEl).setName("Auto-Generate FLOW.md").setDesc("Automatically generate and keep FLOW.md updated with your vault settings & schemas for AI agents (Claude, Cursor, Copilot, etc.).").addToggle((toggle) => toggle.setValue(this.plugin.settings.autoGenerateFlowGuide !== false).onChange(async (value) => {
+      this.plugin.settings.autoGenerateFlowGuide = value;
+      await this.plugin.saveSettings();
+      if (value) {
+        await ensureFlowGuide(this.app, this.plugin.settings, this.plugin.manifest.version, true);
+      }
+    }));
+    new import_obsidian15.Setting(containerEl).setName("Guide File Path").setDesc("Relative file path where the AI agent guide will be saved in your vault.").addText((text) => text.setPlaceholder("FLOW.md").setValue(this.plugin.settings.flowGuidePath || "FLOW.md").onChange(async (value) => {
+      this.plugin.settings.flowGuidePath = value || "FLOW.md";
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian15.Setting(containerEl).setName("Update Guide Now").setDesc("Force regenerate the FLOW.md file with current vault folders and settings.").addButton((btn) => btn.setButtonText("Update FLOW.md").onClick(async () => {
+      await ensureFlowGuide(this.app, this.plugin.settings, this.plugin.manifest.version, true);
+      new import_obsidian15.Notice("FLOW.md agent guide generated successfully!");
+    }));
     containerEl.createEl("h3", { text: "Danger Zone", cls: "flow-danger-zone" });
-    new import_obsidian13.Setting(containerEl).setName("Factory Reset").setDesc("DEV ONLY: Delete all files managed by Flow Tracker and clear local storage.").addButton(
+    new import_obsidian15.Setting(containerEl).setName("Factory Reset").setDesc("DEV ONLY: Delete all files managed by Flow Tracker and clear local storage.").addButton(
       (btn) => btn.setButtonText("Reset All Data").setWarning().onClick(async () => {
         if (confirm("DANGER: This will delete ALL files in your Flow Tracker folders. Are you absolutely sure?")) {
           const foldersToClear = [
@@ -35764,7 +36284,7 @@ var FlowSettingTab = class extends import_obsidian13.PluginSettingTab {
     );
   }
 };
-var ChangelogModal = class extends import_obsidian13.Modal {
+var ChangelogModal = class extends import_obsidian15.Modal {
   constructor(app, plugin, version) {
     super(app);
     this.plugin = plugin;
@@ -35796,8 +36316,8 @@ var ChangelogModal = class extends import_obsidian13.Modal {
     listContainer.style.border = "1px solid var(--background-modifier-border)";
     let changelogRendered = false;
     try {
-      if ("### Added\n- **Task Activation Flow**: Pengganti *Morning Activation* yang berupa *wizard* interaktif untuk membantu perencanaan harian. Muncul otomatis di awal hari kerja atau dapat dipanggil manual kapan saja.\n\n---".trim()) {
-        await import_obsidian13.MarkdownRenderer.render(this.app, "### Added\n- **Task Activation Flow**: Pengganti *Morning Activation* yang berupa *wizard* interaktif untuk membantu perencanaan harian. Muncul otomatis di awal hari kerja atau dapat dipanggil manual kapan saja.\n\n---", listContainer, "", this.plugin);
+      if ('### Added\n- **AI Agent Specification Auto-Generator (`FLOW.md`)**:\n  - Otomatis membuat dan memperbarui file panduan `FLOW.md` di root vault saat plugin dimuat, diperbarui, atau saat pengaturan folder diubah.\n  - Berisi struktur routing folder aktif, spesifikasi lengkap YAML Frontmatter (*Issues, Projects, Epics, Daily Notes*), enum validasi, batas WIP, dan *Action Recipes Cookbook* langkah-demi-langkah bagi AI coding assistant (Claude, Cursor, Antigravity, Copilot, ChatGPT).\n  - **Auto-Sync `AGENTS.md`**: Otomatis mendeteksi file `AGENTS.md` di vault dan menyisipkan referensi ke `FLOW.md` agar agent langsung tersinkronisasi tanpa konfigurasi manual.\n- **Quick Triage Actions**:\n  - **Convert Selection to Issue**: Sorot teks atau checklist di editor mana pun (misal `INBOX.md`), klik kanan \u2192 *"Flow: Convert Selection to Issue"*. Otomatis membuat kartu issue baru di folder `Issues/` dan mengganti teks di editor dengan wikilink `[[ISSUE-xxx|Title]]`.\n  - **Convert Note to Issue**: Mengonversi file catatan biasa langsung menjadi kartu Flow Issue terstruktur via context menu file atau Command Palette.\n- **Vault Issue Validator & Diagnostics**:\n  - Perintah baru `Flow Tracker: Validate Vault Issues & Schema` untuk mendeteksi error status, missing fields (`id`, `title`), dan broken dependency pada `blockedBy`.\n- **AI & Agent Integration Settings**:\n  - Section pengaturan baru di Tab Settings Flow untuk mengatur toggle auto-generate, custom path, dan tombol regenerate manual.\n\n---'.trim()) {
+        await import_obsidian15.MarkdownRenderer.render(this.app, '### Added\n- **AI Agent Specification Auto-Generator (`FLOW.md`)**:\n  - Otomatis membuat dan memperbarui file panduan `FLOW.md` di root vault saat plugin dimuat, diperbarui, atau saat pengaturan folder diubah.\n  - Berisi struktur routing folder aktif, spesifikasi lengkap YAML Frontmatter (*Issues, Projects, Epics, Daily Notes*), enum validasi, batas WIP, dan *Action Recipes Cookbook* langkah-demi-langkah bagi AI coding assistant (Claude, Cursor, Antigravity, Copilot, ChatGPT).\n  - **Auto-Sync `AGENTS.md`**: Otomatis mendeteksi file `AGENTS.md` di vault dan menyisipkan referensi ke `FLOW.md` agar agent langsung tersinkronisasi tanpa konfigurasi manual.\n- **Quick Triage Actions**:\n  - **Convert Selection to Issue**: Sorot teks atau checklist di editor mana pun (misal `INBOX.md`), klik kanan \u2192 *"Flow: Convert Selection to Issue"*. Otomatis membuat kartu issue baru di folder `Issues/` dan mengganti teks di editor dengan wikilink `[[ISSUE-xxx|Title]]`.\n  - **Convert Note to Issue**: Mengonversi file catatan biasa langsung menjadi kartu Flow Issue terstruktur via context menu file atau Command Palette.\n- **Vault Issue Validator & Diagnostics**:\n  - Perintah baru `Flow Tracker: Validate Vault Issues & Schema` untuk mendeteksi error status, missing fields (`id`, `title`), dan broken dependency pada `blockedBy`.\n- **AI & Agent Integration Settings**:\n  - Section pengaturan baru di Tab Settings Flow untuk mengatur toggle auto-generate, custom path, dan tombol regenerate manual.\n\n---', listContainer, "", this.plugin);
         changelogRendered = true;
       }
     } catch (err) {

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.8.0] - 2026-08-16
+
+### Added
+- **AI Agent Specification Auto-Generator (`FLOW.md`)**:
+  - Otomatis membuat dan memperbarui file panduan `FLOW.md` di root vault saat plugin dimuat, diperbarui, atau saat pengaturan folder diubah.
+  - Berisi struktur routing folder aktif, spesifikasi lengkap YAML Frontmatter (*Issues, Projects, Epics, Daily Notes*), enum validasi, batas WIP, dan *Action Recipes Cookbook* langkah-demi-langkah bagi AI coding assistant (Claude, Cursor, Antigravity, Copilot, ChatGPT).
+  - **Auto-Sync `AGENTS.md`**: Otomatis mendeteksi file `AGENTS.md` di vault dan menyisipkan referensi ke `FLOW.md` agar agent langsung tersinkronisasi tanpa konfigurasi manual.
+- **Quick Triage Actions**:
+  - **Convert Selection to Issue**: Sorot teks atau checklist di editor mana pun (misal `INBOX.md`), klik kanan → *"Flow: Convert Selection to Issue"*. Otomatis membuat kartu issue baru di folder `Issues/` dan mengganti teks di editor dengan wikilink `[[ISSUE-xxx|Title]]`.
+  - **Convert Note to Issue**: Mengonversi file catatan biasa langsung menjadi kartu Flow Issue terstruktur via context menu file atau Command Palette.
+- **Vault Issue Validator & Diagnostics**:
+  - Perintah baru `Flow Tracker: Validate Vault Issues & Schema` untuk mendeteksi error status, missing fields (`id`, `title`), dan broken dependency pada `blockedBy`.
+- **AI & Agent Integration Settings**:
+  - Section pengaturan baru di Tab Settings Flow untuk mengatur toggle auto-generate, custom path, dan tombol regenerate manual.
+
+---
 ## [0.7.1] - 2026-07-12
 
 ### Added
