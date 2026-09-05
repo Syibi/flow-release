@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.8.1] - 2026-09-05
+
+### Performance & Optimizations
+- **Board & Drag-and-Drop Performance**:
+  - Precomputing smart score dan unresolved blocker mapping menggunakan `useMemo` sehingga tidak lagi dihitung berulang-ulang di setiap render kolom.
+  - Memoisasi pengelompokan issue kolom Kanban dan kuadran Eisenhower.
+  - Mengekstrak kartu issue ke komponen `KanbanCard` dengan `React.memo`, mencegah stutter dan re-render seluruh kartu saat drag-and-drop hover antar kolom.
+- **Productivity & Heatmap Lookup**:
+  - Mengganti pencarian linear berulang pada rendering 84 sel heatmap menjadi $O(1)$ Map lookups instan (`completedCountByDate`, `dailyNotesByDate`).
+  - Mengoptimalkan kalkulasi statistik streak dan tasks taken dengan indexing `issuesById` Map ($O(1)$).
+- **Dashboard & Timer Memoization**:
+  - Memoisasi derived metrics, kalkulasi estimasi jadwal kerja, dan status pomodoro di `DashboardView`.
+  - Memindahkan helper storage ke luar siklus render di `PomodoroTimer`.
+
+### Refactoring & Architecture
+- **Deduplikasi Daily Report & Standup Parser**:
+  - Menyatukan ~400 baris duplikasi kode parsing standup, timeline aktivitas harian, dan markdown daily note antara `DailyReportModalView` dan `WeeklyReviewView` ke modul bersama `src/utils/dailyReportParser.tsx`.
+  - Mengurangi ukuran bundle produksi plugin dari 441.4 KB menjadi 438.8 KB.
+- **Ekstraksi Subtask & Checklist Utils**:
+  - Memindahkan fungsi murni manipulasi checklist markdown (`parseSubtasks`, `toggleSubtask`, `deleteSubtask`, `addSubtask`, `editSubtask`, `parseNotes`, `updateNotesInBody`) dari `IssueEditor` ke `src/utils/subtaskUtils.ts`.
+- **Plugin Lifecycle & Memory Cleanup**:
+  - Menambahkan pembatalan timer debounce dan pembersihan listener array pada fungsi `onunload()` di `main.ts` untuk mencegah *memory leaks* saat plugin di-reload.
+- **Type Safety**:
+  - Memperbaiki pengetikan fungsi `calculateStreak` di `timeUtils.ts` agar aman dari tipe `any[]`.
+
+### Testing & Tooling
+- Menambahkan 7 unit tests baru untuk manipulasi subtask markdown di `tests/subtaskUtils.test.ts` (total 39/39 tests passing di Bun).
+
+---
 ## [0.8.0] - 2026-08-16
 
 ### Added
@@ -11,7 +40,7 @@ All notable changes to this project will be documented in this file.
   - Berisi struktur routing folder aktif, spesifikasi lengkap YAML Frontmatter (*Issues, Projects, Epics, Daily Notes*), enum validasi, batas WIP, dan *Action Recipes Cookbook* langkah-demi-langkah bagi AI coding assistant (Claude, Cursor, Antigravity, Copilot, ChatGPT).
   - **Auto-Sync `AGENTS.md`**: Otomatis mendeteksi file `AGENTS.md` di vault dan menyisipkan referensi ke `FLOW.md` agar agent langsung tersinkronisasi tanpa konfigurasi manual.
 - **Quick Triage Actions**:
-  - **Convert Selection to Issue**: Sorot teks atau checklist di editor mana pun (misal `INBOX.md`), klik kanan → *"Flow: Convert Selection to Issue"*. Otomatis membuat kartu issue baru di folder `Issues/` dan mengganti teks di editor dengan wikilink `[[ISSUE-xxx|Title]]`.
+  - **Convert Selection to Issue**: Sorot teks atau checklist di editor mana pun (misal `INBOX.md`), klik kanan  *"Flow: Convert Selection to Issue"*. Otomatis membuat kartu issue baru di folder `Issues/` dan mengganti teks di editor dengan wikilink `[[ISSUE-xxx|Title]]`.
   - **Convert Note to Issue**: Mengonversi file catatan biasa langsung menjadi kartu Flow Issue terstruktur via context menu file atau Command Palette.
 - **Vault Issue Validator & Diagnostics**:
   - Perintah baru `Flow Tracker: Validate Vault Issues & Schema` untuk mendeteksi error status, missing fields (`id`, `title`), dan broken dependency pada `blockedBy`.
@@ -86,23 +115,23 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - **Related Documents per Task**: Dari Task Editor, kini bisa membuat Canvas atau Note baru langsung terhubung ke task. Dokumen disimpan di folder `Docs/` milik project/epic terkait dan diberi nama otomatis `ISSUE-XXX - Nama.md/canvas`.
-- **Vault Scan Approach for Related Docs**: Relasi dokumen dideteksi berdasarkan naming convention (`ISSUE-XXX - *`) tanpa perlu menyimpan frontmatter tambahan — lebih simpel, lebih robust, tidak ada race condition.
+- **Vault Scan Approach for Related Docs**: Relasi dokumen dideteksi berdasarkan naming convention (`ISSUE-XXX - *`) tanpa perlu menyimpan frontmatter tambahan  lebih simpel, lebih robust, tidak ada race condition.
 - **Real-time Related Docs List**: Daftar dokumen terkait auto-refresh saat ada file dibuat, dihapus, atau di-rename di vault (menggunakan vault event listeners).
-- **Delete Button per Document**: Tombol ✕ di setiap item dokumen untuk menghapus file dari vault dengan dialog konfirmasi.
+- **Delete Button per Document**: Tombol  di setiap item dokumen untuk menghapus file dari vault dengan dialog konfirmasi.
 - **Archive Tab (Projects & Epics)**: Tab "Archive" di ProjectsView untuk melihat project dan epic yang sudah berstatus `archived`.
 - **Auto-Archive Tasks**: Sistem otomatis memindahkan task berstatus `done` ke folder arsip setelah jumlah hari yang dikonfigurasi di Settings.
 - **Edit Project & Epic**: Tombol edit di modal detail project/epic untuk mengubah nama, status, dan properti lainnya.
 - **Epic Status**: Menambahkan field `status` (`active` | `archived`) pada Epic.
 
 ### Changed
-- **Related Documents Icons**: Mengganti emoji (📄🗂) dengan ikon SVG konsisten dari Lucide (`FileText` untuk note, `Network` untuk canvas) agar seragam dengan seluruh UI plugin.
+- **Related Documents Icons**: Mengganti emoji () dengan ikon SVG konsisten dari Lucide (`FileText` untuk note, `Network` untuk canvas) agar seragam dengan seluruh UI plugin.
 - **Blank File on Create**: File task, project, epic, note, dan canvas yang baru dibuat kini tidak lagi memiliki heading placeholder (`# Judul`). File dibuat kosong agar user bebas menulis konten sendiri.
-- **triggerChange() Debounce**: UI refresh di-debounce 250ms untuk mengelompokkan event perubahan file yang terjadi cepat berturut-turut (misal saat batch archive) menjadi satu re-render saja — meningkatkan performa signifikan pada vault besar.
+- **triggerChange() Debounce**: UI refresh di-debounce 250ms untuk mengelompokkan event perubahan file yang terjadi cepat berturut-turut (misal saat batch archive) menjadi satu re-render saja  meningkatkan performa signifikan pada vault besar.
 
 ### Fixed
 - **Blank UI on Window Reload**: Menambahkan listener `metadataCache.on('resolved')` sehingga UI selalu terisi data setelah Obsidian selesai mengindeks vault, menghilangkan kondisi tampilan kosong saat Ctrl+R.
 - **editingIssue Sync**: State task yang sedang diedit di modal kini disinkronkan otomatis saat index vault diperbarui, mencegah data stale pada editor yang sedang terbuka.
-- **Electron `prompt()` Compatibility**: Mengganti semua pemanggilan `prompt()` dengan UI input inline berbasis React state — kompatibel penuh dengan lingkungan Electron/Obsidian yang memblokir `prompt()`.
+- **Electron `prompt()` Compatibility**: Mengganti semua pemanggilan `prompt()` dengan UI input inline berbasis React state  kompatibel penuh dengan lingkungan Electron/Obsidian yang memblokir `prompt()`.
 - **Epic Autofill on Edit**: Field epic kini ter-isi otomatis saat membuka task editor untuk task yang sudah memiliki epic terdaftar.
 - **completedDate Preservation**: Field `completedDate` kini dijaga dengan benar saat menyimpan ulang task yang sudah berstatus `done`.
 
@@ -129,10 +158,10 @@ All notable changes to this project will be documented in this file.
 ## [0.5.0] - 2026-06-11
 
 ### Added
-- **Daily Report Modal**: New Obsidian modal (`DailyReportModal`) that opens a full daily report for any selected date. Displays session stats (focus pomodoros, total duration, completion %), completed and uncompleted task cards, a Refleksi Harian section, and an activity log with two tabs — Kronologis (timeline) and Report (task sessions with precise `startTime – endTime` and action notes). Footer provides quick access to the raw daily note and dashboard navigation.
+- **Daily Report Modal**: New Obsidian modal (`DailyReportModal`) that opens a full daily report for any selected date. Displays session stats (focus pomodoros, total duration, completion %), completed and uncompleted task cards, a Refleksi Harian section, and an activity log with two tabs  Kronologis (timeline) and Report (task sessions with precise `startTime  endTime` and action notes). Footer provides quick access to the raw daily note and dashboard navigation.
 - **Review Tab**: New dedicated **Review** main tab with two sub-tabs:
-  - **Daily Review** — date switcher (`< Prev Day / Today / Next Day >`) for reviewing any date. Includes a reflection form (Yang Berjalan Lancar, Hambatan / Kendala, Rencana Besok) with **1-second auto-save** (no manual save button). Also shows a daily report card with task sessions and clickable task titles that open the IssueEditor.
-  - **Weekly Review** — scope planner for `thisWeek` tasks and a weekly overview summary.
+  - **Daily Review**  date switcher (`< Prev Day / Today / Next Day >`) for reviewing any date. Includes a reflection form (Yang Berjalan Lancar, Hambatan / Kendala, Rencana Besok) with **1-second auto-save** (no manual save button). Also shows a daily report card with task sessions and clickable task titles that open the IssueEditor.
+  - **Weekly Review**  scope planner for `thisWeek` tasks and a weekly overview summary.
 - **Workday Timeline**: New visual progress bar on the Dashboard showing elapsed time, planned focus time, free buffer, and overload segments across the work day. A floating "Sekarang (HH:MM)" badge with a vertical marker line shows real-time position.
 - **Daily Focus Progress Bar**: Secondary progress bar below the timeline tracking logged vs estimated pomodoros for today's tasks.
 - **Focus Queue**: Pomodoro sidebar now features a 3-slot Focus Queue that auto-fills from today's active tasks, auto-ejects completed tasks, and compacts empty slots. Supports manual slot assignment via dropdown.
@@ -141,7 +170,7 @@ All notable changes to this project will be documented in this file.
 - **Break Overlay**: Full-screen break overlay with breathing animation (inhale/hold/exhale cycle), offline activity prompt, and skip/dismiss controls.
 - **Alarm System**: Looping audio tone and pulsing button when Pomodoro timer completes. "Matikan Alarm" silences and transitions to next mode.
 - **Recommended Task Widget**: Suggests the highest Smart-Score backlog task not yet in the Focus Queue when capacity allows.
-- **Target Tercapai Button**: One-click manual session completion inside the Deep Work overlay — increments logged pomodoro count, logs activity to daily note, and transitions to break mode with a celebratory C5-E5-G5 audio arpeggio.
+- **Target Tercapai Button**: One-click manual session completion inside the Deep Work overlay  increments logged pomodoro count, logs activity to daily note, and transitions to break mode with a celebratory C5-E5-G5 audio arpeggio.
 - **Inbox Tab**: Quick-capture input for raw tasks and thoughts, processed later into issues via the IssueEditor.
 - **End-of-Day Celebration State**: When the scheduled work day ends, Today's Plan is replaced with a celebration card showing daily stats and a shortcut to write daily reflection.
 
@@ -150,12 +179,12 @@ All notable changes to this project will be documented in this file.
 - **Reflection Labels**: All-caps saturated colored text in the Daily Report reflection section replaced with soft pill badges (muted background, low-opacity border) for cleaner visual hierarchy.
 - **Report Tab**: Renamed "Daily Standup" tab to "Report"; now set as the default active tab in the Review view.
 - **Recent Daily Reports Sort Order**: List on Dashboard now sorted oldest-to-newest (ascending chronological order).
-- **Timer State Persistence**: Pomodoro timer state (mode, running/paused, remaining time) persisted to `localStorage` using epoch targets — survives sidebar unmounts and plugin reloads.
+- **Timer State Persistence**: Pomodoro timer state (mode, running/paused, remaining time) persisted to `localStorage` using epoch targets  survives sidebar unmounts and plugin reloads.
 - **obsidianUtils**: `readReflectionFromDailyNote` and `saveReflectionToDailyNote` now accept an optional `dateStr` parameter for reading/writing to any date's daily note (not just today).
 
 ### Fixed
 - **Modal Close Button**: Native Obsidian close button hidden inside `DailyReportModal`; replaced with a custom React button precisely positioned in the modal header with proper sizing, border, and hover effect.
-- **Emoji Cleanup**: Removed `⏱️` from timing badges and `🎉` from task completion text in both the Daily Report Modal and Weekly Review views.
+- **Emoji Cleanup**: Removed `` from timing badges and `` from task completion text in both the Daily Report Modal and Weekly Review views.
 - **Auto-Clean Stale Tasks**: Completed tasks with a `completedDate` from a previous day are automatically removed from Today's Plan on Dashboard load.
 
 ---
@@ -171,7 +200,7 @@ All notable changes to this project will be documented in this file.
 ## [0.4.3] - 2026-06-11
 
 ### Added
-- **Interactive Tag Pills (Chips)**: Redesigned the tags input field to automatically convert text to separate interactive tag pills upon typing a comma, pressing `Enter` or `Tab`, or clicking outside the input (blur). Supports removing individual tags by clicking their delete (`×`) icon or pressing `Backspace` on an empty input.
+- **Interactive Tag Pills (Chips)**: Redesigned the tags input field to automatically convert text to separate interactive tag pills upon typing a comma, pressing `Enter` or `Tab`, or clicking outside the input (blur). Supports removing individual tags by clicking their delete (``) icon or pressing `Backspace` on an empty input.
 - **Robust Tag Fallbacks**: Added a legacy tags parser to ensure existing comma-separated strings inside frontmatter metadata, local drafts, or raw markdown view mode are automatically parsed and loaded as tag pills.
 
 ### Changed

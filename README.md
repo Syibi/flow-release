@@ -1,6 +1,6 @@
-# Flow — Personal Project OS for Obsidian
+# Flow  Personal Project OS for Obsidian
 
-A local-first, Markdown-native project management plugin for [Obsidian](https://obsidian.md). Flow transforms your vault into a structured personal operating system — purpose-built for developers and builders who need focused, distraction-resistant task execution.
+A local-first, Markdown-native project management plugin for [Obsidian](https://obsidian.md). Flow transforms your vault into a structured personal operating system  purpose-built for developers and builders who need focused, distraction-resistant task execution.
 
 All data is stored as plain Markdown files with YAML frontmatter. No proprietary databases. No sync lock-in.
 
@@ -15,10 +15,10 @@ All data is stored as plain Markdown files with YAML frontmatter. No proprietary
 | **Daily Planning** | Mark tasks for today's focus; auto-syncs to your Daily Note |
 | **Weekly Review** | Structured weekly evaluation with a completion checklist and log |
 | **Pomodoro Timer** | 3-slot focus queue with auto-advance and session auto-logging |
-| **Task Dependencies** | `blockedBy` field — visually locks tasks awaiting resolution |
+| **Task Dependencies** | `blockedBy` field  visually locks tasks awaiting resolution |
 | **WIP Limit** | Configurable cap on concurrent In Progress tasks |
 | **Energy Planning** | Low / High energy classification with dashboard filter |
-| **Project Health** | Dynamic health scoring per project: Healthy · At Risk · Stuck |
+| **Project Health** | Dynamic health scoring per project: Healthy  At Risk  Stuck |
 | **Knowledge Links** | `related` wiki-links open directly in Obsidian from the issue editor |
 
 ---
@@ -30,14 +30,14 @@ All data is stored as plain Markdown files with YAML frontmatter. No proprietary
 [BRAT](https://github.com/TfTHacker/obsidian42-brat) is a community plugin that enables installing and auto-updating plugins directly from GitHub.
 
 1. Install **BRAT** from Obsidian Community Plugins
-2. Go to **Settings → Community Plugins → BRAT → Add Beta Plugin**
+2. Go to **Settings  Community Plugins  BRAT  Add Beta Plugin**
 3. Enter the public release repository URL:
    ```
    https://github.com/Syibi/flow-release
    ```
-4. Click **Add Plugin** — BRAT will download and activate the plugin automatically
+4. Click **Add Plugin**  BRAT will download and activate the plugin automatically
 
-To update to the latest release: **BRAT → Check for updates**
+To update to the latest release: **BRAT  Check for updates**
 
 ---
 
@@ -49,13 +49,13 @@ To update to the latest release: **BRAT → Check for updates**
    ```
    [YourVault]/.obsidian/plugins/obsidian-flow-tracker/
    ```
-4. Restart Obsidian and enable the plugin under **Settings → Community Plugins**
+4. Restart Obsidian and enable the plugin under **Settings  Community Plugins**
 
 ---
 
 ## Configuration
 
-After activation, configure your folder paths under **Settings → Flow Tracker**:
+After activation, configure your folder paths under **Settings  Flow Tracker**:
 
 | Setting | Default | Purpose |
 |---|---|---|
@@ -113,4 +113,4 @@ tags:
 
 ## License
 
-MIT © 2026 Syibi
+MIT  2026 Syibi
