@@ -341,6 +341,9 @@
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
   color: var(--text-muted);
+  height: fit-content;
+  line-height: normal;
+  box-sizing: border-box;
 }
 
 .badge::before {
@@ -1402,4 +1405,120 @@
 .flow-epic-card:focus-visible {
   outline: 2px solid var(--interactive-accent) !important;
   outline-offset: 2px !important;
+}
+
+/* Breadcrumb Navigation */
+.flow-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--flow-text-sm);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.flow-breadcrumb-item {
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flow-breadcrumb-item:hover {
+  color: var(--interactive-accent);
+}
+
+.flow-breadcrumb-separator {
+  color: var(--text-muted);
+  opacity: 0.5;
+  user-select: none;
+}
+
+.flow-breadcrumb-current {
+  color: var(--text-normal);
+  font-weight: 600;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Metric Summary Bar & Segmented Progress */
+.flow-metric-summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: var(--background-secondary-alt);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.flow-metric-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--flow-text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.flow-metric-pill.todo {
+  background: rgba(156, 163, 175, 0.12);
+  color: var(--text-muted);
+  border-color: rgba(156, 163, 175, 0.25);
+}
+
+.flow-metric-pill.active {
+  background: rgba(139, 92, 246, 0.12);
+  color: #a78bfa;
+  border-color: rgba(139, 92, 246, 0.25);
+}
+
+.flow-metric-pill.blocked {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.flow-metric-pill.done {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+/* Focus Queue Slot Number */
+.focus-queue-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: var(--flow-text-xs);
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  flex-shrink: 0;
+}
+
+.focus-queue-slot.active .focus-queue-index {
+  color: var(--text-on-accent);
+  background: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
 }

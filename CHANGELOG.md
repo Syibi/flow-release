@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.8.3] - 2026-09-07
+
+### UI/UX & Anti-Slop Redesign
+- **Breadcrumb Navigation**:
+  - Menambahkan navigasi breadcrumb dinamis (`Projects / [Project Name] / [Epic Name]`) di bagian atas tampilan detail Proyek dan Epic, menggantikan tombol *Back* konvensional.
+- **Metric Summary Bar**:
+  - Menambahkan bar ringkasan status (`.flow-metric-summary-bar` & `.flow-metric-pill`) untuk status tugas (`Todo`, `Active`, `Blocked`, `Done`) dengan styling ringkas dan modern, menggantikan deretan badge status yang meregang.
+- **Focus Queue Slot Indicators**:
+  - Mengganti radio button default pada antrean slot Pomodoro (`Focus Queue`) dengan nomor slot berdesain rapi (`#1`, `#2`, `#3`) yang aktif bersesuaian dengan task terpilih.
+  - Menambahkan `tabular-nums` pada countdown digital Pomodoro untuk mencegah layout jitter saat detik berjalan.
+- **Keyboard Accessibility (`:focus-visible`)**:
+  - Menambahkan styling cincin fokus keyboard kontras (`2px solid var(--interactive-accent)`) dengan offset 2px untuk seluruh elemen interaktif: tombol aksi, tab navigasi, selector filter, input pencarian, kartu kanban, kartu inbox, kartu project & epic.
+- **Kanban & Eisenhower Feedback**:
+  - Animasi transisi halus dan highlight bingkai putus-putus berbingkai (`border-radius: 8px`) saat kartu di-drag antar kolom atau kuadran (`.drag-over`).
+  - Kursor kartu kanban eksplisit menggunakan `cursor: grab` dan `cursor: grabbing`.
+  - Penambahan indikator kartu kosong yang rapi (`.kanban-column-empty`) untuk kolom Kanban dan kuadran Eisenhower yang belum memiliki tugas.
+- **Native Obsidian Design**:
+  - Menghapus `@import` font eksternal Google Fonts (menggunakan font sistem Obsidian `var(--font-interface)`).
+  - Menghapus gradient ungu/indigo artifisial dan menggantinya dengan Obsidian CSS tokens (`var(--interactive-accent)`, `var(--background-modifier-*)`).
+
+### Bug Fixes
+- **Due Date Badge Legibility & Contrast**:
+  - Memperbaiki warna badge tenggat waktu di `timeUtils.ts`: mengganti variabel Obsidian `--background-modifier-error` (yang solid merah opak) dengan latar translucent alpha `rgba(239, 68, 68, 0.16)` sehingga teks status tanggal (Overdue/Today/Tomorrow) selalu terbaca jelas dengan kontras tinggi di tema Dark maupun Light.
+- **Due Date Visibility in Projects & Epics**:
+  - Menambahkan kolom Due Date lengkap beserta header tabel pada daftar issue di tampilan detail Proyek dan detail Epic (`ProjectsView.tsx`).
+- **Kanban Card Meta Alignment**:
+  - Membatasi lebar pill project (`max-width: 140px`) dengan ellipsis agar badge due date tidak tergeser keluar kartu.
+- **Badge Vertical Stretch Fix**:
+  - Memperbaiki flex alignment dan menambahkan `height: fit-content` pada `.badge` agar pill status tugas (`Todo`, `Active`, `Blocked`, `Done`) tidak meregang secara vertikal.
+
+---
+## [0.8.2] - 2026-09-07
+
+### Features & Enhancements
+- **Bilingual Internationalization (i18n)**:
+  - Dukungan penuh dwibahasa (**English** & **Bahasa Indonesia**) di seluruh tampilan: Dashboard, Kanban Board, Eisenhower Matrix, Inbox, Heatmap Produktivitas, timer Pomodoro, banner refleksi/evaluasi, notifikasi WIP limit, dan modal laporan harian.
+  - Pengaturan bahasa dapat diubah secara instan melalui menu *Settings -> Flow Tracker -> Language*.
+  - Arsitektur i18n lokal, type-safe, zero-dependency via `src/utils/i18n.ts` dengan dukungan interpolasi parameter.
+- **Quick Capture Task Modal**:
+  - Dialog modal native Obsidian (`QuickCaptureModal`) untuk mencatat ide dan tugas baru ke Inbox secara instan tanpa perlu membuka view utama.
+  - Terintegrasi dengan Obsidian Command Palette (`Quick Capture Task to Inbox`) dan dapat dipasang ke hotkey global.
+- **Global Pomodoro Commands**:
+  - Perintah global Obsidian baru untuk kontrol timer dari mana saja: `Toggle Focus Timer (Start / Pause)` dan `Skip Break Timer`.
+
+### Testing & Maintenance
+- Menambahkan test suite `tests/i18n.test.ts` (46 total tests passing).
+- Memperbaiki penanganan `styles.css` pada pipeline rilis `release.ts`.
+
+---
 ## [0.8.1] - 2026-09-05
 
 ### Performance & Optimizations
