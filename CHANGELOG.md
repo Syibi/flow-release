@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.8.5] - 2026-09-07
+
+### Bug Fixes & Scanner Robustness
+- **Universal Task & Note Scanner**:
+  - Memperbaiki parser pemindaian vault agar mendukung `type: task`, `type: Task`, `type: Issue`, `type: Project`, `type: Epic` secara fleksibel dan *case-insensitive*.
+  - Menambahkan inferensi tugas otomatis berbasis frontmatter: setiap catatan dengan `status` (`todo`, `in-progress`, `done`, `blocked`, dll.) atau `priority` kini otomatis dikenali sebagai task/issue meskipun tidak berada di folder `Issues/` atau tidak memiliki atribut `type: issue`.
+- **Flexible Project & Epic Linking**:
+  - Relasi task ke proyek dan epic kini dapat menggunakan ID (`PROJECT-XXX`), Judul (`[[My Project]]` / `My Project`), maupun nama file markdown.
+  - Memperbaiki pemetaan nama proyek pada kartu Kanban agar tidak bernilai kosong jika ditautkan menggunakan judul proyek alih-alih ID.
+
+---
 ## [0.8.4] - 2026-09-07
 
 ### Bug Fixes & Reliability
