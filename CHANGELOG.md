@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.8.4] - 2026-09-07
+
+### Bug Fixes & Reliability
+- **Obsidian Startup & Restart Index Race Condition Fix**:
+  - Memperbaiki masalah data tampak kosong/ter-reset saat Obsidian dibuka ulang (*cold restart*).
+  - Menghubungkan listener event native Obsidian `app.metadataCache.on('resolved')` dan `app.workspace.onLayoutReady()` sehingga Flow Tracker secara otomatis memicu `rescan()` menyeluruh begitu Obsidian selesai membaca seluruh file dan frontmatter vault.
+  - Menambahkan command baru di Command Palette: `Flow: Rescan Vault & Refresh Flow Index` untuk sinkronisasi manual kapan pun dibutuhkan.
+
+---
 ## [0.8.3] - 2026-09-07
 
 ### UI/UX & Anti-Slop Redesign
