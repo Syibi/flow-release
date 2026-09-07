@@ -1522,3 +1522,320 @@
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum';
 }
+
+/* ==========================================================================
+   Sensory & ADHD-Friendly Enhancements (Micro-delights & Attentional Focus)
+   ========================================================================== */
+
+/* Custom Dopamine Checkbox */
+.flow-checkbox-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--background-modifier-border-hover);
+  background: var(--background-primary);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  position: relative;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.flow-checkbox-custom:hover {
+  border-color: var(--interactive-accent);
+  transform: scale(1.08);
+}
+
+.flow-checkbox-custom.is-checked {
+  background: var(--text-success, #10b981);
+  border-color: var(--text-success, #10b981);
+  color: #ffffff;
+  animation: flowCheckboxPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.flow-checkbox-custom svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 3;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+@keyframes flowCheckboxPop {
+  0% { transform: scale(0.85); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Animated Strikethrough for Task Title */
+.flow-strikethrough-title {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.flow-strikethrough-title.is-done {
+  color: var(--text-muted);
+}
+
+.flow-strikethrough-title.is-done::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform-origin: left center;
+  animation: flowStrikethroughSwipe 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes flowStrikethroughSwipe {
+  0% {
+    width: 0%;
+    opacity: 0.3;
+  }
+  100% {
+    width: 100%;
+    opacity: 0.9;
+  }
+}
+
+/* Spotlight & Sensory Tunneling (Attentional Narrowing for ADHD) */
+.issue-row {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.issue-row.focused-task-card {
+  border: 1px solid var(--interactive-accent) !important;
+  background: var(--background-secondary) !important;
+  box-shadow: 0 0 0 1px var(--interactive-accent), 0 2px 8px var(--background-modifier-box-shadow) !important;
+  transform: translateY(-1px);
+  z-index: 2;
+  position: relative;
+}
+
+.focused-task-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: var(--flow-text-xs);
+  font-weight: 600;
+  color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+  border: 1px solid var(--interactive-accent);
+}
+
+.flow-task-dimmed {
+  opacity: 0.62 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.flow-task-dimmed:hover {
+  opacity: 1 !important;
+  transform: translateX(2px);
+}
+
+/* Segmented Health Bar for Subtasks */
+.flow-subtask-pill-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 0;
+}
+
+.flow-subtask-pill-segment {
+  height: 4px;
+  width: 12px;
+  border-radius: 2px;
+  background: var(--background-modifier-border);
+  transition: all 0.25s ease;
+}
+
+.flow-subtask-pill-segment.is-completed {
+  background: var(--interactive-accent);
+}
+
+/* Pomodoro Breathing Halo */
+.flow-timer-halo-breathe {
+  filter: drop-shadow(0 0 6px var(--interactive-accent));
+  opacity: 0.95;
+}
+
+/* Anti-Anxiety Soft Warm Warning */
+.flow-soft-amber-badge {
+  background: var(--background-modifier-hover) !important;
+  color: var(--text-warning, #f59e0b) !important;
+  border: 1px solid var(--text-warning, #f59e0b) !important;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Cockpit Dashboard Layout (Anti-Slop, Fluid & Obsidian Native)
+   ========================================================================== */
+
+.flow-dashboard-cockpit {
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 8px 16px 32px 16px;
+}
+
+.flow-cockpit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flow-cockpit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .flow-cockpit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flow-cockpit-sidebar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Integrated Cockpit Metrics & Timeline */
+.flow-cockpit-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.flow-cockpit-metric-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.flow-cockpit-metric-val {
+  font-size: var(--flow-text-3xl);
+  font-weight: 700;
+  color: var(--text-normal);
+  line-height: 1.1;
+}
+
+.flow-cockpit-metric-lbl {
+  font-size: var(--flow-text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+.flow-progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background-color: var(--background-modifier-border-hover, rgba(128, 128, 128, 0.2));
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+  box-sizing: border-box;
+}
+
+.flow-progress-bar-fill {
+  height: 100%;
+  background-color: var(--interactive-accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.flow-inline-add-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  border: 1px dashed var(--background-modifier-border);
+  background: var(--background-primary);
+  transition: all 0.18s ease;
+}
+
+.flow-inline-add-input:focus-within {
+  border-color: var(--interactive-accent);
+  border-style: solid;
+  background: var(--background-secondary);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+.flow-inline-add-input input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: var(--flow-text-sm);
+  color: var(--text-normal);
+  padding: 0;
+}
+
+.focus-queue-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  opacity: 0.7;
+}
+
+.focus-queue-clear-btn:hover {
+  color: var(--text-error, #ef4444);
+  background: var(--background-modifier-hover);
+  opacity: 1;
+}
+
+

@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.8.6] - 2026-09-08
+
+### UI/UX & Anti-Slop Cockpit Design
+- **Balanced Dashboard Cockpit Layout**:
+  - Membatasi lebar kontainer dashboard (`max-width: 1060px; margin: 0 auto;`) untuk mencegah layout meregang berlebihan pada layar ultrawide dan memberikan whitespace ergonomis.
+- **High-Contrast Progress Bar & Explicit Target Metrics**:
+  - Memperbaiki progress bar harian yang sebelumnya tidak terlihat: mempertebal ke `8px`, menambahkan border solid, dan menyertakan indikator status eksplisit (`0/7 pmd (0%)` atau status selesai) agar visual target harian selalu terbaca jelas.
+- **Focus Queue & Pomodoro Button Ergonomics**:
+  - Memperbaiki tombol kosong di sidebar antrean fokus menjadi tombol hapus slot (`×`) yang jelas dan bertooltip.
+  - Memperbarui tombol aksi fokus menjadi *"Mark Task as Done"* dengan ikon checklist hijau dan status teks yang tegas.
+
+### Bug Fixes & Scanner Reactivity
+- **Subtask State Preservation on Single File Edits**:
+  - Mengatasi bug di mana pengeditan file tunggal di Obsidian menghapus metrik checklist subtask (`subtaskTotal` & `subtaskCompleted`).
+- **Eisenhower Quadrant & Kanban Card Polish**:
+  - Mengoptimalkan pembagian kuadran Eisenhower dan memastikan tugas `done` serta catatan `inbox` otomatis dikecualikan.
+
+### Quality Assurance & Comprehensive Test Suite
+- **Full Feature Test Coverage**:
+  - Menambahkan unit test otomatis untuk seluruh fitur tanpa terkecuali (Vault Parser, Vault Mutators, Board & Eisenhower Matrix, Smart Scoring, Subtask Parser, Daily Note Sync & Reflections, Weekly Review, Triage Validator, dan FLOW.md Agent Generator).
+  - Total cakupan pengujian meningkat menjadi **89 tests passed** (244 assertions across 12 test files).
+- **Strict TypeScript & Biome Integration**:
+  - Mengintegrasikan direktori `tests/` ke dalam `tsconfig.json` dan `biome lint` untuk verifikasi tipe 100% bebas error.
+
+---
 ## [0.8.5] - 2026-09-07
 
 ### Bug Fixes & Scanner Robustness
