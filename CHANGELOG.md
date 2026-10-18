@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [0.10.0] - 2026-10-18
+
+### Changes
+- chore: clean repository artifacts
+- chore: ignore local worktrees
+
+---
+## [0.9.0] - 2026-10-18
+
+### Workflow Reliability
+- Menyatukan parser full-scan dan incremental agar dokumen terkait, status epic, subtask, dan referensi daily note diproses secara konsisten.
+- Menormalkan referensi tugas ber-alias seperti `[[ISSUE-007|OAuth research]]` ke ID tugas yang benar.
+- Memperbaiki metrik produktivitas dengan jendela konsistensi 84 hari dan persentase maksimal 100%.
+- Menggunakan alur Inbox yang sama untuk quick capture dan daily activation sehingga file baru memiliki format serta nama yang aman.
+- Memperbaiki daily activation agar mengikuti jam kerja, tidak tampil berulang, dan tetap dapat digunakan pada vault kosong.
+
+### UI, Accessibility & Feedback
+- Menambahkan kontrol status Kanban yang dapat digunakan tanpa drag-and-drop serta dukungan keyboard pada task card dan checkbox.
+- Menambahkan status loading, pesan kegagalan inisialisasi/capture, aksi retry, dan semantik navigasi aktif.
+- Memperbaiki keterbacaan, focus ring, layout panel sempit, dan dukungan reduced motion dengan token tema Obsidian.
+
+### Maintenance
+- Menambahkan regression test untuk workflow, parser, metrik produktivitas, dan daily activation.
+- Menyesuaikan konfigurasi TypeScript untuk kompatibilitas migrasi TypeScript 6 tanpa `baseUrl` yang deprecated.
+
+---
 ## [0.8.6] - 2026-09-08
 
 ### UI/UX & Anti-Slop Cockpit Design

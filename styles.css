@@ -1,7 +1,7 @@
 /* Typography Scale (Tailwind naming, scaled down for dense UI) */
 :root {
-  --flow-text-xs: 10px;
-  --flow-text-sm: 11px;
+  --flow-text-xs: 11px;
+  --flow-text-sm: 12px;
   --flow-text-base: 12px;
   --flow-text-lg: 14px;
   --flow-text-xl: 16px;
@@ -11,6 +11,10 @@
   --flow-text-5xl: 30px;
   --flow-text-6xl: 36px;
   --flow-text-7xl: 48px;
+  --flow-status-success: var(--text-success, #087f5b);
+  --flow-status-warning: var(--text-warning, #9a6700);
+  --flow-status-danger: var(--text-error, #b42318);
+  --flow-focus-ring: var(--interactive-accent);
 }
 
 /* Main flow tracker view styles */
@@ -30,7 +34,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  border-bottom: none;
+  border-bottom: 1px solid var(--background-modifier-border);
   background: var(--background-secondary);
 }
 
@@ -57,10 +61,7 @@
   font-size: var(--flow-text-4xl);
   font-weight: 700;
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, var(--text-normal) 40%, var(--text-muted) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-normal);
 }
 
 .flow-nav-tabs {
@@ -83,7 +84,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0px;
+  gap: 6px;
   padding: 6px 8px;
   border-radius: 6px;
   font-size: var(--flow-text-base);
@@ -102,13 +103,39 @@
 }
 
 .flow-nav-tab.active {
-  gap: 8px;
-  padding: 6px 12px;
+  padding: 6px 10px;
   color: var(--interactive-accent);
   background: var(--background-primary);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--background-modifier-border);
-  flex: 1;
+  flex: 0 0 auto;
+}
+
+.flow-status-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 24px;
+  color: var(--text-normal);
+  background: var(--background-secondary-alt);
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: var(--flow-text-sm);
+}
+
+.flow-status-notice.is-error {
+  color: var(--flow-status-danger);
+  border-color: var(--flow-status-danger);
+}
+
+.flow-quiet-btn {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 4px 8px;
 }
 
 .flow-action-btn {
@@ -318,6 +345,30 @@
   font-weight: 600;
   color: var(--text-normal);
   line-height: 1.4;
+}
+
+.flow-task-open-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.flow-status-select-label {
+  align-items: center;
+  display: flex;
+  font-size: var(--flow-text-xs);
+  gap: 6px;
+  justify-content: space-between;
+  color: var(--text-muted);
+}
+
+.flow-checkbox-custom:focus-visible,
+.flow-task-open-btn:focus-visible,
+.flow-quiet-btn:focus-visible {
+  outline: 2px solid var(--flow-focus-ring);
+  outline-offset: 2px;
 }
 
 .kanban-card-footer {
@@ -875,9 +926,46 @@
 }
 
 .focused-task-card {
-  animation: gentlePulse 2s infinite ease-in-out !important;
   border: 1px solid var(--interactive-accent) !important;
   background: var(--background-secondary-alt) !important;
+  box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+}
+
+@media (max-width: 900px) {
+  .flow-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .flow-nav-tabs {
+    order: 3;
+    width: 100%;
+  }
+
+  .flow-sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: min(350px, 92vw);
+    z-index: 20;
+    box-shadow: -8px 0 20px var(--background-modifier-box-shadow);
+  }
+
+  .flow-content {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Remove default Obsidian padding for the tracker view */
